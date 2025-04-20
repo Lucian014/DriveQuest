@@ -55,8 +55,10 @@ function Contact() {
                 exit={{ opacity: 0 }}
                 className={darkMode ? homeStyle.body_dark : homeStyle.body_light}
             >
-                <h1 className={styles.form_title}>Contact Page</h1>
+                <div className={styles.block}>
+
                 <form onSubmit={handleSubmit} className={styles.form_container}>
+                    <h1 className={styles.form_title}>Contact Page</h1>
                     <input
                         type="text"
                         placeholder="Title.."
@@ -82,6 +84,7 @@ function Contact() {
                     />
                     <button type="submit" className={styles.submit_button}>Confirm message</button>
                 </form>
+                </div>
             </motion.div>
         </AnimatePresence>
     );

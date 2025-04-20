@@ -1,8 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
 import styles from '../styles/Profile.module.css';
-import {motion} from "framer-motion";
+import {motion , AnimatePresence} from "framer-motion";
 import CsrfContext from "./CsrfContext";
 import homeStyles from '../styles/Home.module.css';
+import {useTheme} from "../components/ThemeContext";
+
+
 function Profile() {
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
@@ -14,6 +17,11 @@ function Profile() {
     const [user, setUser] = useState({});
     const csrftoken = useContext(CsrfContext);
     const [cars, setCars] = useState([]);
+    const {darkMode} = useTheme();
+
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }, [darkMode]);
 
     useEffect(() => {
         fetch("http://localhost:8000/drivequest/profile/", {
@@ -131,7 +139,14 @@ function Profile() {
     };
 
     return (
-    <div className={homeStyles.body_dark} >
+    <AnimatePresence mode={"popLayout"} exitBeforeEnter={true} initial={false} animate={"visible"} exit={"hidden"}>
+    <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, transition: { duration: 0.5 } }}
+        exit={{ opacity: 0 }}
+        key={darkMode ? "dark" : "light"}
+        className={darkMode ? homeStyles.body_dark : homeStyles.body_light}
+    >
         <div className={styles.profile_box}>
             <div className={styles.profile_container}>
                 <h1>{firstName}'s Profile</h1>
@@ -280,7 +295,8 @@ function Profile() {
                 </div>
             </div>
         </div>
-    </div>
+    </motion.div>
+    </AnimatePresence>
     );
 }
 
