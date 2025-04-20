@@ -1,6 +1,5 @@
 /* Overall page style with a deep blue gradient background */
 .body {
-    background: linear-gradient(135deg, #0D47A1 0%, #1976D2 100%);
     background-size: cover;
     display: flex;
     justify-content: center;
@@ -12,9 +11,8 @@
 
 /* Login container with a semi-transparent white background for contrast */
 .loginContainer {
-    background: rgba(255, 255, 255, 0.92);
     padding: 2rem;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: none;
     border-radius: 1.5rem;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -38,7 +36,7 @@
 
 /* Welcome message uses a deep blue shade to reinforce the brand colour */
 .welcome {
-    color: #0D47A1;
+    color: rgba(173, 141, 122, 0.8);
     font-size: 2.5rem;
 }
 

@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import {AnimatePresence, motion} from 'framer-motion';
 import styles from '../styles/Home.module.css';
 import { useNavigate } from 'react-router-dom';
 import CsrfContext from "./CsrfContext";
+import {useTheme} from "../components/ThemeContext";
 
 function Home() {
     const [carType, setCarType] = useState('');
@@ -11,6 +12,12 @@ function Home() {
     const carTypes = ['SUV', 'Sedan', 'Hatchback', 'Hybrid', 'Electric', 'Pickup'];
     const navigate = useNavigate();
     const csrftoken = useContext(CsrfContext);
+    const {darkMode} = useTheme();
+
+    useEffect(()=>{
+        document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+    },[darkMode]);
+
 
     useEffect(() => {
         fetch('http://localhost:8000/drivequest/cars', {
@@ -62,11 +69,14 @@ function Home() {
     };
 
     return (
+        <AnimatePresence mode={"popLayout"} exitBeforeEnter={true} initial={false} animate={"visible"} exit={"hidden"}>
         <motion.div
-            className={styles.body_dark}
-            initial="hidden"
-            animate="visible"
+            key={darkMode ? "dark" : "light"}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { duration: 0.5 } }}
+            exit={{ opacity: 0 }}
             variants={containerVariants}
+            className={darkMode ? styles.body_dark : styles.body_light}
         >
             <div className={styles.hero}>
                 {/* HERO SECTION */}
@@ -250,6 +260,7 @@ function Home() {
                 </motion.section>
             </div>
         </motion.div>
+        </AnimatePresence>
     );
 }
 

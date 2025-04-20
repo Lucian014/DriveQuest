@@ -9,6 +9,9 @@ import CsrfContext from "./pages/CsrfContext";
 import Contact from "./pages/Contact";
 import CarDetails from "./pages/CarDetails";
 import Navbar from "./components/Navbar";
+import {ThemeProvider} from "./components/ThemeContext";
+import homeStyle from "./styles/Home.module.css";
+
 
 function getCookie(name) {
     let cookieValue = null;
@@ -38,6 +41,7 @@ function App() {
     }, []);
 
     return (
+        <ThemeProvider>
         <CsrfContext.Provider value={csrfToken}>
             <Router>
                 <Navbar/>
@@ -51,6 +55,7 @@ function App() {
                 </Routes>
             </Router>
         </CsrfContext.Provider>
+        </ThemeProvider>
     );
 }
 

@@ -1,46 +1,51 @@
-/* Overall page style with a deep blue gradient background */
 .body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    text-align: center;
-    font-family: 'Inter', sans-serif;
+    min-height: 80vh;
+    padding: 40px 20px;
 }
 
-/* Login container with a semi-transparent white background for contrast */
-.loginContainer {
-    background: rgba(255, 255, 255, 0.92);
-    padding: 2rem;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 1.5rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+.loginBox {
+    border-radius: 20px;
+    padding: 50px 40px;
+    max-width: 1000px;
     width: 100%;
-    max-width: 800px;
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* Left or main login form container */
-.login {
+.login_title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    color: #4a3c35;
+}
+
+.loginContent {
+    display: flex;
+    gap: 40px;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.leftside {
     flex: 1;
+    min-width: 300px;
+    display: flex;
+    justify-content: flex-start; /* form-ul merge în stânga */
+}
+
+.login {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    padding-bottom: 15px;
-    border-radius: 25px;
+    gap: 15px;
+    width: 100%;
+    max-width: 400px;
 }
 
-/* Welcome message uses a deep blue shade to reinforce the brand colour */
-.welcome {
-    color: #0D47A1;
-    font-size: 2.5rem;
-}
-
-/* Input fields and buttons styled to be clean and modern */
 .login input,
 .login button {
     padding: 1rem;
@@ -65,26 +70,17 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Container for any image or additional illustrative content */
 .imagine {
     flex: 1;
+    min-width: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Secondary container; can be used for additional text or branding if needed */
-.leftside {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-/* Style for images to ensure they look good within the container */
 .imagine img {
     max-width: 100%;
     height: auto;
-    border-radius: 20px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }

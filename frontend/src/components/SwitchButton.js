@@ -1,11 +1,10 @@
-import { useState } from "react";
+// components/SwitchButton.js
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "./ThemeContext";
 import styles from "../styles/SwitchButton.module.css";
 
 export default function ThemeToggle() {
-    const [darkMode, setDarkMode] = useState(false);
-
-    const toggleTheme = () => setDarkMode((prev) => !prev);
+    const { darkMode, toggleTheme } = useTheme();
 
     return (
         <div className={styles.block}>

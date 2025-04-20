@@ -1,10 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react'
-import styles from "../styles/Login.module.css";
+import styles from "../styles/Signup.module.css";
 import {useNavigate} from "react-router-dom";
 import { useContext } from 'react';
 import CsrfContext from "./CsrfContext";
-
-
+import {useTheme} from "../components/ThemeContext";
+import {motion} from "framer-motion";
+import homeStyle from "../styles/Home.module.css";
+import {AnimatePresence} from "framer-motion";
 function Signup(){
 
     const [firstName, setFirstName] = useState('');
@@ -15,7 +17,11 @@ function Signup(){
     const [username,setUsername] = useState('');
     const navigate = useNavigate();
     const csrftoken = useContext(CsrfContext);
+    const {darkMode} = useTheme();
 
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+    }, [darkMode]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -64,6 +70,14 @@ function Signup(){
         }
 
     return (
+        <AnimatePresence mode={"popLayout"} exitBeforeEnter={true} initial={false} animate={"visible"} exit={"hidden"}>
+        <motion.div
+            key={darkMode ? "dark" : "light"}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { duration: 0.5 } }}
+            exit={{ opacity: 0 }}
+            className={darkMode ? homeStyle.body_dark : homeStyle.body_light}
+        >
         <div className={styles.body}>
             <div className={styles.loginContainer}>
                 <div className={styles.leftside}>
@@ -117,12 +131,11 @@ function Signup(){
                         <button type="submit">Sign Up</button>
                     </form>
                 </div>
-                <div className={styles.imagine}>
-                    <img src={"../images/loginImage.png"} alt={"Imagine"}></img>
-                </div>
 
             </div>
         </div>
+        </motion.div>
+        </AnimatePresence>
     );
 }
 
