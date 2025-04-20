@@ -1,0 +1,217 @@
+
+
+.body_dark {
+    background: linear-gradient(135deg, rgba(169, 169, 169, 0.8), rgba(214, 204, 194, 0.85)); /* Gradienți maro-gri cu transparență */
+    min-height: 100vh;
+    width: 100%; /* schimbat din 100vw */
+    overflow-x: hidden;
+    font-family: 'Segoe UI', sans-serif;
+    color: #3a2d27;
+    padding-top: 20px;
+    backdrop-filter: blur(8px);
+    text-align: center;
+}
+
+.body_light {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(240, 240, 240, 0.85)); /* Gradienți alb-gri cu transparență */
+    min-height: 100vh;
+    width: 100%; /* schimbat din 100vw */
+    overflow-x: hidden;
+    font-family: 'Segoe UI', sans-serif;
+    color: #3a2d27; /* Păstrăm culoarea textului închis pentru contrast */
+    padding-top: 20px;
+    backdrop-filter: blur(8px);
+    text-align: center;
+}
+
+/* HERO SECTION */
+.hero_section {
+    background-color: rgba(245, 225, 185, 0.85); /* Fundal mai cald și plăcut */
+    text-align: center;
+    padding: 3rem 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12); /* shadow modern */
+}
+
+.hero_title {
+
+    font-size: 3rem; /* mărim fontul pentru impact */
+    font-weight: bold;
+    color: #3e2c23;
+
+}
+
+.hero_subtitle {
+    margin-top: 1rem;
+    font-size: 1.4rem; /* mărim fontul pentru vizibilitate */
+    color: #5f4b3b;
+}
+
+/* FORMULAR CĂUTARE */
+.search_form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.form_input {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: none;
+    background-color: #f7f0e8;
+    font-size: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    width: 200px; /* aceeași lățime pentru toate */
+    box-sizing: border-box;
+}
+
+
+.form_button {
+    background-color: #b08968;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.form_button:hover {
+    background-color: #9c7355;
+}
+
+/* AVANTAJE */
+.benefits_section {
+    margin-top: 4rem;
+    text-align: center;
+}
+
+.section_title {
+    font-size: 2rem; /* mărim fontul titlului */
+    margin-bottom: 1.5rem;
+    color: #3a2d27;
+}
+
+.benefit_list {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.benefit_item {
+    background: rgba(255, 255, 255, 0.8); /* fundal alb translucid */
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 500;
+    color: #4b3a2d;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* shadow discret */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.benefit_item:hover {
+    transform: translateY(-5px); /* efect hover */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); /* shadow mai intens la hover */
+}
+
+/* MAȘINI RECOMANDATE */
+.featured_cars {
+    margin-top: 4rem;
+}
+
+.car_list {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.car_card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: rgba(214, 204, 194, 0.8); /* transparență pe carduri */
+    border: 1px solid #cbb6a2;
+    padding: 1rem;
+    border-radius: 12px;
+    text-align: center;
+    max-width: 220px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); /* shadow modern */
+}
+
+.car_image {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.car_name {
+    margin: 0.8rem 0 0.4rem;
+    font-size: 1.1rem;
+    color: #3a2d27;
+}
+
+.car_price {
+    color: #4e3b2f;
+}
+
+.rent_button {
+    margin-top: 0.5rem;
+    background: #7f5539;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-size:1.2rem;
+    font-weight: 700;
+}
+
+.rent_button:hover {
+    background: #5d3c27;
+}
+
+
+.dropdown_wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 250px; /* dropdown-ul nu mai e full width */
+}
+
+.dropdown_list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #d5c3b1;
+    border-radius: 12px;
+    margin-top: 0.3rem;
+    z-index: 10;
+    max-height: 180px;
+    overflow-y: auto;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    padding: 0.4rem 0;
+}
+
+.dropdown_item {
+    list-style: none; /* elimină bulina */
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    color: #3a2d27;
+    transition: background 0.2s ease;
+    font-size: 0.95rem;
+}
+
+.dropdown_item:hover {
+    background-color: #f1e6da;
+    font-weight: 500;
+    border-left: 4px solid #a37c5d;
+}
+
+.form_input {
+    /* dacă vrei ca inputurile să nu mai fie full width */
+    max-width: 250px;
+}
