@@ -1,12 +1,10 @@
-from urllib import request
-
 import requests
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie, csrf_protect
-from .models import Car,Contact,Car_Rental,Comment
+from .models import Car, Contact, Car_Rental, Comment
 from django.contrib.auth import get_user_model,login,authenticate,login as django_login
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_protect
@@ -94,7 +92,7 @@ def login(request):
             }
             return JsonResponse({'message': 'User logged in successfully', 'user': user_data}, status=200)
         else:
-            return JsonResponse({'message': 'User login failed'}, status=400)
+            return JsonResponse({'message': 'Invalid Credentials'}, status=400)
     else:
         return JsonResponse({'message': 'Method not allowed'}, status=405)
 
