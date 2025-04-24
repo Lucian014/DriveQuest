@@ -6,6 +6,18 @@ import {useTheme} from "../components/ThemeContext";
 import {AnimatePresence} from "framer-motion";
 import {motion} from "framer-motion";
 import styles from "../styles/Contact.module.css";
+import L from 'leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+    iconUrl: require('leaflet/dist/images/marker-icon.png'),
+    shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+});
+
+const coordinates = [47.1585, 27.6014];
 
 function Contact() {
     const [title, setTitle] = useState('');
@@ -13,10 +25,20 @@ function Contact() {
     const [phoneNumber, setPhoneNumber] = useState('');
     const {darkMode} = useTheme();
     const csrftoken = useContext(CsrfContext);
+    const rating = 5;
+    const [hoverRating, setHoverRating] = useState(0);
 
     useEffect(()=>{
         document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
     },[darkMode]);
+
+    const handleStarMouseEnter = (star) => {
+        setHoverRating(star);
+    };
+
+    const handleStarMouseLeave = () => {
+        setHoverRating(0);
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -47,6 +69,7 @@ function Contact() {
     };
 
     return (
+        <div className={styles.contactContainer}>
         <AnimatePresence mode={"popLayout"} exitBeforeEnter={true} initial={false} animate={"visible"} exit={"hidden"}>
             <motion.div
                 key={darkMode ? "dark" : "light"}
@@ -55,38 +78,85 @@ function Contact() {
                 exit={{ opacity: 0 }}
                 className={darkMode ? homeStyle.body_dark : homeStyle.body_light}
             >
-                <div className={styles.block}>
+                <main>
+                    <section className={styles.contactSection}>
+                        <h2>We'd Love to Hear From You!</h2>
+                        <p>If you have any questions, comments, or feedback, feel free to reach out to us using the form below.</p>
 
-                <form onSubmit={handleSubmit} className={styles.form_container}>
-                    <h1 className={styles.form_title}>Contact Page</h1>
-                    <input
-                        type="text"
-                        placeholder="Title.."
-                        value={title}
-                        required
-                        onChange={(e) => setTitle(e.target.value)}
-                        className={styles.input_field}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Content.."
-                        value={content}
-                        required
-                        onChange={(e) => setContent(e.target.value)}
-                        className={styles.input_field}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Phone Number.."
-                        value={phoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                        className={styles.input_field}
-                    />
-                    <button type="submit" className={styles.submit_button}>Confirm message</button>
-                </form>
+                        <div className={styles.contactContent}>
+                    {/* Contact Form Section */}
+                    <div className={styles.contactFormContainer}>
+                    <form id="contactForm" className={styles.contactForm} onSubmit={handleSubmit}>
+                        <div className={styles.formGroup}>
+                            <label htmlFor="name"><i className="fas fa-user"></i> Title</label>
+                            <input
+                                type="text"
+                                placeholder="Title.."
+                                value={title}
+                                required
+                                onChange={(e) => setTitle(e.target.value)}
+                            />
+                        </div>
+                        <div className={styles.formGroup}>
+                            <label htmlFor="email"><i className="fas fa-envelope"></i> Content</label>
+                            <input
+                                type="text"
+                                placeholder="Content.."
+                                value={content}
+                                required
+                                onChange={(e) => setContent(e.target.value)}
+                            />
+                        </div>
+                        <div className={styles.formGroup}>
+                            <label htmlFor="subject"><i className="fas fa-tag"></i> Phone number(optionally)</label>
+                            <input
+                                type="text"
+                                placeholder="Phone Number.."
+                                value={phoneNumber}
+                                onChange={(e) => setPhoneNumber(e.target.value)}
+                            />
+                        </div>
+                        <button type="submit" className={styles.submitBtn}>Send Message</button>
+                    </form>
                 </div>
+                    <div className={styles.contactMap}>
+                        <h3>Our Location</h3>
+                        <MapContainer center={coordinates} zoom={12} style={{ height: "295px", width: "100%" }}>
+                            <TileLayer
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            />
+                            <Marker position={coordinates}>
+                                <Popup>
+                                    Liceul Teoretic de Informatica Grigore Moisil
+                                </Popup>
+                            </Marker>
+                        </MapContainer>
+
+                        {/* Rating Section */}
+                        <div className={styles.rateContainer}>
+                            <p>Rate Us</p>
+                            <div className={styles.stars}>
+                                {[1, 2, 3, 4, 5].map((star) => {
+                                    const isFilled = star <= (hoverRating || rating);
+                                    return (
+                                        <i
+                                            key={star}
+                                            className={`fas fa-star ${styles.star} ${isFilled ? styles.filled : ""}`}
+                                            onMouseEnter={() => handleStarMouseEnter(star)}
+                                            onMouseLeave={handleStarMouseLeave}
+                                        ></i>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
             </motion.div>
         </AnimatePresence>
+        </div>
     );
 }
 

@@ -9,9 +9,7 @@
     overflow-x: hidden;
     font-family: 'Segoe UI', sans-serif;
     color: #3a2d27;
-    padding-top: 20px;
     backdrop-filter: blur(8px);
-    text-align: center;
 }
 
 .body_light {
@@ -21,11 +19,12 @@
     overflow-x: hidden;
     font-family: 'Segoe UI', sans-serif;
     color: #3a2d27; /* Păstrăm culoarea textului închis pentru contrast */
-    padding-top: 20px;
     backdrop-filter: blur(8px);
-    text-align: center;
 }
-
+.hero{
+    text-align: center;
+    padding-top: 20px;
+}
 /* HERO SECTION */
 .hero_section {
     background-color: rgba(245, 225, 185, 0.85); /* Fundal mai cald și plăcut */
