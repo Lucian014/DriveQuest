@@ -89,12 +89,10 @@
 
 /* Profile image */
 .profile_image {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin: 0 auto 1.5rem;
+    position: relative;    /* establish a positioning context */
+    overflow: visible;     /* no longer clip children */
 }
+
 .profile_image img {
     width: 100%;
     height: 100%;
@@ -110,11 +108,13 @@
     font-weight: bold;
     color: #4b3a2d;
 }
+
 .input_box {
     background: #f7f0e8;
     padding: 0.5rem;
     border-radius: 5px;
 }
+
 .input_box input {
     width: 100%;
     padding: 0.5rem;
@@ -151,15 +151,48 @@
 }
 
 /* Buttons */
+
+
+.image_actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    width: 100%;
+    z-index:10;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+/* File input styling */
+.file_input {
+    display: block;
+    margin: 0 auto;
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+    width: 100%; /* Ensure it spans the full width available */
+    box-sizing: border-box;
+}
+
+/* Buttons for actions */
 .action_buttons {
     display: flex;
-    gap: 0.5rem;
-    justify-content: center;
-    margin-top: auto;
+    justify-content: space-between;
+    width: 100%;
 }
+
+/* Adjusted button styling */
 .button {
-    padding: 0.6rem 1.2rem;
-    margin-top: 8px;
+    padding: 0.8rem 1.5rem;
+    margin-top: 10px;
     background: #7f5539;
     color: white;
     border-radius: 6px;
@@ -167,7 +200,9 @@
     transition: background 0.3s;
     font-size: 1rem;
     font-weight: 600;
+    text-align: center; /* Ensure button text is centered */
 }
+
 .button:hover {
     background: #5d3c27;
 }
