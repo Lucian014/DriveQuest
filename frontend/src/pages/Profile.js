@@ -17,6 +17,8 @@ function Profile() {
     const [user, setUser] = useState({});
     const csrftoken = useContext(CsrfContext);
     const [cars, setCars] = useState([]);
+    const [points, setPoints] = useState(0);
+    const [XP, setXP] = useState(0);
     const {darkMode} = useTheme();
 
     useEffect(() => {
@@ -41,6 +43,8 @@ function Profile() {
                 setLastName(data.user.lastName);
                 setUsername(data.user.username);
                 setImage(data.user.profile_picture);
+                setPoints(data.user.points);
+                setXP(data.user.XP);
             })
             .catch(error => {
                 console.log(error);
@@ -150,6 +154,7 @@ function Profile() {
         <div className={styles.profile_box}>
             <div className={styles.profile_container}>
                 <h1>{firstName}'s Profile</h1>
+                <h2>{points}</h2>
                 <motion.div
                     className={styles.profile_image}
                     initial={{ opacity: 0 }}

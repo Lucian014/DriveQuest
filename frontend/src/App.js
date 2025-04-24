@@ -10,8 +10,7 @@ import Contact from "./pages/Contact";
 import CarDetails from "./pages/CarDetails";
 import Navbar from "./components/Navbar";
 import {ThemeProvider} from "./components/ThemeContext";
-import homeStyle from "./styles/Home.module.css";
-
+import Payment from "./pages/Payment";
 
 function getCookie(name) {
     let cookieValue = null;
@@ -52,6 +51,7 @@ function App() {
                     <Route path='/profile' element={<Profile/>} />
                     <Route path='/contact' element={<Contact/>} />
                     <Route path='/car_details/:id' element={<CarDetails/>} />
+                    <Route path='/payment' element={<Payment/>} />
                 </Routes>
             </Router>
         </CsrfContext.Provider>

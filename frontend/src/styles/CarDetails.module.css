@@ -1,0 +1,198 @@
+.container {
+    padding: 2rem;
+    background-color: #e0e0e0; /* gri puțin mai închis decât containerul */
+    border-radius: 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    max-width: 900px;
+    margin: auto;
+}
+
+.carInfo {
+    background-color: #e0e0e0; /* gri puțin mai închis decât containerul */
+    padding: 1.5rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+}
+
+.carImage {
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+    margin: 1rem 0;
+}
+
+.rentalStatus {
+    background-color: #ffdede;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.form {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.form button  {
+    background-color: rgba(121, 95, 66, 0.78);
+    color: white; /* Textul va fi alb */
+    border: none; /* Fără border default */
+    border-radius: 5px; /* Colțuri rotunjite */
+    padding: 10px 20px; /* Spărturi pentru un buton mai mare */
+    cursor: pointer; /* Cursor pointer pentru interactivitate */
+    transition: background-color 0.3s, transform 0.2s ease-in-out; /* Tranziție la hover */
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.form button:hover {
+    background-color: rgba(121, 95, 66, 0.91);
+    transform: translateY(-2px); /* Ridicarea butonului */
+}
+
+.form button:focus {
+    outline: none; /* Elimină outline-ul default */
+    box-shadow: 0 0 5px rgba(141, 97, 70, 0.73); /* Shadow când butonul este selectat */
+}
+
+
+
+.detailsSummary {
+    margin-top: 1.5rem;
+    background-color: #f0f0f0;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.detailsSummary button {
+    background-color: rgba(121, 95, 66, 0.78);
+    color: white; /* Textul va fi alb */
+    border: none; /* Fără border default */
+    border-radius: 5px; /* Colțuri rotunjite */
+    padding: 10px 20px; /* Spărturi pentru un buton mai mare */
+    cursor: pointer; /* Cursor pointer pentru interactivitate */
+    transition: background-color 0.3s, transform 0.2s ease-in-out; /* Tranziție la hover */
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.detailsSummary button:hover {
+    background-color: rgba(121, 95, 66, 0.91);
+    transform: translateY(-2px);
+}
+
+.detailsSummary button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(141, 97, 70, 0.73);
+}
+
+.commentsSection {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #ccc;
+}
+
+.commentForm {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+.textarea {
+    width: 100%;
+    resize: vertical;
+    padding: 1rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+}
+
+.postButton {
+    align-self: flex-end;
+    padding: 0.5rem 1.2rem;
+    background-color: rgba(121, 95, 66, 0.78);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.postButton:hover {
+    background-color: rgba(121, 95, 66, 0.91);
+
+
+}
+
+.commentList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.comment {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    background-color: #f8f8f8;
+    padding: 1rem;
+    border-radius: 12px;
+    position: relative;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.commentContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.commentHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+.username {
+    font-weight: bold;
+    margin-right: 1rem;
+}
+
+.commentDate {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.deleteButton {
+    background-color: transparent;
+    border: none;
+    color: red;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.commentText {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 0.5rem;
+    line-height: 1.4;
+    font-family: 'Roboto','Arial', sans-serif;
+    font-size:16px;
+
+}
+
+.noComments {
+    color: #777;
+    font-style: italic;
+}

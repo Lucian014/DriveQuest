@@ -30,9 +30,12 @@ class User(AbstractUser,PermissionsMixin):
     dater_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now=True)
     profile_picture = models.ImageField(upload_to='user_images/',blank=True,null=True)
+    points = models.PositiveIntegerField(default=0)
+    XP = models.PositiveIntegerField(default=0)
     objects = CustomUserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
+
 
 class Contact(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -46,7 +49,7 @@ class Car(models.Model):
     price = models.FloatField()
     year = models.IntegerField()
     image = models.ImageField(upload_to='car_images/',blank=True, null=True)
-
+    popularity = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.brand
@@ -59,3 +62,16 @@ class Car_Rental(models.Model):
     end_date = models.DateField()
     days = models.IntegerField(default=0)
     price = models.FloatField()
+    PAYMENT_METHOD = [
+        ('None','None'),
+        ('Cash','Cash'),
+        ('PayPal','PayPal'),
+        ('Credit Card','Credit Card'),
+    ]
+    payment_method = models.CharField(default='None',choices=PAYMENT_METHOD,max_length=11)
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    car = models.ForeignKey(Car, on_delete=models.CASCADE)
+    comment = models.TextField()
+    date = models.DateTimeField()

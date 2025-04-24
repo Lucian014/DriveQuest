@@ -12,6 +12,9 @@ urlpatterns = [
     path('update_profile/<int:user_id>/',views.update_profile,name='update_profile'),
     path('profile/',views.profile,name='profile'),
     path('contact/',views.contact,name='contact'),
-path('car_rental/', views.car_rental, name='car_rental'),
+    path('car_rental/', views.car_rental, name='car_rental'),
     path('car_rental/<int:car_id>/',views.car_rental,name='car_rental'),
+    path('post_comment/<int:car_id>/',views.post_comment,name='post_comment'),
+    path('user',views.user,name='user'),
+    path('delete_comment/<int:comment_id>/',views.delete_comment,name='delete_comment'),
 ]
