@@ -104,7 +104,6 @@ function Profile() {
         fetch(`http://localhost:8000/drivequest/update_profile/${user.id}/`, {
             method: "POST",
             headers:{
-                "Content-Type": "application/json",
                 'X-CSRFToken': csrftoken,
             },
             credentials: "include",
@@ -162,7 +161,7 @@ function Profile() {
                     transition={{ duration: 0.5 }}
                 >
                     <img
-                        src={image ? image : '/images/defaultImage.webp'}
+                        src={image ? image : '/images/defaultImage.png'}
                         alt="Profile Image"
                     />
                     {isEditing && (

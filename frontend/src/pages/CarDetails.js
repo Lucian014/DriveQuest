@@ -235,7 +235,7 @@ function CarDetails() {
                                                     <span className={styles.username}>{comment.username}</span>
                                                     <span className={styles.commentDate}>{formatDate(comment.date)}</span>
                                                 </div>
-                                                {(user.username === comment.username || user.is_superuser) && (
+                                                {(user.username && (user.username === comment.username || user.is_superuser)) && (
                                                     <button
                                                         className={styles.deleteButton}
                                                         onClick={() => handleDelete(comment.id)}
