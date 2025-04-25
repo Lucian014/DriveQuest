@@ -1,4 +1,4 @@
-import react, {useContext, useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import CsrfContext from "../pages/CsrfContext";
 import SwitchButton from "./SwitchButton";
@@ -50,7 +50,7 @@ function Navbar() {
         }
     }
 
-    const navItems = isLoggedIn ? ["Home", "Profile" , "Contact"]
+    const navItems = isLoggedIn ? ["Home", "Profile" , "Contact", "Logout"]
         : ["Home", "Login"];
 
     const renderNav = (item, index) => {

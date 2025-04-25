@@ -1,86 +1,137 @@
+/* ========= Layout ========= */
 .body {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+/* Left side (carousel + signup prompt) */
+.left {
+    margin: 40px;
+    /* ensure same backdrop as rightContainer */
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.imageCarrousel {
+    margin-top: 20px;
+    height: 60vh;
+    width: 800px;
+    border-radius: 20px;
+    opacity: 0;                        /* start invisible */
+    transition: transform 0.3s ease-in-out, opacity 1s ease-in-out;
+}
+
+.fade {
+    opacity: 1;                        /* fade in to fully visible */
+}
+
+.imageCarrousel:hover {
+    transform: scale(1.02);
+}
+
+.description {
+    margin-top: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 80vh;
-    padding: 40px 20px;
+    flex-direction: column;
 }
 
-.loginBox {
-    border-radius: 20px;
-    padding: 50px 40px;
-    max-width: 1000px;
+.h2 {
+    margin-top: 10px;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.p {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+/* Right side (login form) */
+.right {
+    margin-right:50px;
     width: 100%;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.rightContainer {
+    margin-top: 100px;
+    height: 500px;
+    padding: 30px;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
 }
 
 .login_title {
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    color: #4a3c35;
-}
-
-.loginContent {
-    display: flex;
-    gap: 40px;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.leftside {
-    flex: 1;
-    min-width: 300px;
-    display: flex;
-    justify-content: flex-start; /* form-ul merge în stânga */
+    font-size: 40px;
+    margin-bottom: 30px;
 }
 
 .login {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    width: 100%;
-    max-width: 400px;
-}
-
-.login input,
-.login button {
-    padding: 1rem;
-    border: none;
-    font-size: 1rem;
-    font-family: 'Inter', sans-serif;
-    border-radius: 25px;
-    background: #e0e0e0;
-    transition: all 0.4s ease;
-}
-
-/* Remove default focus outline */
-.login input:focus,
-.login button:focus {
-    outline: none;
-}
-
-/* Hover effect for inputs and buttons to improve interactivity */
-.login input:hover,
-.login button:hover {
-    background: #f5f5f5;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.imagine {
-    flex: 1;
-    min-width: 300px;
-    display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.imagine img {
-    max-width: 100%;
-    height: auto;
+.names{
+    display: flex;
+    gap:10px;
+}
+.names input{
+    width:195px !important;
+}
+.login input {
+    width: 400px;
+    height: 45px;
+    padding: 10px;
+    font-size: 18px;
+    text-align: center;
+    border: 2px solid #ccc;
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: border-color 0.3s ease-in-out;
+    margin-bottom: 20px;
+}
+
+/* ========= Button Reset & Shared Styles ========= */
+.btn {
+    /* reset native chrome */
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: none;
+    border: none;
+
+    /* your fill */
+    background: #b08968;
+    color: white;
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+
+    /* sizing & shape */
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 10px;
+    width: 100px;
+    margin-top:0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.btn:hover,
+.btn:focus {
+    background: #a07656;
+}
+
+.btn:active {
+    background: #8f6345;
 }
