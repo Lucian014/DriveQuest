@@ -1,6 +1,7 @@
 import requests
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie, csrf_protect
@@ -13,6 +14,7 @@ from django.contrib.auth import get_user_model, login as django_login,logout as 
 from django.core.exceptions import ValidationError
 import json
 from datetime import datetime
+
 
 @ensure_csrf_cookie
 def csrf_token(request):
@@ -431,3 +433,63 @@ def rate_website(request):
         return JsonResponse({'message': 'Rating submitted successfully'}, status=200)
     else:
         return JsonResponse({'message': 'Method not allowed'}, status=405)
+
+
+def search_cars(request):
+    if request.method == "GET":
+        input_value = request.GET.get('searchInput')
+        start_date = request.GET.get('startDate')
+        end_date = request.GET.get('endDate')
+        car_type = request.GET.get('carType')
+
+        cars = Car.objects.all()
+
+        if input_value:
+            cars = cars.filter(
+                Q(brand__icontains=input_value) |
+                Q(model__icontains=input_value)
+            )
+
+        if car_type:
+            cars = cars.filter(car_type=car_type)
+
+        if start_date:
+            try:
+                start_date_obj = datetime.strptime(start_date, "%Y-%m-%d").date()
+                # Exclude cars that have rentals overlapping with the selected start date
+                cars = cars.exclude(
+                    car_rental__start_date__lte=start_date_obj,
+                    car_rental__end_date__gte=start_date_obj
+                )
+            except ValueError:
+                pass  # Ignore invalid date format
+
+        if end_date:
+            try:
+                end_date_obj = datetime.strptime(end_date, "%Y-%m-%d").date()
+                # Exclude cars that have rentals overlapping with the selected end date
+                cars = cars.exclude(
+                    car_rental__start_date__lte=end_date_obj,
+                    car_rental__end_date__gte=end_date_obj
+                )
+            except ValueError:
+                pass  # Ignore invalid date format
+
+        cars = cars.distinct()
+
+        cars_data = []
+        for car in cars:
+            cars_data.append({
+                'id': car.id,
+                'brand': car.brand,
+                'model': car.model,
+                'year': car.year,
+                'price': car.price,
+                'image': car.image.url if car.image else None,
+                'car_type': car.car_type,
+            })
+
+        return JsonResponse(cars_data, safe=False)
+
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
