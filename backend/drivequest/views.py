@@ -21,6 +21,7 @@ def csrf_token(request):
     return JsonResponse({'csrfToken': csrf_token})
 
 
+
 @csrf_protect
 def signup(request):
     if request.method == 'POST':
