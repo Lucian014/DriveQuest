@@ -1,8 +1,8 @@
 import {useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import CsrfContext from "../pages/CsrfContext";
+import CsrfContext from "./CsrfContext";
 import SwitchButton from "./SwitchButton";
-import styles from '../styles/Navbar.module.css';
+import styles from '../styles/Components/Navbar.module.css';
 import {Link} from "react-router-dom";
 
 function Navbar() {
@@ -50,8 +50,8 @@ function Navbar() {
         }
     }
 
-    const navItems = isLoggedIn ? ["Home", "Profile" , "Contact", "Logout"]
-        : ["Home", "Login"];
+    const navItems = isLoggedIn ? ["Home","Pick-up Points", "Profile" , "Contact", "Logout"]
+        : ["Home", "Login", "Pick-up Points"];
 
     const renderNav = (item, index) => {
         if (!item) return null;
@@ -69,6 +69,7 @@ function Navbar() {
         if (item === "Login") path = "/";
         if (item === "Profile") path = "/profile";
         if (item === "Contact") path = "/contact";
+        if (item === "Pick-up Points") path = "/rental_centers"
         return (
             <Link to={path} key={index} className={styles.navItem}>
                 {item}

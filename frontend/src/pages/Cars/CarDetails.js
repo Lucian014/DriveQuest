@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
-import CsrfContext from "./CsrfContext";
-import styles from '../styles/CarDetails.module.css';
+import CsrfContext from "../../components/CsrfContext";
+import styles from '../../styles/Cars/CarDetails.module.css';
 import { motion, AnimatePresence } from "framer-motion";
-import { useTheme } from "../components/ThemeContext";
-import homeStyle from "../styles/Home.module.css";
+import { useTheme } from "../../components/ThemeContext";
+import homeStyle from "../../styles/UserPages/Home.module.css";
+import Loading from "../../components/Loading";
 
 function CarDetails() {
     const { id } = useParams();
@@ -147,7 +148,7 @@ function CarDetails() {
         return `${day}-${month}-${year}`;
     };
 
-    if (loading) return <p>Se încarcă...</p>;
+    if (loading) return <Loading />
     if (error) return <p>{error}</p>;
 
     return (
@@ -166,6 +167,8 @@ function CarDetails() {
                             <p>Model: {car.model}</p>
                             <p>Year: {car.year}</p>
                             <p>Price: {car.price}</p>
+                            <p>Car type: {car.car_type}</p>
+                            <p>Rental Center: {car.center}</p>
                             <img
                                 className={styles.carImage}
                                 src={car.image ? `http://localhost:8000${car.image}` : '/images/defaultImage.webp'}
@@ -204,7 +207,7 @@ function CarDetails() {
                             )}
                         </div>
                     ) : (
-                        <p>Mașina nu a fost găsită.</p>
+                        <Loading />
                     )}
 
                     <div className={styles.commentsSection}>

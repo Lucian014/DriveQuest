@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {AnimatePresence, motion} from 'framer-motion';
-import styles from '../styles/Home.module.css';
+import styles from '../../styles/UserPages/Home.module.css';
 import { useNavigate } from 'react-router-dom';
-import CsrfContext from "./CsrfContext";
-import {useTheme} from "../components/ThemeContext";
+import CsrfContext from "../../components/CsrfContext";
+import {useTheme} from "../../components/ThemeContext";
 
 function Home() {
     const [carType, setCarType] = useState('');
@@ -157,7 +157,7 @@ function Home() {
                                             key={type}
                                             onClick={() => handleSelect(type)}
                                             className={styles.dropdown_item}
-                                            whileHover={{ x: 5, backgroundColor: '#f1e6da' }}
+                                            whileHover={{ backgroundColor: '#f1e6da' }}
                                             whileTap={{ scale: 0.98 }}
                                         >
                                             {type}

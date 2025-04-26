@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie, csrf_protect
-from .models import Car, Contact, Car_Rental, Comment
+from .models import Car, Contact, Car_Rental, Comment, RentalCenter
 from django.contrib.auth import get_user_model,login,authenticate,login as django_login
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_protect
@@ -179,6 +179,63 @@ def update_profile(request, user_id):
         return JsonResponse({'message': 'Method not allowed'}, status=405)
 
 
+def get_centers(request):
+    if request.method == "GET":
+        centers = RentalCenter.objects.all()
+        centers_data = []
+        for center in centers:
+            centers_data.append({
+                'id': center.id,
+                'name': center.name,
+                'address': center.address,
+                'city': center.city,
+                'country': center.country,
+                'phone': center.phone,
+                'image': center.image.url if center.image else None,
+                'latitude': center.lat,
+                'longitude': center.long,
+            })
+        return JsonResponse(centers_data, safe=False)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+def center_details(request, center_id):
+    if request.method == 'GET':
+        center = RentalCenter.objects.get(id=center_id)
+        cars = Car.objects.filter(center=center)
+
+        car_list = []
+        for car in cars:
+            car_list.append({
+                'id': car.id,
+                'brand': car.brand,
+                'model': car.model,
+                'year': car.year,
+                'price': car.price,
+                'image': car.image.url if car.image else None,
+                'car_type': car.car_type,
+            })
+
+        return JsonResponse({
+            'center': {
+                'id': center.id,
+                'name': center.name,
+                'city': center.city,
+                'address': center.address,
+                'country': center.country,
+                'phone': center.phone,
+                'image': center.image.url if center.image else None,
+                'latitude': center.lat,
+                'longitude': center.long,
+                'cars': car_list,
+            }
+        }, status=200)
+    else:
+        return JsonResponse({'message': 'Method not allowed'}, status=405)
+
+
+
 def get_cars(request, car_id=None):
     if request.method == "GET":
         cars= Car.objects.all()
@@ -221,7 +278,9 @@ def car_details(request, car_id):
             'price': car.price,
             'image': car.image.url if car.image else None,
             'rented': rented,
-            'end_date': end_date if end_date else None
+            'end_date': end_date if end_date else None,
+            'car_type': car.car_type,
+            'center': car.center.name,
         }, 'comments': comments_data}, status=200)
     else:
         return JsonResponse({'message': 'Method not allowed'}, status=405)
@@ -341,5 +400,34 @@ def delete_comment(request, comment_id):
     if request.method == "DELETE":
         Comment.objects.filter(id=comment_id).delete()
         return JsonResponse({'message': 'Comment deleted successfully'}, status=200)
+    else:
+        return JsonResponse({'message': 'Method not allowed'}, status=405)
+
+
+def calculate_rating(request):
+    if request.method == 'GET':
+       User = get_user_model()
+       users = User.objects.filter(stars__lte=5)
+       rating = 0
+       cnt = 0
+       for user in users:
+          rating += user.stars
+          cnt +=1
+       if cnt == 0:
+          cnt = 1
+       rating /= cnt
+       return JsonResponse({'rating': rating}, status=200)
+    else:
+        return JsonResponse({'message': 'Method not allowed'}, status=405)
+
+
+def rate_website(request):
+    if request.method == 'PUT':
+        user = request.user
+        data = json.loads(request.body)
+        stars = data.get('rating')
+        user.stars = stars
+        user.save()
+        return JsonResponse({'message': 'Rating submitted successfully'}, status=200)
     else:
         return JsonResponse({'message': 'Method not allowed'}, status=405)

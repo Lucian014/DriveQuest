@@ -1,10 +1,10 @@
 // src/components/Login.js
 import React, { useEffect, useState, useContext } from 'react';
-import styles from '../styles/Login.module.css';
-import homeStyle from "../styles/Home.module.css";
+import styles from '../../styles/Authentification/Login.module.css';
+import homeStyle from "../../styles/UserPages/Home.module.css";
 import { useNavigate } from "react-router-dom";
-import CsrfContext from './CsrfContext';
-import { useTheme } from "../components/ThemeContext";
+import CsrfContext from '../../components/CsrfContext';
+import { useTheme } from "../../components/ThemeContext";
 import { AnimatePresence, motion } from "framer-motion";
 
 function Login() {

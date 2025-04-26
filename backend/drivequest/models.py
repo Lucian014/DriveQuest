@@ -32,6 +32,7 @@ class User(AbstractUser,PermissionsMixin):
     profile_picture = models.ImageField(upload_to='user_images/',blank=True,null=True)
     points = models.PositiveIntegerField(default=0)
     XP = models.PositiveIntegerField(default=0)
+    stars = models.PositiveIntegerField(default=10)
     objects = CustomUserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
@@ -50,7 +51,20 @@ class Car(models.Model):
     year = models.IntegerField()
     image = models.ImageField(upload_to='car_images/',blank=True, null=True)
     popularity = models.PositiveIntegerField(default=0)
-
+    CAR_TYPE = [
+        ('Unknown', 'Unknown'),
+        ('Sedan','Sedan'),
+        ('SUV','SUV'),
+        ('Hatchback','Hatchback'),
+        ('Electric','Electric'),
+        ('Convertible','Convertible'),
+        ('Hybrid','Hybrid'),
+        ('Sports','Sports'),
+        ('Luxury','Luxury'),
+        ('Pickup','Pickup'),
+    ]
+    car_type = models.CharField(default='Unknown',choices=CAR_TYPE,max_length=14)
+    center = models.ForeignKey('RentalCenter', on_delete=models.CASCADE, blank=True, null=True)
     def __str__(self):
         return self.brand
 
@@ -75,3 +89,17 @@ class Comment(models.Model):
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
     comment = models.TextField()
     date = models.DateTimeField()
+
+
+class RentalCenter(models.Model):
+    name = models.CharField(max_length=100)
+    address = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
+    phone = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='rent_center_images/',blank=True, null=True)
+    lat = models.FloatField()
+    long = models.FloatField()
+
+    def __str__(self):
+        return self.name

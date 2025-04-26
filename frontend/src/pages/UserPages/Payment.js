@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import CsrfContext from "./CsrfContext";
-import styles from '../styles/Payment.module.css';
+import CsrfContext from "../../components/CsrfContext";
+import styles from '../../styles/UserPages/Payment.module.css';
 import {motion, AnimatePresence} from "framer-motion";
-import {useTheme} from "../components/ThemeContext";
-import homeStyle from "../styles/Home.module.css";
+import {useTheme} from "../../components/ThemeContext";
+import homeStyle from "../../styles/UserPages/Home.module.css";
 function Payment() {
     const location = useLocation();
     const state = location.state;

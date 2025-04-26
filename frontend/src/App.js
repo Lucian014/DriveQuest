@@ -1,17 +1,20 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import CsrfContext from "./pages/CsrfContext";
+import CsrfContext from "./components/CsrfContext";
 import { ThemeProvider } from "./components/ThemeContext";
 import Navbar from "./components/Navbar";
+import Loading from "./components/Loading";
 
 // 👇 Lazy-loaded pages
-const Home = lazy(() => import('./pages/Home'));
-const Login = lazy(() => import('./pages/Login'));
-const SignUp = lazy(() => import('./pages/SignUp'));
-const Profile = lazy(() => import('./pages/Profile'));
-const Contact = lazy(() => import('./pages/Contact'));
-const CarDetails = lazy(() => import('./pages/CarDetails'));
-const Payment = lazy(() => import('./pages/Payment'));
+const Home = lazy(() => import('./pages/UserPages/Home'));
+const Login = lazy(() => import('./pages/Authentification/Login'));
+const SignUp = lazy(() => import('./pages/Authentification/SignUp'));
+const Profile = lazy(() => import('./pages/UserPages/Profile'));
+const Contact = lazy(() => import('./pages/UserPages/Contact'));
+const CarDetails = lazy(() => import('./pages/Cars/CarDetails'));
+const Payment = lazy(() => import('./pages/UserPages/Payment'));
+const RentalCenters = lazy(()=>import('./pages/Cars/RentalCenters'));
+const Center = lazy(() => import('./pages/Cars/Center'));
 
 function getCookie(name) {
     let cookieValue = null;
@@ -41,7 +44,7 @@ function AppContent() {
     return (
         <>
             {!hideNavbarRoutes.includes(location.pathname) && <Navbar />}
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loading />}>
                 <Routes>
                     <Route path="/home" element={<Home />} />
                     <Route path="/" element={<Login />} />
@@ -50,6 +53,8 @@ function AppContent() {
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/car_details/:id" element={<CarDetails />} />
                     <Route path="/payment" element={<Payment />} />
+                    <Route path="/rental_centers" element={<RentalCenters />} />
+                    <Route path="/center/:id" element={<Center />} />
                 </Routes>
             </Suspense>
         </>

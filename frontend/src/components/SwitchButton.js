@@ -1,7 +1,7 @@
 // components/SwitchButton.js
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "./ThemeContext";
-import styles from "../styles/SwitchButton.module.css";
+import styles from "../styles/Components/SwitchButton.module.css";
 
 export default function ThemeToggle() {
     const { darkMode, toggleTheme } = useTheme();

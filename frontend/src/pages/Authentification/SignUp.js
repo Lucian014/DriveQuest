@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import styles from "../styles/Login.module.css";
+import styles from "../../styles/Authentification/Login.module.css";
 import {useNavigate} from "react-router-dom";
 import { useContext } from 'react';
-import CsrfContext from "./CsrfContext";
-import {useTheme} from "../components/ThemeContext";
+import CsrfContext from "../../components/CsrfContext";
+import {useTheme} from "../../components/ThemeContext";
 import {motion} from "framer-motion";
-import homeStyle from "../styles/Home.module.css";
+import homeStyle from "../../styles/UserPages/Home.module.css";
 import {AnimatePresence} from "framer-motion";
 
 function Signup() {

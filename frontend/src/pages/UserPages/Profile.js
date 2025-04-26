@@ -1,9 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
-import styles from '../styles/Profile.module.css';
+import styles from '../../styles/UserPages/Profile.module.css';
 import {motion , AnimatePresence} from "framer-motion";
-import CsrfContext from "./CsrfContext";
-import homeStyles from '../styles/Home.module.css';
-import {useTheme} from "../components/ThemeContext";
+import CsrfContext from "../../components/CsrfContext";
+import homeStyles from '../../styles/UserPages/Home.module.css';
+import {useTheme} from "../../components/ThemeContext";
 
 
 function Profile() {
