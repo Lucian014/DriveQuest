@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.db import models
+from django.db.models import Avg
 
 # Create your models here.
 
@@ -65,9 +66,25 @@ class Car(models.Model):
     ]
     car_type = models.CharField(default='Unknown',choices=CAR_TYPE,max_length=14)
     center = models.ForeignKey('RentalCenter', on_delete=models.CASCADE, blank=True, null=True)
-    def __str__(self):
-        return self.brand
 
+    def __str__(self):
+        return f"{self.brand} {self.model}"
+
+    @property
+    def average_rating(self):
+        # Aggregate average from related ratings.
+        return self.ratings.aggregate(avg=Avg('rating'))['avg'] or 0
+
+class CarRating(models.Model):
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name="ratings")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.PositiveSmallIntegerField()  # e.g., 1-5 scale
+
+    class Meta:
+        unique_together = ('car', 'user')  # Enforce one rating per user per car
+
+    def __str__(self):
+        return f"{self.user.username} rated {self.car} as {self.rating}"
 
 class Car_Rental(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

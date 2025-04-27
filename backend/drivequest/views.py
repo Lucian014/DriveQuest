@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie, csrf_protect
-from .models import Car, Contact, Car_Rental, Comment, RentalCenter
+from .models import Car, Contact, Car_Rental, Comment, RentalCenter, CarRating
 from django.contrib.auth import get_user_model,login,authenticate,login as django_login
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_protect
@@ -319,6 +319,7 @@ def car_details(request, car_id):
     if request.method == 'GET':
         car = Car.objects.get(id=car_id)
         rent =Car_Rental.objects.filter(car=car).first()
+        related = Car.objects.filter(brand=car.brand, car_type=car.car_type).exclude(id=car.id)[:3]
         rented = False
         end_date = None
         if rent is not None:
@@ -333,6 +334,19 @@ def car_details(request, car_id):
                 'date': comment.date,
                 'username': comment.user.username,
             })
+        related_data = []
+        for related_car in related:
+            related_data.append({
+                'id': related_car.id,
+                'brand': related_car.brand,
+                'model': related_car.model,
+                'year': related_car.year,
+                'price': related_car.price,
+                'image': related_car.image.url if related_car.image else None,
+                'car_type': related_car.car_type,
+                'center': related_car.center.name,
+                'rating': car.average_rating if car.average_rating > 0 else "N/A",
+            })
         return JsonResponse({'car':{
             'id': car.id,
             'brand': car.brand,
@@ -344,9 +358,32 @@ def car_details(request, car_id):
             'end_date': end_date if end_date else None,
             'car_type': car.car_type,
             'center': car.center.name,
-        }, 'comments': comments_data}, status=200)
+            'rating': car.average_rating if car.average_rating > 0 else "N/A",
+        }, 'comments': comments_data , 'related_cars': related_data}, status=200)
     else:
         return JsonResponse({'message': 'Method not allowed'}, status=405)
+
+
+def rate_car(request, car_id):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        rating = data.get('rating')
+        car = Car.objects.get(id=car_id)
+        user = request.user
+        rated_car = CarRating.objects.filter(user=user, car=car).first()
+        if rated_car:
+            rated_car.rating = rating
+            rated_car.save()
+        else:
+            CarRating.objects.create(
+                user=user,
+                car=car,
+                rating=rating,
+            )
+        return JsonResponse({'message': 'Rating submitted successfully'}, status=200)
+    else:
+        return JsonResponse({'message': 'Method not allowed'}, status=405)
+
 
 def post_comment(request, car_id):
     if request.method == "POST":
