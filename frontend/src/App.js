@@ -16,6 +16,7 @@ const Payment = lazy(() => import('./pages/UserPages/Payment'));
 const RentalCenters = lazy(()=>import('./pages/Cars/RentalCenters'));
 const Center = lazy(() => import('./pages/Cars/Center'));
 
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
