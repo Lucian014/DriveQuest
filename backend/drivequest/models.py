@@ -34,6 +34,11 @@ class User(AbstractUser,PermissionsMixin):
     points = models.PositiveIntegerField(default=0)
     XP = models.PositiveIntegerField(default=0)
     stars = models.PositiveIntegerField(default=10)
+    prize1 = models.BooleanField(default=False)
+    prize2 = models.BooleanField(default=False)
+    prize3 = models.BooleanField(default=False)
+    prize4 = models.BooleanField(default=False)
+    prize5 = models.BooleanField(default=False)
     objects = CustomUserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']

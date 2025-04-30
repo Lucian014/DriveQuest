@@ -15,6 +15,7 @@ const CarDetails = lazy(() => import('./pages/Cars/CarDetails'));
 const Payment = lazy(() => import('./pages/UserPages/Payment'));
 const RentalCenters = lazy(()=>import('./pages/Cars/RentalCenters'));
 const Center = lazy(() => import('./pages/Cars/Center'));
+const Prizes = lazy(() => import('./pages/UserPages/Prizes'));
 
 
 function getCookie(name) {
@@ -56,6 +57,7 @@ function AppContent() {
                     <Route path="/payment" element={<Payment />} />
                     <Route path="/rental_centers" element={<RentalCenters />} />
                     <Route path="/center/:id" element={<Center />} />
+                    <Route path="/prizes" element={<Prizes />} />
                 </Routes>
             </Suspense>
         </>

@@ -50,7 +50,7 @@ function Navbar() {
         }
     }
 
-    const navItems = isLoggedIn ? ["Home","Pick-up Points", "Profile" , "Contact", "Logout"]
+    const navItems = isLoggedIn ? ["Home", "Pick-up Points", "Profile" , "Prizes", "Contact", "Logout"]
         : ["Home", "Login", "Pick-up Points"];
 
     const renderNav = (item, index) => {
@@ -70,6 +70,8 @@ function Navbar() {
         if (item === "Profile") path = "/profile";
         if (item === "Contact") path = "/contact";
         if (item === "Pick-up Points") path = "/rental_centers"
+        if (item === "Prizes") path = "/prizes";
+
         return (
             <Link to={path} key={index} className={styles.navItem}>
                 {item}

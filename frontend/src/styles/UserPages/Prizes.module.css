@@ -1,0 +1,65 @@
+
+
+.container{
+  @apply bg-[#e9e6e6] font-sans h-auto
+}
+
+.header{
+    @apply text-center w-full bg-[#78ffd6] p-6;
+}
+
+.prizes{
+    @apply w-full flex flex-wrap gap-y-6 gap-6 p-10 justify-center items-center;
+}
+
+.prize{
+    @apply w-[400px] h-[200px] flex flex-col items-center justify-center bg-gradient-to-r from-[#007991] to-[#78ffd6] p-2 rounded-xl shadow-lg;
+}
+
+.prizeTitle{
+    @apply text-3xl font-bold text-white mb-2;
+}
+
+.prizeDescription{
+    @apply text-[17px] text-center mb-3 text-white;
+}
+
+.prizeButton {
+    @apply bg-gradient-to-r from-teal-400 to-orange-400 text-white font-bold py-2.5 px-5 border-none rounded-full cursor-pointer overflow-hidden shadow-md transition-all duration-300 ease-in-out relative;
+
+    /* Pseudo-element for shiny effect */
+    position: relative;
+}
+
+.prizeButton::before {
+    content: '';
+    @apply absolute top-0 left-[-100%] w-full h-full bg-white/40 transform skew-x-[-45deg] transition-all duration-500 ease-in-out;
+}
+
+.prizeButton:hover {
+    @apply bg-gradient-to-r from-orange-400 to-teal-400 translate-y-[-2px] shadow-lg;
+}
+
+.prizeButton:hover::before {
+    left: 100%;
+}
+
+.leaderboard{
+    @apply w-full flex flex-col items-center justify-center pb-12 pt-6 mt-4;
+}
+
+.table{
+    @apply w-auto border-collapse border-2 border-gray-500 overflow-hidden;
+}
+
+.leaderboard th{
+    @apply p-[25px] border-gray-500  text-center text-[1.4rem] bg-gradient-to-br from-[#007991] to-[#78ffd6]  text-black uppercase font-bold border-b-[1px] border-white/30 transition-all duration-300 ease-in-out
+}
+
+.leaderboard img{
+    @apply w-12 h-12 rounded-full mx-auto;
+}
+
+.leaderboard td{
+    @apply p-[15px] text-center text-[1.2rem] border-b-[1px] border-white;
+}

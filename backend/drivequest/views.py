@@ -492,6 +492,11 @@ def user(request):
             'points': user.points,
             'xp': user.XP,
             'profile_picture': user.profile_picture.url if user.profile_picture else None,
+            'prize1': user.prize1,
+            'prize2': user.prize2,
+            'prize3': user.prize3,
+            'prize4': user.prize4,
+            'prize5': user.prize5,
         }}, status=200)
     else:
         return JsonResponse({'message': 'Method not allowed'}, status=405)
@@ -531,3 +536,51 @@ def rate_website(request):
         return JsonResponse({'message': 'Rating submitted successfully'}, status=200)
     else:
         return JsonResponse({'message': 'Method not allowed'}, status=405)
+
+
+def claim_reward(request, prize_number):
+    if request.method == 'PUT':
+        user = request.user
+        prize_field = f'prize{prize_number}'
+        if hasattr(user, prize_field):
+            setattr(user, prize_field, True)
+            user.save()
+            return JsonResponse({'message': f'Prize {prize_field} claimed successfully'}, status=200)
+        else:
+            return JsonResponse({'message': f'Invalid prize: {prize_field}'}, status=400)
+    else:
+        return JsonResponse({'message': 'Method not allowed'}, status=405)
+
+
+def leaderboard(request):
+    if request.method == 'GET':
+        User = get_user_model()
+        users = User.objects.order_by('-XP')[:5]
+        users_data = []
+
+        for index, user in enumerate(users, start=1):
+            users_data.append({
+                'id': user.id,
+                'username': user.username,
+                'XP': user.XP,
+                'profile_picture': request.build_absolute_uri(user.profile_picture.url) if user.profile_picture else None,
+                'rank': index,
+            })
+
+        current_user = request.user if request.user.is_authenticated else None
+        if current_user:
+            current_user_rank = (
+                    User.objects.filter(XP__gt=current_user.XP).count() + 1
+            )
+            if current_user_rank > 5:
+              users_data.append({
+                'id': current_user.id,
+                'username': current_user.username,
+                'XP': current_user.XP,
+                'profile_picture': request.build_absolute_uri(user.profile_picture.url) if user.profile_picture else None,
+                'rank': current_user_rank,
+              })
+
+        return JsonResponse(users_data, safe=False)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
