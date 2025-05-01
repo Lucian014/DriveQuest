@@ -33,9 +33,11 @@ function RentalCenters() {
         <div className={styles.container}>
             {centers.map((center, id) => (
                 <div key={id} className={styles.card} onClick={() => handleCenter(center.id)}>
-                    <p className={styles.name}>{center.name}</p>
-                    <p className={styles.info}>{center.address}</p>
-                    <p className={styles.info}>{center.city}</p>
+                    <div className={styles.text_content}>
+                        <p className={styles.name}>{center.name}</p>
+                        <p className={styles.info}>{center.address}</p>
+                        <p className={styles.info}>{center.city}</p>
+                    </div>
                     <p className={styles.country}>{center.country}</p>
                 </div>
             ))}
