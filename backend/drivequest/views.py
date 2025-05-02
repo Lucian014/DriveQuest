@@ -360,7 +360,7 @@ def car_details(request, car_id):
                 'price': related_car.price,
                 'image': related_car.image.url if related_car.image else None,
                 'car_type': related_car.car_type,
-                'center': related_car.center.name,
+                'center': related_car.center.name if related_car.center else None,
                 'rating': car.average_rating if car.average_rating > 0 else "N/A",
             })
         return JsonResponse({'car':{
@@ -373,7 +373,7 @@ def car_details(request, car_id):
             'rented': rented,
             'end_date': end_date if end_date else None,
             'car_type': car.car_type,
-            'center': car.center.name,
+            'center': car.center.name if car.center else None,
             'rating': car.average_rating if car.average_rating > 0 else "N/A",
         }, 'comments': comments_data , 'related_cars': related_data}, status=200)
     else:

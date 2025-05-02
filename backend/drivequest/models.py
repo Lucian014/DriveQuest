@@ -129,3 +129,16 @@ class RentalCenter(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Bill(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    car_rental = models.ForeignKey(Car_Rental, on_delete=models.CASCADE)
+    total_amount = models.FloatField()
+    payment_method = models.CharField(max_length=20)
+    from_date = models.DateField()
+    due_date = models.DateField()
+    pdf_file = models.FileField(upload_to='bills/', null=True, blank=True)
+
+    def __str__(self):
+        return f"Bill #{self.id} for {self.user.username}"
