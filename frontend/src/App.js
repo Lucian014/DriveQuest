@@ -5,6 +5,7 @@ import { ThemeProvider } from "./components/ThemeContext";
 import Navbar from "./components/Navbar";
 import Loading from "./components/Loading";
 
+
 // 👇 Lazy-loaded pages
 const Home = lazy(() => import('./pages/UserPages/Home'));
 const Login = lazy(() => import('./pages/Authentification/Login'));
