@@ -58,9 +58,9 @@ input[type="file"] {
 }
 
 .car_list{
-    @apply flex flex-wrap gap-4 w-full h-full;
+    @apply flex flex-wrap gap-2 w-full h-full;
 }
 
 .listedCar{
-    @apply flex flex-col gap-2 w-[90%] md:w-[30%] h-full;
+    @apply flex flex-col gap-2 w-[90%] md:w-[28%] h-full;
 }

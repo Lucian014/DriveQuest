@@ -29,6 +29,9 @@ function Profile() {
     const [toDelete, setToDelete] = useState(null);
     const [modalTitle, setModalTitle] = useState("");
     const [modalContent, setModalContent] = useState("");
+    const [currentPage, setCurrentPage] = useState(0); // Track the current page of cars
+    const carsPerPage = 3; // Show 3 cars per page
+
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', 'dark');
@@ -193,6 +196,21 @@ function Profile() {
             setModalContent("An error occurred while deleting the rental.");
         }
     }
+
+    const handleNext = () => {
+        if (currentPage < Math.floor(cars.length / carsPerPage)) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrev = () => {
+        if (currentPage > 0) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const currentCars = cars.slice(currentPage * carsPerPage, (currentPage + 1) * carsPerPage);
+
     return (
     <AnimatePresence mode={"popLayout"} exitBeforeEnter={true} initial={false} animate={"visible"} exit={"hidden"}>
     <motion.div
@@ -381,9 +399,21 @@ function Profile() {
 
                     {(selectedTab === "rental") && (<div className={styles.info}>
                         <div className={styles.car_list}>
-                            {cars.length > 0 ? (
-                                cars.map((car, index) => (
-                                    <div className={styles.listedCar}>
+                            {/* Left Arrow */}
+                            <div className="flex justify-center items-center w-[40px]">
+                                <button
+                                    onClick={handlePrev}
+                                    className={`px-2 py-2 rounded-lg ${currentPage === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-300'}`}
+                                    disabled={currentPage === 0}
+                                >
+                                    ◀️
+                                </button>
+                            </div>
+
+                            {/* Cars List */}
+                            {currentCars.length > 0 ? (
+                                currentCars.map((car, index) => (
+                                    <div key={index} className={styles.listedCar}>
                                         <img
                                             className="w-[100%] h-[150px] object-cover rounded-lg"
                                             src={car.image ? `http://localhost:8000${car.image}` : '/images/defaultImage.webp'}
@@ -402,11 +432,17 @@ function Profile() {
                                             💶 Total: {car.price} €
                                         </p>
                                         {isEditing ? (
-                                            <button onClick={()=>{setToDelete(car.id);
-                                                setIsOpen(!isOpen);
-                                                setModalTitle("Delete from Rental History");
-                                                setModalContent("Are you sure you want to delete this rental?");
-                                            }} className="min-h-[30px] ml-1 text-mb bg-amber-400 rounded-lg w-auto">Delete from Rental History</button>
+                                            <button
+                                                onClick={() => {
+                                                    setToDelete(car.id);
+                                                    setIsOpen(!isOpen);
+                                                    setModalTitle("Delete from Rental History");
+                                                    setModalContent("Are you sure you want to delete this rental?");
+                                                }}
+                                                className="min-h-[30px] ml-1 text-mb bg-amber-400 rounded-lg w-auto"
+                                            >
+                                                Delete from Rental History
+                                            </button>
                                         ) : (
                                             <div className="min-h-[30px]"></div>
                                         )}
@@ -415,6 +451,17 @@ function Profile() {
                             ) : (
                                 <p className={styles.no_rentals}>Nu ai închiriat nicio mașină momentan.</p>
                             )}
+
+                            {/* Right Arrow */}
+                            <div className="flex justify-center items-center w-[40px]">
+                                <button
+                                    onClick={handleNext}
+                                    className={`px-2 py-2 rounded-lg ${currentPage >= Math.floor(cars.length / carsPerPage) ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-300'}`}
+                                    disabled={currentPage >= Math.floor(cars.length / carsPerPage)}
+                                >
+                                    ▶️
+                                </button>
+                            </div>
                         </div>
                     </div>)}
                     <motion.div

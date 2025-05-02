@@ -18,7 +18,6 @@ const RentalCenters = lazy(()=>import('./pages/Cars/RentalCenters'));
 const Center = lazy(() => import('./pages/Cars/Center'));
 const Prizes = lazy(() => import('./pages/UserPages/Prizes'));
 
-
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -31,6 +30,7 @@ function getCookie(name) {
             }
         }
     }
+    console.log(cookieValue);
     return cookieValue;
 }
 

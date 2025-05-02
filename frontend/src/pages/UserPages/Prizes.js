@@ -126,13 +126,32 @@ function Prizes() {
                     </table>
                 </div>
             </div>
-
-
-
-            {modal && <div className="modal">
-                <p>Reward claimed successfully</p>
-                <button onClick={()=>setModal(false)}>Close</button>
-            </div>}
+            {modal && (
+                <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+                    <div
+                        className="rounded-2xl p-1 bg-gradient-to-r from-teal-400 via-blue-500 to-purple-600 w-[90%] max-w-md shadow-xl">
+                        <div className="bg-white rounded-2xl p-6">
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-xl font-semibold text-gray-800">Reward claimed successfully</h2>
+                                <button
+                                    onClick={() => setModal(!modal)}
+                                    className="text-gray-500 hover:text-gray-700 text-lg font-bold"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                            <div className="mt-6 flex justify-end gap-2">
+                                <button
+                                    onClick={() => setModal(!modal)}
+                                    className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
