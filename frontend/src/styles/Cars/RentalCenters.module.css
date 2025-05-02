@@ -1,0 +1,167 @@
+.container {
+    display: flex;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding-top: 1.5rem;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.3rem;
+}
+
+.content{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.inputs {
+    padding-top: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+}
+
+/* Păstrezi poziționarea în grid */
+.CountryInput {
+    grid-column-start: 2;
+}
+
+.CityInput {
+    grid-column-start: 3;
+}
+
+.AddressInput {
+    grid-column-start: 2;
+    grid-row-start: 2;
+}
+
+.CenterNameInput {
+    grid-column-start: 3;
+    grid-row-start: 2;
+}
+
+.searchButton {
+    grid-column: span 2 / span 2;
+    grid-column-start: 2;
+    grid-row-start: 3;
+}
+
+/* ✨ Stil Booking pentru inputuri */
+.inputs input,
+.inputs select {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 2px solid #febb02;
+    border-radius: 8px;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #fff;
+    transition: border 0.2s ease;
+}
+
+.inputs input:focus,
+.inputs select:focus {
+    border-color: #febb02;
+    box-shadow: 0 0 0 2px rgba(254, 187, 2, 0.2);
+}
+
+/* ✨ Stil Booking pentru buton */
+.searchButton {
+    padding: 0.75rem 1rem;
+    background-color: #febb02;
+    color: #000;
+    font-weight: bold;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.searchButton:hover {
+    background-color: #e0a800;
+}
+
+/* CARD STYLING */
+.card {
+    background: linear-gradient(to bottom right, #ffffff, #f8f9fa);
+    border-radius: 5px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    padding: 3rem ;
+    transition: all 0.3s ease;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    max-height: 600px;
+    width: 100%;
+}
+
+.text_content{
+    flex: 0 0 50%;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.29);
+}
+
+/* TEXT ELEMENTS */
+.name {
+    display: flex;
+    text-align: left;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
+}
+
+.info {
+    display: flex;
+    text-align: left;
+    font-size: 1.1rem;
+    color: #4a5568;
+    margin-bottom: 0.2rem;
+    letter-spacing: 0.3px;
+}
+
+.country {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #718096;
+    background-color: #edf2f7;
+    padding: 0.3rem 0.5rem;
+    border-radius: 1rem;
+    margin-top: 1.1rem;
+    width: fit-content;
+}
+
+
+.MapWrapper {
+    flex: 0 0 50%;
+    max-width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    padding-right: 20px;
+
+}
+
+
+/* RESPONSIVE TWEAK */
+@media (max-width: 600px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .card {
+        padding: 1.5rem;
+    }
+
+    .name {
+        font-size: 1.4rem;
+    }
+}

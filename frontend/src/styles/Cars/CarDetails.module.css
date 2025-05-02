@@ -1,0 +1,455 @@
+/* Container holds both car info and comments */
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+/* Top section: image and info side by side */
+.topSection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    align-items: flex-start;
+}
+.imageContainer {
+    flex: 1 1 500px;
+}
+
+.infoContainer {
+    min-width: 550px;
+    background: linear-gradient(135deg, #f9f9f9, #ffffff);
+    border-radius: 16px;
+    padding: 32px 40px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.infoContainer:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Heading Styling */
+.infoContainer h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+/* General Text Styling */
+.infoContainer p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    margin-bottom: 12px;
+    color: #555;
+}
+.infoContainer p strong {
+    color: #222;
+}
+
+/* Car image styling */
+.carImage {
+    width: 100%;
+    max-height:275px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+
+.rateContainerCar {
+    margin-top: 18px;
+    min-height: 105px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    background: radial-gradient(circle at top left, #ffffff, #f2f2f2);
+    border-radius: 20px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.rateContainerCar:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.2);
+}
+
+/* "Rate Us" Text Styling (Positioned on top) */
+.rateContainerCar p {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0 0 5px;
+    color: #333;
+}
+
+/* Stars Container */
+.stars {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Star Icon Styling */
+.star {
+    font-size: 32px;
+    color: #e0e0e0;
+    cursor: pointer;
+    transition: color 0.25s ease, transform 0.25s ease, text-shadow 0.25s ease;
+}
+
+.filled {
+    color: #ffc107;
+    text-shadow: 0 0 8px rgba(255, 193, 7, 0.8);
+    transform: scale(1.1);
+}
+
+.star:hover {
+    transform: scale(1.2);
+}
+
+
+
+/* Add a pulsate animation when filled */
+.filled:hover {
+    animation: pulsate 0.6s ease;
+}
+
+@keyframes pulsate {
+    0% { transform: scale(1.15); }
+    50% { transform: scale(1.25); }
+    100% { transform: scale(1.15); }
+}
+
+
+/* Rental status banner */
+.rentalStatus {
+    background-color: #ffefef;
+    border: 1px solid #f5c2c2;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 20px 0;
+    text-align: center;
+    font-weight: 600;
+    color: #a00;
+}
+
+/* Form Styling */
+.form {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 16px;
+}
+.form input[type="date"] {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+.form input[type="date"]:focus {
+    border-color: #4070f4;
+    outline: none;
+}
+.form button {
+    background: #4070f4;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+.form button:hover {
+    background: #335cd6;
+    transform: translateY(-2px);
+}
+
+/* Details Summary Styling */
+.detailsSummary {
+    background: #f3f3f3;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 24px;
+    text-align: center;
+}
+.detailsSummary p {
+    font-size: 1rem;
+    margin: 10px 0;
+    color: #444;
+}
+.detailsSummary button {
+    background: #6d3bbf;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+.detailsSummary button:hover {
+    background: #572fa0;
+    transform: translateY(-2px);
+}
+
+/* Bottom section: comments */
+.bottomSection {
+    display: flex;
+    flex-wrap: wrap;       /* allow wrap on narrow screens */
+    gap: 32px;             /* space between columns */
+    margin-top: 40px;
+}
+
+/* Each column */
+.relatedSection,
+.commentsSection {
+    flex: 1 1 500px;       /* grow, shrink, base width 400px */
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+/* Heading styles */
+.relatedSection h4,
+.commentsSection h3 {
+    margin-bottom: 16px;
+    font-size: 1.25rem;
+    color: #333;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 8px;
+}
+
+.relatedSection h4 {
+    font-size: 1.4rem;
+    color: #333333;
+    margin: 0 0 0.5rem 0; /* sets top margin to 0 */
+}
+
+.commentsSection h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    color: #333;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 8px;
+}
+
+/* Related list: grid of cards */
+.relatedList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 21px;
+    margin-top: 16px;
+}
+
+.relatedCard {
+    display: flex;
+    cursor: pointer;
+    text-align: center;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.relatedCard img {
+    height: 140px;
+    width: auto;
+    object-fit: cover;
+}
+.relatedCard p {
+    margin: 8px 0;
+    font-size: 1.1rem;
+}
+
+.relatedDetails {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left:40px;
+}
+.relatedDetails p {
+    margin: 4px 0;
+}
+.relatedDetails p:first-of-type {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #333;
+}
+.relatedDetails p:nth-of-type(2),
+.relatedDetails p:nth-of-type(3) {
+    font-size: 1.05rem;
+    color: #555;
+}
+.relatedDetails p:last-of-type {
+    font-size: 0.95rem;
+    color: #b08968;
+    font-weight: 500;
+}
+
+.relatedCard:hover {
+    box-shadow: 0 4px 15px rgba(64, 112, 244, 0.2);
+}
+
+/* Comments section adjustments */
+/* Title and subtitle */
+.commentsSection h3 {
+    font-size: 1.8rem;
+    color: #333333;
+    margin-bottom: 0.5rem;
+}
+
+.sectionSubtitle {
+    font-size: 1.1rem;
+    color: #666666;
+    margin-bottom: 1.5rem;
+}
+
+/* Comment Form Styles */
+.commentForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.textarea {
+    width: 100%;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    font-size: 1rem;
+    resize: vertical;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.textarea:focus {
+    border-color: #4070f4;
+    box-shadow: 0 0 5px rgba(64, 112, 244, 0.5);
+}
+
+.postButton {
+    align-self: flex-start;
+    background-color: #4070f4;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.postButton:hover {
+    background-color: #335cd6;
+    transform: translateY(-2px);
+}
+
+/* Comment List & Individual Comment Styling */
+.commentList {
+    margin-top: 2rem;
+    height: 310px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.comment {
+    display: flex;
+    gap: 1rem;
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s;
+}
+
+.comment:hover {
+    box-shadow: 0 4px 15px rgba(64, 112, 244, 0.2);
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #4070f4;
+}
+
+.commentContent {
+    flex: 1;
+}
+
+/* Comment Header (User Info & Controls) */
+.commentHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.username {
+    font-weight: 600;
+    color: #333333;
+    margin-right: 0.5rem;
+}
+
+.commentDate {
+    font-size: 0.85rem;
+    color: #999999;
+}
+
+.deleteButton {
+    background: transparent;
+    border: 1px solid #ff4d4f;
+    color: #ff4d4f;
+    border-radius: 4px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.deleteButton:hover {
+    background-color: #ff4d4f;
+    color: #ffffff;
+}
+
+/* Comment Text */
+.commentText p {
+    font-size: 1rem;
+    color: #555555;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* No Comments and Encouragement Styles */
+.noCommentsWrapper {
+    text-align: center;
+    padding: 2rem;
+    color: #777777;
+}
+
+.noComments {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.encourage {
+    font-size: 1rem;
+    color: #777777;
+}

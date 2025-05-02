@@ -1,0 +1,66 @@
+
+
+.profile_container {
+    @apply box-border
+    mx-auto w-[90%]
+    flex flex-col md:flex-row items-start md:gap-9;
+}
+
+.left {
+    @apply h-[530px] bg-white w-[100%] md:w-[40%] max-w-[450px] px-12 py-6 flex flex-col items-center my-24 shadow-xl;
+}
+
+input[type="file"] {
+    display: none; /* Ensure the file input doesn't affect the layout */
+}
+
+.right {
+    @apply h-[530px] box-border flex-1 bg-white
+    px-6 py-6
+    flex flex-col
+    my-24 shadow-xl;
+}
+
+.tabs {
+    @apply flex gap-6;
+}
+
+
+.info{
+    @apply py-6 flex flex-wrap items-start gap-6 mt-6;
+}
+
+.editable_field{
+    @apply min-w-[300px] w-[45%];
+}
+
+.input_box {
+    @apply
+    rounded-xl bg-white
+    shadow-sm focus-within:ring-2 focus-within:ring-purple-500
+    p-3 transition-all;
+}
+
+.action_buttons {
+    @apply flex gap-4 w-full justify-center md:justify-end px-12 pb-4;
+}
+
+/* .button should have the right styles for alignment and appearance */
+.button {
+    @apply bg-yellow-500 text-center p-3 rounded-lg hover:cursor-pointer;
+}
+
+.image_actions{
+    @apply flex gap-2 my-2;
+}
+.imageButton{
+    @apply bg-yellow-500 text-center p-1 rounded-lg hover:cursor-pointer;
+}
+
+.car_list{
+    @apply flex flex-wrap gap-2 w-full h-full;
+}
+
+.listedCar{
+    @apply flex flex-col gap-2 w-[90%] md:w-[28%] h-full;
+}

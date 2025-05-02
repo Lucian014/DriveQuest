@@ -1,0 +1,84 @@
+.container {
+    @apply bg-gray-100 font-sans min-h-screen py-8 px-4 sm:px-6 lg:px-8;
+}
+
+.header {
+    @apply text-center w-full bg-gradient-to-r from-teal-400 via-blue-500 to-purple-600 text-white py-8 rounded-lg shadow-md mb-8;
+}
+
+.header h1 {
+    @apply text-4xl sm:text-5xl font-extrabold tracking-tight;
+}
+
+.prizes {
+    @apply w-full flex flex-wrap gap-6 md:gap-8 justify-center;
+}
+
+.prize {
+    @apply w-full sm:w-[350px] md:w-[400px] lg:w-[450px] h-auto flex flex-col p-4 items-center justify-between bg-white rounded-2xl shadow-xl overflow-hidden transform transition-transform duration-300 hover:scale-105;
+}
+
+.prize::before {
+    /* subtle top border accent */
+    content: '';
+    @apply block w-full h-1 bg-gradient-to-r from-teal-400 to-blue-500;
+}
+
+.prizeContent {
+    @apply p-6 flex-1 flex flex-col items-center justify-center;
+}
+
+.prizeTitle {
+    @apply text-2xl sm:text-3xl font-bold text-gray-800 my-3;
+}
+
+.prizeDescription {
+    @apply text-base sm:text-lg text-center text-gray-600 mb-6;
+}
+
+.prizeButton {
+    @apply inline-block bg-gradient-to-r from-blue-500 to-teal-400 text-white font-semibold py-3 px-6 rounded-full cursor-pointer relative overflow-hidden shadow-md transition-all duration-300 ease-in-out;
+}
+
+.prizeButton::before {
+    content: '';
+    @apply absolute top-0 left-[-120%] w-full h-full bg-white/30 transform skew-x-[-25deg] transition-all duration-500 ease-in-out;
+}
+
+.prizeButton:hover {
+    @apply bg-gradient-to-r from-teal-400 to-blue-500 shadow-lg;
+}
+
+.prizeButton:hover::before {
+    left: 120%;
+}
+
+.leaderboard {
+    @apply w-[50%] mx-auto flex flex-col items-center justify-center bg-white rounded-2xl shadow-lg mt-12 py-8;
+}
+
+.table {
+    @apply mx-auto table-auto border-collapse;
+}
+
+.leaderboard th {
+    @apply px-6 py-4 bg-gradient-to-r from-blue-500 to-teal-400 text-white text-3xl font-bold uppercase;
+}
+
+.leaderboard td {
+    @apply px-6 py-4 text-xl text-center text-gray-700 border-b border-gray-200;
+}
+
+.leaderboard img {
+    @apply w-12 h-12 rounded-full mx-auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .prize {
+        @apply w-full;
+    }
+    .header h1 {
+        @apply text-3xl;
+    }
+}
