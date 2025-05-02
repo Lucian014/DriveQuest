@@ -614,12 +614,12 @@ def bill_history(request):
         for bill in bills:
             bills_data.append({
                 'id': bill.id,
-                'car_rental': str(bill.car_rental),  # Adjust as needed
+                'car_rental': f'{bill.car_rental.car.brand} {bill.car_rental.car.model} ({bill.car_rental.car.year})',  # Adjust as needed
                 'total_amount': bill.total_amount,
                 'payment_method': bill.payment_method,
                 'from_date': bill.from_date.strftime('%Y-%m-%d'),
                 'due_date': bill.due_date.strftime('%Y-%m-%d'),
-                'pdf_url': bill.pdf_file.url if bill.pdf_file else None,
+                'pdf_url': request.build_absolute_uri(bill.pdf_file.url) if bill.pdf_file else None,
             })
 
         return JsonResponse(bills_data, safe=False)

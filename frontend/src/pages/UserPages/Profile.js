@@ -31,7 +31,7 @@ function Profile() {
     const [modalContent, setModalContent] = useState("");
     const [currentPage, setCurrentPage] = useState(0); // Track the current page of cars
     const carsPerPage = 3; // Show 3 cars per page
-
+    const [bills, setBills] = useState([]);
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', 'dark');
@@ -78,6 +78,19 @@ function Profile() {
             .then(data => {
                     console.log("Rented cars: ",data);
                     setCars(data);
+            }).catch(error => {console.log(error)});
+
+        fetch(`http://localhost:8000/drivequest/bill_history/`, {
+            method: "GET",
+            headers:{
+                "Content-Type": "application/json",
+                'X-CSRFToken': csrftoken,
+            },
+            credentials: "include",
+        }).then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setBills(data);
             }).catch(error => {console.log(error)});
 
     },[]);
@@ -464,6 +477,26 @@ function Profile() {
                                 </button>
                             </div>
                         </div>
+                    </div>)}
+
+                    {(selectedTab === "payment") && (<div className={styles.info}>
+                        {bills.length > 0 ? (
+                            bills.map((bill, index) => (
+                                <div key={bill.id} className="bill-card">
+                                    <p><strong>Car :</strong> {bill.car_rental}</p>
+                                    <p><strong>Total Amount:</strong> ${bill.total_amount}</p>
+                                    <p><strong>Payment Method:</strong> {bill.payment_method}</p>
+                                    <p><strong>From:</strong> {formatDate(bill.from_date)} <strong>Due:</strong> {formatDate(bill.due_date)}</p>
+                                    {bill.pdf_url ? (
+                                        <a href={bill.pdf_url} target="_blank" rel="noopener noreferrer">View PDF</a>
+                                    ) : (
+                                        <p>No PDF available</p>
+                                    )}
+                                </div>
+                            ))
+                        ) : (
+                            <p>No bills found.</p>
+                        )}
                     </div>)}
                     <motion.div
                         className={styles.action_buttons}
