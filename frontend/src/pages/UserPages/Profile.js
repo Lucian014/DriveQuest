@@ -29,6 +29,7 @@ function Profile() {
     const [toDelete, setToDelete] = useState(null);
     const [modalTitle, setModalTitle] = useState("");
     const [modalContent, setModalContent] = useState("");
+<<<<<<< HEAD
     const [currentPage, setCurrentPage] = useState(0); // Track the current page of cars
     const carsPerPage = 3; // Show 3 cars per page
     const [bills, setBills] = useState([]);
@@ -49,6 +50,8 @@ function Profile() {
     const currentBills = bills.slice(start, start + billsPerPage);
 
 
+=======
+>>>>>>> cd22d14 (Lets test this out)
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', 'dark');
@@ -210,6 +213,7 @@ function Profile() {
 
 
     const deleteRental = async (id) =>{
+<<<<<<< HEAD
 
         if(modalTitle === "Delete from Rental History"){
             const response = await fetch(`http://localhost:8000/drivequest/car_rental/${id}/`, {
@@ -262,6 +266,25 @@ function Profile() {
 
     const currentCars = cars.slice(currentPage * carsPerPage, (currentPage + 1) * carsPerPage);
 
+=======
+        const response = await fetch(`http://localhost:8000/drivequest/car_rental/${id}/`, {
+            method: "DELETE",
+            headers:{
+                "Content-Type": "application/json",
+                'X-CSRFToken': csrftoken,
+            },
+            credentials: "include",
+        });
+        if (response.ok) {
+            setCars(cars.filter(car => car.id !== id));
+            setIsOpen(false);
+            setIsEditing(false);
+        } else{
+            setModalTitle("Error");
+            setModalContent("An error occurred while deleting the rental.");
+        }
+    }
+>>>>>>> cd22d14 (Lets test this out)
     return (
     <AnimatePresence mode={"popLayout"} exitBeforeEnter={true} initial={false} animate={"visible"} exit={"hidden"}>
     <motion.div
@@ -319,6 +342,7 @@ function Profile() {
                                     Instagram
                                 </button>)}
                                 <i className="fab fa-instagram absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+<<<<<<< HEAD
                             </div>
                         </div>
 
@@ -591,6 +615,8 @@ function Profile() {
                                 ) : (
                                     <p className="text-gray-500 text-center text-2xl col-span-full">No bills found.</p>
                                 )}
+=======
+>>>>>>> cd22d14 (Lets test this out)
                             </div>
 
                             {/* Right Arrow */}
@@ -606,7 +632,175 @@ function Profile() {
                                 </button>
                             </div>
                         </div>
+<<<<<<< HEAD
                     )}
+=======
+
+                            <div className="min-w-[260px] md:min-w-[300px]">
+                                <div className="relative mb-3">
+                                    {isEditing ? (<input
+                                        onChange={(e) => setTwitter(e.target.value)}
+                                        type="text"
+                                        placeholder="Enter Twitter URL"
+                                        className="w-full p-2 pl-12 rounded-xl shadow-sm
+                                     focus-within:ring-2 focus-within:ring-purple-500 focus:outline-none focus:border-transparent"
+                                    />) : (<button onClick={()=>{outsideNavigate(twitter)}} className="w-full text-mb p-2 pl-12 rounded-xl shadow-sm focus-within:ring-2 focus-within:ring-purple-500 flex items-center justify-start">
+                                       Twitter
+                                    </button>)}
+                                    <i className="fab fa-twitter absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                </div>
+                            </div>
+
+                        <div className="min-w-[260px] md:min-w-[300px]">
+                                <div className="relative mb-3">
+                                    {isEditing ? (<input
+                                        onChange={(e) => setTiktok(e.target.value)}
+                                        type="text"
+                                        placeholder="Enter Tiktok URL"
+                                        className="w-full p-2 pl-12 rounded-xl shadow-sm
+                                     focus-within:ring-2 focus-within:ring-purple-500 focus:outline-none focus:border-transparent"
+                                    />) : (<button onClick={()=>{outsideNavigate(tiktok)}} className="w-full text-mb p-2 pl-12 rounded-xl shadow-sm focus-within:ring-2 focus-within:ring-purple-500 flex items-center justify-start">
+                                        Tiktok
+                                    </button>)}
+                                    <i className="fab fa-tiktok absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                </div>
+                            </div>
+
+                        <div className="min-w-[260px] md:min-w-[300px]">
+                                <div className="relative">
+                                    {isEditing ? (<input
+                                        onChange={(e) => setLinkedin(e.target.value)}
+                                        type="text"
+                                        placeholder="Enter Linkedin URL"
+                                        className="w-full p-2 pl-12 rounded-xl shadow-sm
+                                     focus-within:ring-2 focus-within:ring-purple-500 focus:outline-none focus:border-transparent"
+                                    />) : (<button onClick={()=>{outsideNavigate(linkedin)}} className="w-full text-mb p-2 pl-12 rounded-xl shadow-sm focus-within:ring-2 focus-within:ring-purple-500 flex items-center justify-start">
+                                        Linkedin
+                                    </button>)}
+                                    <i className="fab fa-linkedin absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <div className={styles.right}>
+                    <div className={styles.tabs}>
+                        {[
+                            { key: "account", label: "Account info" },
+                            { key: "rental", label: "Car rental history" },
+                            { key: "payment", label: "Payment info" }
+                        ].map(({ key, label }) => (
+                            <button
+                                key={key}
+                                onClick={() => setSelectedTab(key)}
+                                className={`text-lg relative pl-4 pt-4 pb-1 transition-all duration-300 ease-in-out
+          ${selectedTab === key ? "text-yellow-500" : "text-gray-400"}
+          after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-full
+          after:transition-all after:duration-300 after:ease-in-out
+          ${selectedTab === key ? "after:bg-yellow-500" : "after:bg-transparent"}`}
+                            >
+                                {label}
+                            </button>
+                        ))}
+                    </div>
+                        {(selectedTab === "account") && (<div className={styles.info}>
+                            <div className={styles.editable_field}>
+                                <p className="text-lg font-medium text-black mb-1">First Name:</p>
+                                <div className={styles.input_box}>
+                                    {isEditing ? (
+                                        <input
+                                            className="focus:outline-none focus:border-transparent"
+                                            type="text"
+                                            placeholder={firstName}
+                                            value={firstName}
+                                            onChange={(e) => setFirstName(e.target.value)}
+                                        />
+                                    ) : (
+                                        <span>{firstName}</span>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className={styles.editable_field}>
+                                <p className="text-lg font-medium text-black mb-1">Last Name:</p>
+                                <div className={styles.input_box}>
+                                    {isEditing ? (
+                                        <input
+                                            className="focus:outline-none focus:border-transparent"
+                                            type="text"
+                                            placeholder={lastName}
+                                            value={lastName}
+                                            onChange={(e) => setLastName(e.target.value)}
+                                        />
+                                    ) : (
+                                        <span>{lastName}</span>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className={styles.editable_field}>
+                                <p className="text-lg font-medium text-black mb-1">Username:</p>
+                                <div className={styles.input_box}>
+                                    {isEditing ? (
+                                        <input
+                                            className="focus:outline-none focus:border-transparent"
+                                            type="text"
+                                            placeholder={username}
+                                            value={username}
+                                            onChange={(e) => setUsername(e.target.value)}
+                                        />
+                                    ) : (
+                                        <span>{username}</span>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className={styles.editable_field}>
+                                <p className="text-lg font-medium text-black mb-1">Email:</p>
+                                <div className={styles.input_box}>
+                                    <span>{email}</span>
+                                </div>
+                            </div>
+                        </div>)}
+
+                    {(selectedTab === "rental") && (<div className={styles.info}>
+                        <div className={styles.car_list}>
+                            {cars.length > 0 ? (
+                                cars.map((car, index) => (
+                                    <div className={styles.listedCar}>
+                                        <img
+                                            className="w-[100%] h-[150px] object-cover rounded-lg"
+                                            src={car.image ? `http://localhost:8000${car.image}` : '/images/defaultImage.webp'}
+                                            alt={`${car.brand} ${car.model}`}
+                                        />
+                                        <h3 className="text-lg pl-1 font-medium text-black">
+                                            {car.brand} {car.model} ({car.year})
+                                        </h3>
+                                        <p className="text-mb pl-1 text-black">
+                                            📅 {formatDate(car.start_date)} – {formatDate(car.end_date)}
+                                        </p>
+                                        <p className="text-mb pl-1 text-black">
+                                            ⏱️ {car.days} zile
+                                        </p>
+                                        <p className="text-mb pl-1 text-black">
+                                            💶 Total: {car.price} €
+                                        </p>
+                                        {isEditing ? (
+                                            <button onClick={()=>{setToDelete(car.id);
+                                                setIsOpen(!isOpen);
+                                                setModalTitle("Delete from Rental History");
+                                                setModalContent("Are you sure you want to delete this rental?");
+                                            }} className="min-h-[30px] ml-1 text-mb bg-amber-400 rounded-lg w-auto">Delete from Rental History</button>
+                                        ) : (
+                                            <div className="min-h-[30px]"></div>
+                                        )}
+                                    </div>
+                                ))
+                            ) : (
+                                <p className={styles.no_rentals}>Nu ai închiriat nicio mașină momentan.</p>
+                            )}
+                        </div>
+                    </div>)}
+>>>>>>> cd22d14 (Lets test this out)
                     <motion.div
                         className={styles.action_buttons}
                         initial={{ opacity: 0 }}
