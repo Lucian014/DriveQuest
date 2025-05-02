@@ -623,5 +623,10 @@ def bill_history(request):
             })
 
         return JsonResponse(bills_data, safe=False)
+    elif request.method == 'DELETE':
+        bill_id = request.GET.get('id')
+        bill = Bill.objects.get(id=bill_id)
+        bill.delete()
+        return JsonResponse({'message': 'Bill deleted successfully'}, safe=False)
     else:
         return JsonResponse({'error': 'Only GET requests are allowed.'}, status=405)

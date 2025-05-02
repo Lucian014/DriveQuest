@@ -33,6 +33,23 @@ function Profile() {
     const carsPerPage = 3; // Show 3 cars per page
     const [bills, setBills] = useState([]);
 
+
+    const [pageIndex, setPageIndex] = useState(0);
+    const billsPerPage = 3;
+    const pageCount = Math.ceil(bills.length / billsPerPage);
+
+    const goPrevious = () => {
+        if (pageIndex > 0) setPageIndex(pageIndex - 1);
+    };
+    const goNext = () => {
+        if (pageIndex < pageCount - 1) setPageIndex(pageIndex + 1);
+    };
+
+    const start = pageIndex * billsPerPage;
+    const currentBills = bills.slice(start, start + billsPerPage);
+
+
+
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', 'dark');
     }, [darkMode]);
@@ -193,21 +210,41 @@ function Profile() {
 
 
     const deleteRental = async (id) =>{
-        const response = await fetch(`http://localhost:8000/drivequest/car_rental/${id}/`, {
-            method: "DELETE",
-            headers:{
-                "Content-Type": "application/json",
-                'X-CSRFToken': csrftoken,
-            },
-            credentials: "include",
-        });
-        if (response.ok) {
-            setCars(cars.filter(car => car.id !== id));
-            setIsOpen(false);
-            setIsEditing(false);
+
+        if(modalTitle === "Delete from Rental History"){
+            const response = await fetch(`http://localhost:8000/drivequest/car_rental/${id}/`, {
+                method: "DELETE",
+                headers:{
+                    "Content-Type": "application/json",
+                    'X-CSRFToken': csrftoken,
+                },
+                credentials: "include",
+            });
+            if (response.ok) {
+                setCars(cars.filter(car => car.id !== id));
+                setIsOpen(false);
+                setIsEditing(false);
+            } else{
+                setModalTitle("Error");
+                setModalContent("An error occurred while deleting the rental.");
+            }
         } else{
-            setModalTitle("Error");
-            setModalContent("An error occurred while deleting the rental.");
+            const response = await fetch(`http://localhost:8000/drivequest/bill_history/?id=${id}`, {
+                method: "DELETE",
+                headers:{
+                    "Content-Type": "application/json",
+                    'X-CSRFToken': csrftoken,
+                },
+                credentials: "include",
+            });
+            if (response.ok) {
+                setBills(bills.filter(bill => bill.id !== id));
+                setIsOpen(false);
+                setIsEditing(false);
+            } else{
+                setModalTitle("Error");
+                setModalContent("An error occurred while deleting the rental.");
+            }
         }
     }
 
@@ -479,25 +516,97 @@ function Profile() {
                         </div>
                     </div>)}
 
-                    {(selectedTab === "payment") && (<div className={styles.info}>
-                        {bills.length > 0 ? (
-                            bills.map((bill, index) => (
-                                <div key={bill.id} className="bill-card">
-                                    <p><strong>Car :</strong> {bill.car_rental}</p>
-                                    <p><strong>Total Amount:</strong> ${bill.total_amount}</p>
-                                    <p><strong>Payment Method:</strong> {bill.payment_method}</p>
-                                    <p><strong>From:</strong> {formatDate(bill.from_date)} <strong>Due:</strong> {formatDate(bill.due_date)}</p>
-                                    {bill.pdf_url ? (
-                                        <a href={bill.pdf_url} target="_blank" rel="noopener noreferrer">View PDF</a>
-                                    ) : (
-                                        <p>No PDF available</p>
-                                    )}
-                                </div>
-                            ))
-                        ) : (
-                            <p>No bills found.</p>
-                        )}
-                    </div>)}
+                    {selectedTab === "payment" && (
+                        <div className="flex items-center space-x-2">
+                            {/* Left Arrow */}
+                            <div className="flex justify-center items-center w-10 h-full">
+                                <button
+                                    onClick={goPrevious}
+                                    className={`px-2 py-2 rounded-lg ${
+                                        pageIndex === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-300'
+                                    }`}
+                                    disabled={pageIndex === 0}
+                                >
+                                    ◀️
+                                </button>
+                            </div>
+
+                            {/* Grid of Cards */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 py-6 mb-6 flex-1">
+                                {currentBills.length > 0 ? (
+                                    currentBills.map((bill) => (
+                                        <div
+                                            key={bill.id}
+                                            className="bg-white rounded-2xl shadow-lg border border-gray-200 h-80 p-6 flex flex-col transition-transform hover:scale-[1.02]"
+                                        >
+                                            <div className="flex-1 space-y-2">
+                                                <h3 className="text-xl font-bold text-gray-800 truncate">Billing History</h3>
+
+                                                <p className="text-gray-600">
+                                                    <span className="font-semibold block">Car:</span>
+                                                    <span className="block truncate">{bill.car_rental}</span>
+                                                </p>
+
+                                                <p className="text-gray-600">
+                                                    <span className="font-semibold">From:</span> {formatDate(bill.from_date)}
+                                                </p>
+
+                                                <p className="text-gray-600">
+                                                    <span className="font-semibold">Due:</span> {formatDate(bill.due_date)}
+                                                </p>
+
+                                                <p className="text-lg font-semibold text-gray-800">${bill.total_amount}</p>
+
+                                                <p className="text-gray-500 truncate">Paid via {bill.payment_method}</p>
+                                            </div>
+                                            <div className="mt-4 flex justify-between items-center">
+                                                {bill.pdf_url ? (
+                                                    <a
+                                                        href={bill.pdf_url}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="px-4 py-2 bg-blue-500 text-black text-sm font-medium rounded-lg hover:bg-blue-600 transition"
+                                                    >
+                                                        View PDF
+                                                    </a>
+                                                ) : (
+                                                    <span className="text-red-500 text-sm">No PDF</span>
+                                                )}
+                                                {isEditing && (
+                                                    <button
+                                                        className="px-4 py-2 bg-amber-400 text-black text-sm font-medium rounded-lg hover:bg-amber-500 transition"
+                                                        onClick={() => {
+                                                            setToDelete(bill.id);
+                                                            setIsOpen(true);
+                                                            setModalTitle('Delete Bill');
+                                                            setModalContent('Are you sure you want to delete this bill? This action cannot be undone.');
+                                                        }}
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="text-gray-500 text-center text-2xl col-span-full">No bills found.</p>
+                                )}
+                            </div>
+
+                            {/* Right Arrow */}
+                            <div className="flex justify-center items-center w-10 h-full">
+                                <button
+                                    onClick={goNext}
+                                    className={`px-2 py-2 rounded-lg ${
+                                        pageIndex >= pageCount - 1 ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-300'
+                                    }`}
+                                    disabled={pageIndex >= pageCount - 1}
+                                >
+                                    ▶️
+                                </button>
+                            </div>
+                        </div>
+                    )}
                     <motion.div
                         className={styles.action_buttons}
                         initial={{ opacity: 0 }}

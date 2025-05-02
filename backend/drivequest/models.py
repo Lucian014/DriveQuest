@@ -158,6 +158,5 @@ class OpeningHours(models.Model):
     day = models.CharField(max_length=10,choices=DAYS_OF_WEEK)
     start_time = models.TimeField()
     end_time = models.TimeField()
-
     def str(self):
         return f"{self.get_day_display()}: {self.start_time} - {self.end_time}"
