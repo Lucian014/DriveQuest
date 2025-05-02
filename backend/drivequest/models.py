@@ -39,6 +39,10 @@ class User(AbstractUser,PermissionsMixin):
     prize3 = models.BooleanField(default=False)
     prize4 = models.BooleanField(default=False)
     prize5 = models.BooleanField(default=False)
+    instagram = models.CharField(max_length=255,blank=True,null=True)
+    tiktok = models.CharField(max_length=255,blank=True,null=True)
+    twitter = models.CharField(max_length=255,blank=True,null=True)
+    linkedin = models.CharField(max_length=255,blank=True,null=True)
     objects = CustomUserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']

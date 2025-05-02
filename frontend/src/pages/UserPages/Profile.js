@@ -4,7 +4,7 @@ import {motion , AnimatePresence} from "framer-motion";
 import CsrfContext from "../../components/CsrfContext";
 import homeStyles from '../../styles/UserPages/Home.module.css';
 import {useTheme} from "../../components/ThemeContext";
-
+import '../../App.css';
 
 function Profile() {
     const [email, setEmail] = useState("");
@@ -20,6 +20,15 @@ function Profile() {
     const [points, setPoints] = useState(0);
     const [XP, setXP] = useState(0);
     const {darkMode} = useTheme();
+    const [instagram, setInstagram] = useState("");
+    const [twitter, setTwitter] = useState("");
+    const [tiktok, setTiktok] = useState("");
+    const [linkedin, setLinkedin] = useState("");
+    const [selectedTab, setSelectedTab] = useState("account");
+    const [isOpen, setIsOpen] = useState(false);
+    const [toDelete, setToDelete] = useState(null);
+    const [modalTitle, setModalTitle] = useState("");
+    const [modalContent, setModalContent] = useState("");
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', 'dark');
@@ -45,6 +54,11 @@ function Profile() {
                 setImage(data.user.profile_picture);
                 setPoints(data.user.points);
                 setXP(data.user.XP);
+                setInstagram(data.user.instagram);
+                setTwitter(data.user.twitter);
+                setTiktok(data.user.tiktok);
+                setLinkedin(data.user.tiktok);
+
             })
             .catch(error => {
                 console.log(error);
@@ -71,6 +85,10 @@ function Profile() {
             username: username,
             firstName: firstName,
             lastName: lastName,
+            instagram: instagram,
+            twitter: twitter,
+            tiktok: tiktok,
+            linkedin: linkedin,
         };
 
         fetch(`http://localhost:8000/drivequest/update_profile/${user.id}/`, {
@@ -89,6 +107,10 @@ function Profile() {
                 setFirstName(data.user.firstName);
                 setLastName(data.user.lastName);
                 setUsername(data.user.username);
+                setInstagram(data.user.instagram);
+                setTwitter(data.user.twitter);
+                setTiktok(data.user.tiktok);
+                setLinkedin(data.user.tiktok);
                 alert('Profile updated successfully!');
             })
             .catch(err => {
@@ -141,6 +163,36 @@ function Profile() {
             .catch(err => console.log(err));
     };
 
+    const outsideNavigate = (url) => {
+        if (url) {
+            window.open(url, "_blank");
+        }
+    }
+
+    const formatDate = (dateStr) => {
+        const date = new Date(dateStr);
+        return `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getFullYear())}`;
+    };
+
+
+    const deleteRental = async (id) =>{
+        const response = await fetch(`http://localhost:8000/drivequest/car_rental/${id}/`, {
+            method: "DELETE",
+            headers:{
+                "Content-Type": "application/json",
+                'X-CSRFToken': csrftoken,
+            },
+            credentials: "include",
+        });
+        if (response.ok) {
+            setCars(cars.filter(car => car.id !== id));
+            setIsOpen(false);
+            setIsEditing(false);
+        } else{
+            setModalTitle("Error");
+            setModalContent("An error occurred while deleting the rental.");
+        }
+    }
     return (
     <AnimatePresence mode={"popLayout"} exitBeforeEnter={true} initial={false} animate={"visible"} exit={"hidden"}>
     <motion.div
@@ -150,155 +202,257 @@ function Profile() {
         key={darkMode ? "dark" : "light"}
         className={darkMode ? homeStyles.body_dark : homeStyles.body_light}
     >
-        <div className={styles.profile_box}>
             <div className={styles.profile_container}>
-                <h1>{firstName}'s Profile</h1>
-                <h2>{points}</h2>
-                <motion.div
-                    className={styles.profile_image}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <img
-                        src={image ? image : '/images/defaultImage.png'}
-                        alt="Profile Image"
-                    />
+                <div className={`${styles.left}`}>
+                    <div className="relative">
+                        <img
+                            src={image ? image : '/images/defaultImage.png'}
+                            alt="Profile Image"
+                            className="rounded-full w-[100px] h-[100px] mb-4 object-cover"
+                        />
+                        {isEditing && (
+                            <label className="absolute bottom-0 right-0 bg-yellow-500 p-2 rounded-full cursor-pointer shadow hover:bg-yellow-600">
+                                <i className="fas fa-pen text-black"></i>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => setNewImage(e.target.files[0])}
+                                    className="hidden"
+                                />
+                            </label>
+                        )}
+                    </div>
                     {isEditing && (
                         <div className={styles.image_actions}>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => setNewImage(e.target.files[0])}
-                            />
-                            <div className={styles.action_buttons}>
-                                <div className={styles.button} onClick={handleImageUpload}>
-                                    Upload Image
+                            <div className={styles.imageButton} onClick={handleImageUpload}>
+                                Upload Image
+                            </div>
+                            {image && (
+                                <div className={styles.imageButton} onClick={handleImageDelete}>
+                                    Delete Image
                                 </div>
-                                {image && (
-                                    <div className={styles.button} onClick={handleImageDelete}>
-                                        Delete Image
-                                    </div>
-                                )}
+                            )}
+                        </div>
+                    )}
+                    <h1 className="text-center text-2xl">{firstName} {lastName}</h1>
+                    <h2 className="text-mb text-black/50">Current points: {points}</h2>
+
+                    <div className="mt-6 w-full">
+                        <div className="min-w-[260px] md:min-w-[300px]">
+                            <div className="relative mb-3">
+                                {isEditing ? (<input
+                                    onChange={(e) => setInstagram(e.target.value)}
+                                    type="text"
+                                    placeholder="Enter Instagram URL"
+                                    className="w-full p-2 pl-12 rounded-xl shadow-sm
+                                     focus-within:ring-2 focus-within:ring-purple-500 focus:outline-none focus:border-transparent"
+                                />) : (<button onClick={()=>{outsideNavigate(instagram)}} className="w-full text-mb p-2 pl-12 rounded-xl shadow-sm focus-within:ring-2 focus-within:ring-purple-500 flex items-center justify-start">
+                                    Instagram
+                                </button>)}
+                                <i className="fab fa-instagram absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                             </div>
                         </div>
-                    )}
-                </motion.div>
 
-                <div className={styles.editable_field}>
-                    <p>Username:</p>
-                    <div className={styles.input_box}>
-                        {isEditing ? (
-                            <input
-                                type="text"
-                                placeholder={username}
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                            />
-                        ) : (
-                            <span>{username}</span>
-                        )}
+                            <div className="min-w-[260px] md:min-w-[300px]">
+                                <div className="relative mb-3">
+                                    {isEditing ? (<input
+                                        onChange={(e) => setTwitter(e.target.value)}
+                                        type="text"
+                                        placeholder="Enter Twitter URL"
+                                        className="w-full p-2 pl-12 rounded-xl shadow-sm
+                                     focus-within:ring-2 focus-within:ring-purple-500 focus:outline-none focus:border-transparent"
+                                    />) : (<button onClick={()=>{outsideNavigate(twitter)}} className="w-full text-mb p-2 pl-12 rounded-xl shadow-sm focus-within:ring-2 focus-within:ring-purple-500 flex items-center justify-start">
+                                       Twitter
+                                    </button>)}
+                                    <i className="fab fa-twitter absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                </div>
+                            </div>
+
+                        <div className="min-w-[260px] md:min-w-[300px]">
+                                <div className="relative mb-3">
+                                    {isEditing ? (<input
+                                        onChange={(e) => setTiktok(e.target.value)}
+                                        type="text"
+                                        placeholder="Enter Tiktok URL"
+                                        className="w-full p-2 pl-12 rounded-xl shadow-sm
+                                     focus-within:ring-2 focus-within:ring-purple-500 focus:outline-none focus:border-transparent"
+                                    />) : (<button onClick={()=>{outsideNavigate(tiktok)}} className="w-full text-mb p-2 pl-12 rounded-xl shadow-sm focus-within:ring-2 focus-within:ring-purple-500 flex items-center justify-start">
+                                        Tiktok
+                                    </button>)}
+                                    <i className="fab fa-tiktok absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                </div>
+                            </div>
+
+                        <div className="min-w-[260px] md:min-w-[300px]">
+                                <div className="relative">
+                                    {isEditing ? (<input
+                                        onChange={(e) => setLinkedin(e.target.value)}
+                                        type="text"
+                                        placeholder="Enter Linkedin URL"
+                                        className="w-full p-2 pl-12 rounded-xl shadow-sm
+                                     focus-within:ring-2 focus-within:ring-purple-500 focus:outline-none focus:border-transparent"
+                                    />) : (<button onClick={()=>{outsideNavigate(linkedin)}} className="w-full text-mb p-2 pl-12 rounded-xl shadow-sm focus-within:ring-2 focus-within:ring-purple-500 flex items-center justify-start">
+                                        Linkedin
+                                    </button>)}
+                                    <i className="fab fa-linkedin absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                </div>
+                            </div>
                     </div>
                 </div>
-
-                <div className={styles.editable_field}>
-                    <p>First Name:</p>
-                    <div className={styles.input_box}>
-                        {isEditing ? (
-                            <input
-                                type="text"
-                                placeholder={firstName}
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                            />
-                        ) : (
-                            <span>{firstName}</span>
-                        )}
-                    </div>
-                </div>
-
-                <div className={styles.editable_field}>
-                    <p>Last Name:</p>
-                    <div className={styles.input_box}>
-                        {isEditing ? (
-                            <input
-                                type="text"
-                                placeholder={lastName}
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                            />
-                        ) : (
-                            <span>{lastName}</span>
-                        )}
-                    </div>
-                </div>
-
-                <div className={styles.editable_field}>
-                    <p>Email:</p>
-                    <div className={styles.input_box}>
-                        <span>{email}</span>
-                    </div>
-                </div>
-
-                <motion.div
-                    className={styles.action_buttons}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <div
-                        className={styles.button}
-                        onClick={() => setIsEditing(!isEditing)}
-                    >
-                        {isEditing ? 'Cancel Edit' : 'Edit Profile'}
-                    </div>
-                    {isEditing && (
-                        <div className={styles.button} onClick={handleSave}>
-                            Save Changes
-                        </div>
-                    )}
-                </motion.div>
-            </div>
-            <div className={styles.car_list_wrapper}>
-                <div className={styles.car_list}>
-                    {cars.length > 0 ? (
-                        cars.map((car, index) => (
-                            <motion.div
-                                key={index}
-                                className={styles.car_card}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.5, delay: index * 0.2 }}
+                <div className={styles.right}>
+                    <div className={styles.tabs}>
+                        {[
+                            { key: "account", label: "Account info" },
+                            { key: "rental", label: "Car rental history" },
+                            { key: "payment", label: "Payment info" }
+                        ].map(({ key, label }) => (
+                            <button
+                                key={key}
+                                onClick={() => setSelectedTab(key)}
+                                className={`text-lg relative pl-4 pt-4 pb-1 transition-all duration-300 ease-in-out
+          ${selectedTab === key ? "text-yellow-500" : "text-gray-400"}
+          after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-full
+          after:transition-all after:duration-300 after:ease-in-out
+          ${selectedTab === key ? "after:bg-yellow-500" : "after:bg-transparent"}`}
                             >
-                                <img
-                                    src={
-                                        car.image
-                                            ? `http://localhost:8000${car.image}`
-                                            : '/images/defaultImage.webp'
-                                    }
-                                    alt={`${car.brand} ${car.model}`}
-                                    className={styles.car_image}
-                                />
-                                <h3 className={styles.car_name}>
-                                    {car.brand} {car.model}
-                                </h3>
-                                <p className={styles.car_info}>
-                                    📅 {car.start_date} – {car.end_date}
-                                </p>
-                                <p className={styles.car_info}>
-                                    ⏱️ {car.days} zile
-                                </p>
-                                <p className={styles.car_price}>
-                                    💶 Total: {car.price} €
-                                </p>
-                            </motion.div>
-                        ))
-                    ) : (
-                        <p className={styles.no_rentals}>Nu ai închiriat nicio mașină momentan.</p>
-                    )}
+                                {label}
+                            </button>
+                        ))}
+                    </div>
+                        {(selectedTab === "account") && (<div className={styles.info}>
+                            <div className={styles.editable_field}>
+                                <p className="text-lg font-medium text-black mb-1">First Name:</p>
+                                <div className={styles.input_box}>
+                                    {isEditing ? (
+                                        <input
+                                            className="focus:outline-none focus:border-transparent"
+                                            type="text"
+                                            placeholder={firstName}
+                                            value={firstName}
+                                            onChange={(e) => setFirstName(e.target.value)}
+                                        />
+                                    ) : (
+                                        <span>{firstName}</span>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className={styles.editable_field}>
+                                <p className="text-lg font-medium text-black mb-1">Last Name:</p>
+                                <div className={styles.input_box}>
+                                    {isEditing ? (
+                                        <input
+                                            className="focus:outline-none focus:border-transparent"
+                                            type="text"
+                                            placeholder={lastName}
+                                            value={lastName}
+                                            onChange={(e) => setLastName(e.target.value)}
+                                        />
+                                    ) : (
+                                        <span>{lastName}</span>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className={styles.editable_field}>
+                                <p className="text-lg font-medium text-black mb-1">Username:</p>
+                                <div className={styles.input_box}>
+                                    {isEditing ? (
+                                        <input
+                                            className="focus:outline-none focus:border-transparent"
+                                            type="text"
+                                            placeholder={username}
+                                            value={username}
+                                            onChange={(e) => setUsername(e.target.value)}
+                                        />
+                                    ) : (
+                                        <span>{username}</span>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className={styles.editable_field}>
+                                <p className="text-lg font-medium text-black mb-1">Email:</p>
+                                <div className={styles.input_box}>
+                                    <span>{email}</span>
+                                </div>
+                            </div>
+                        </div>)}
+
+                    {(selectedTab === "rental") && (<div className={styles.info}>
+                        <div className={styles.car_list}>
+                            {cars.length > 0 ? (
+                                cars.map((car, index) => (
+                                    <div className={styles.listedCar}>
+                                        <img
+                                            className="w-[100%] h-[150px] object-cover rounded-lg"
+                                            src={car.image ? `http://localhost:8000${car.image}` : '/images/defaultImage.webp'}
+                                            alt={`${car.brand} ${car.model}`}
+                                        />
+                                        <h3 className="text-lg pl-1 font-medium text-black">
+                                            {car.brand} {car.model} ({car.year})
+                                        </h3>
+                                        <p className="text-mb pl-1 text-black">
+                                            📅 {formatDate(car.start_date)} – {formatDate(car.end_date)}
+                                        </p>
+                                        <p className="text-mb pl-1 text-black">
+                                            ⏱️ {car.days} zile
+                                        </p>
+                                        <p className="text-mb pl-1 text-black">
+                                            💶 Total: {car.price} €
+                                        </p>
+                                        {isEditing ? (
+                                            <button onClick={()=>{setToDelete(car.id);
+                                                setIsOpen(!isOpen);
+                                                setModalTitle("Delete from Rental History");
+                                                setModalContent("Are you sure you want to delete this rental?");
+                                            }} className="min-h-[30px] ml-1 text-mb bg-amber-400 rounded-lg w-auto">Delete from Rental History</button>
+                                        ) : (
+                                            <div className="min-h-[30px]"></div>
+                                        )}
+                                    </div>
+                                ))
+                            ) : (
+                                <p className={styles.no_rentals}>Nu ai închiriat nicio mașină momentan.</p>
+                            )}
+                        </div>
+                    </div>)}
+                    <motion.div
+                        className={styles.action_buttons}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        {isEditing && (
+                            <div className={styles.button} onClick={handleSave}>
+                                Save Changes
+                            </div>
+                        )}
+                        <div
+                            className={styles.button}
+                            onClick={() => setIsEditing(!isEditing)}
+                        >
+                            {isEditing ? 'Cancel Edit' : 'Edit Profile'}
+                        </div>
+                    </motion.div>
                 </div>
+                {isOpen && (
+                    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+                        <div className="bg-white rounded-2xl p-6 w-[90%] max-w-md shadow-xl">
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-xl font-semibold">{modalTitle}</h2>
+                                <button onClick={()=>{setToDelete(null); setIsOpen(!isOpen)}} className="text-gray-500 hover:text-gray-700">✕</button>
+                            </div>
+                            <p className="text-gray-700">{modalContent}</p>
+                            <div className="mt-6 flex justify-end gap-2">
+                                <button onClick={()=>{setToDelete(null); setIsOpen(!isOpen)}} className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
+                                <button onClick={()=>{deleteRental(toDelete)}} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Confirm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
-        </div>
     </motion.div>
     </AnimatePresence>
     );

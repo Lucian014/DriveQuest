@@ -120,6 +120,10 @@ def profile(request):
             'profile_picture': request.build_absolute_uri(user.profile_picture.url) if user.profile_picture else None,
             'points':user.points,
             'xp':user.XP,
+            'instagram': user.instagram if user.instagram else "https://www.instagram.com",
+            'tiktok': user.tiktok if user.tiktok else "https://www.tiktok.com",
+            'twitter': user.twitter if user.twitter else "https://www.twitter.com",
+            'linkedin': user.linkedin if user.linkedin else "https://www.linkedin.com",
         }}, status=200)
     else:
         return JsonResponse({'message': 'Method not allowed'}, status=405)
@@ -137,6 +141,10 @@ def update_profile(request, user_id):
         user.first_name = data.get('firstName', user.first_name)
         user.last_name = data.get('lastName', user.last_name)
         user.username = data.get('username', user.username)
+        user.instagram = data.get('instagram', user.instagram)
+        user.tiktok = data.get('tiktok', user.tiktok)
+        user.twitter = data.get('twitter', user.twitter)
+        user.linkedin = data.get('linkedin', user.linkedin)
         user.save()
 
         return JsonResponse({
@@ -147,7 +155,11 @@ def update_profile(request, user_id):
                 'username': user.username,
                 'firstName': user.first_name,
                 'lastName': user.last_name,
-                'profile_picture': user.profile_picture.url if user.profile_picture else None
+                'profile_picture': user.profile_picture.url if user.profile_picture else None,
+                'instagram': user.instagram if user.instagram else "https://www.instagram.com",
+                'tiktok': user.tiktok if user.tiktok else "https://www.tiktok.com",
+                'twitter': user.twitter if user.twitter else "https://www.twitter.com",
+                'linkedin': user.linkedin if user.linkedin else "https://www.linkedin.com",
             }
         }, status=200)
 
@@ -164,7 +176,11 @@ def update_profile(request, user_id):
                     'username': user.username,
                     'firstName': user.first_name,
                     'lastName': user.last_name,
-                    'profile_picture': user.profile_picture.url if user.profile_picture else None
+                    'profile_picture': user.profile_picture.url if user.profile_picture else None,
+                    'instagram': user.instagram if user.instagram else "https://www.instagram.com",
+                    'tiktok': user.tiktok if user.tiktok else "https://www.tiktok.com",
+                    'twitter': user.twitter if user.twitter else "https://www.twitter.com",
+                    'linkedin': user.linkedin if user.linkedin else "https://www.linkedin.com",
                 }
             }, status=200)
         else:
@@ -473,7 +489,10 @@ def car_rental(request, car_id=None):
         } for rental in rentals]
 
         return JsonResponse(rental_list, safe=False)
-
+    elif request.method == "DELETE":
+        rental = Car_Rental.objects.get(id=car_id)
+        rental.delete()
+        return JsonResponse({'message': 'Car rental deleted successfully'}, safe=False)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
 
