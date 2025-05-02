@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie, csrf_protect
-from .models import Car, Contact, Car_Rental, Comment, RentalCenter, CarRating
+from .models import Car, Contact, Car_Rental, Comment, RentalCenter, CarRating, Bill
 from django.contrib.auth import get_user_model,login,authenticate,login as django_login
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_protect
@@ -603,3 +603,25 @@ def leaderboard(request):
         return JsonResponse(users_data, safe=False)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+def bill_history(request):
+    if request.method == 'GET':
+        user = request.user
+        bills = Bill.objects.filter(user=user)
+        bills_data = []
+
+        for bill in bills:
+            bills_data.append({
+                'id': bill.id,
+                'car_rental': str(bill.car_rental),  # Adjust as needed
+                'total_amount': bill.total_amount,
+                'payment_method': bill.payment_method,
+                'from_date': bill.from_date.strftime('%Y-%m-%d'),
+                'due_date': bill.due_date.strftime('%Y-%m-%d'),
+                'pdf_url': bill.pdf_file.url if bill.pdf_file else None,
+            })
+
+        return JsonResponse(bills_data, safe=False)
+    else:
+        return JsonResponse({'error': 'Only GET requests are allowed.'}, status=405)

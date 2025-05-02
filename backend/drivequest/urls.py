@@ -25,4 +25,5 @@ urlpatterns = [
     path('rate_website/', views.rate_website, name='rate_website'),
     path('claim_reward/<int:prize_number>/', views.claim_reward, name='claim_reward'),
     path('leaderboard/', views.leaderboard, name='leaderboard'),
+    path('bill_history/', views.bill_history, name='bill_history'),
 ]

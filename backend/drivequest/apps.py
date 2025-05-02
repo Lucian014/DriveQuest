@@ -1,7 +1,6 @@
 from django.apps import AppConfig
 
+
 class DrivequestConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
     name = 'drivequest'
-    def ready(self):
-        # delay import of signals to avoid import-time errors
-        import drivequest.signals

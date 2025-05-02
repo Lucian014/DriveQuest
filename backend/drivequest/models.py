@@ -142,3 +142,22 @@ class Bill(models.Model):
 
     def __str__(self):
         return f"Bill #{self.id} for {self.user.username}"
+
+
+class OpeningHours(models.Model):
+    DAYS_OF_WEEK = [
+        ('Monday', 'Monday'),
+        ('Tuesday', 'Tuesday'),
+        ('Wednesday', 'Wednesday'),
+        ('Thursday', 'Thursday'),
+        ('Friday', 'Friday'),
+        ('Saturday', 'Saturday'),
+        ('Sunday', 'Sunday'),
+    ]
+    rental_center = models.ForeignKey(RentalCenter,on_delete=models.CASCADE)
+    day = models.CharField(max_length=10,choices=DAYS_OF_WEEK)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+    def str(self):
+        return f"{self.get_day_display()}: {self.start_time} - {self.end_time}"

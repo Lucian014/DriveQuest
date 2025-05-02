@@ -79,6 +79,7 @@ function Profile() {
                     console.log("Rented cars: ",data);
                     setCars(data);
             }).catch(error => {console.log(error)});
+
     },[]);
 
     const handleSave = (e) => {
