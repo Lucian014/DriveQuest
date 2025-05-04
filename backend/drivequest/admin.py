@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Car, User, Contact, Car_Rental, Comment, RentalCenter, Bill,OpeningHours
+from .models import Car, User, Contact, Car_Rental, Comment, RentalCenter, Bill, OpeningHours
 
 # Register your models here.
 

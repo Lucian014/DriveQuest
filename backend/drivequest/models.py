@@ -145,18 +145,28 @@ class Bill(models.Model):
 
 
 class OpeningHours(models.Model):
-    DAYS_OF_WEEK = [
-        ('Monday', 'Monday'),
-        ('Tuesday', 'Tuesday'),
-        ('Wednesday', 'Wednesday'),
-        ('Thursday', 'Thursday'),
-        ('Friday', 'Friday'),
-        ('Saturday', 'Saturday'),
-        ('Sunday', 'Sunday'),
-    ]
-    rental_center = models.ForeignKey(RentalCenter,on_delete=models.CASCADE)
-    day = models.CharField(max_length=10,choices=DAYS_OF_WEEK)
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-    def str(self):
-        return f"{self.get_day_display()}: {self.start_time} - {self.end_time}"
+    rental_center = models.OneToOneField('RentalCenter', on_delete=models.CASCADE)
+
+    monday_start = models.TimeField(null=True, blank=True)
+    monday_end = models.TimeField(null=True, blank=True)
+
+    tuesday_start = models.TimeField(null=True, blank=True)
+    tuesday_end = models.TimeField(null=True, blank=True)
+
+    wednesday_start = models.TimeField(null=True, blank=True)
+    wednesday_end = models.TimeField(null=True, blank=True)
+
+    thursday_start = models.TimeField(null=True, blank=True)
+    thursday_end = models.TimeField(null=True, blank=True)
+
+    friday_start = models.TimeField(null=True, blank=True)
+    friday_end = models.TimeField(null=True, blank=True)
+
+    saturday_start = models.TimeField(null=True, blank=True)
+    saturday_end = models.TimeField(null=True, blank=True)
+
+    sunday_start = models.TimeField(null=True, blank=True)
+    sunday_end = models.TimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Opening hours for {self.rental_center.name}"
