@@ -29,7 +29,6 @@ function Profile() {
     const [toDelete, setToDelete] = useState(null);
     const [modalTitle, setModalTitle] = useState("");
     const [modalContent, setModalContent] = useState("");
-<<<<<<< HEAD
     const [currentPage, setCurrentPage] = useState(0); // Track the current page of cars
     const carsPerPage = 3; // Show 3 cars per page
     const [bills, setBills] = useState([]);
@@ -49,9 +48,6 @@ function Profile() {
     const start = pageIndex * billsPerPage;
     const currentBills = bills.slice(start, start + billsPerPage);
 
-
-=======
->>>>>>> cd22d14 (Lets test this out)
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', 'dark');
@@ -213,8 +209,6 @@ function Profile() {
 
 
     const deleteRental = async (id) =>{
-<<<<<<< HEAD
-
         if(modalTitle === "Delete from Rental History"){
             const response = await fetch(`http://localhost:8000/drivequest/car_rental/${id}/`, {
                 method: "DELETE",
@@ -266,7 +260,6 @@ function Profile() {
 
     const currentCars = cars.slice(currentPage * carsPerPage, (currentPage + 1) * carsPerPage);
 
-=======
         const response = await fetch(`http://localhost:8000/drivequest/car_rental/${id}/`, {
             method: "DELETE",
             headers:{
@@ -284,7 +277,6 @@ function Profile() {
             setModalContent("An error occurred while deleting the rental.");
         }
     }
->>>>>>> cd22d14 (Lets test this out)
     return (
     <AnimatePresence mode={"popLayout"} exitBeforeEnter={true} initial={false} animate={"visible"} exit={"hidden"}>
     <motion.div
@@ -342,7 +334,6 @@ function Profile() {
                                     Instagram
                                 </button>)}
                                 <i className="fab fa-instagram absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-<<<<<<< HEAD
                             </div>
                         </div>
 
@@ -615,8 +606,7 @@ function Profile() {
                                 ) : (
                                     <p className="text-gray-500 text-center text-2xl col-span-full">No bills found.</p>
                                 )}
-=======
->>>>>>> cd22d14 (Lets test this out)
+
                             </div>
 
                             {/* Right Arrow */}
@@ -632,9 +622,7 @@ function Profile() {
                                 </button>
                             </div>
                         </div>
-<<<<<<< HEAD
                     )}
-=======
 
                             <div className="min-w-[260px] md:min-w-[300px]">
                                 <div className="relative mb-3">
@@ -800,7 +788,6 @@ function Profile() {
                             )}
                         </div>
                     </div>)}
->>>>>>> cd22d14 (Lets test this out)
                     <motion.div
                         className={styles.action_buttons}
                         initial={{ opacity: 0 }}
