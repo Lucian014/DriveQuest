@@ -11,7 +11,7 @@ def create_bill_for_rental(sender, instance, created, **kwargs):
         return
 
     # Compute total
-    total = instance.days * instance.price
+    total = instance.price
 
     # Create Bill record
     bill = Bill.objects.create(
@@ -59,7 +59,7 @@ def create_bill_for_rental(sender, instance, created, **kwargs):
     p.setFont("Helvetica", 10)
     p.drawString(40, y, f"{instance.car}")
     p.drawString(220, y, str(instance.days))
-    p.drawString(300, y, f"{instance.price:.2f} EUR")
+    p.drawString(300, y, f"{instance.price/instance.days:.2f} EUR")
     p.drawString(400, y, f"{total:.2f} EUR")
 
     # Footer

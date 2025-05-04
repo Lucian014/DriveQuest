@@ -144,7 +144,7 @@ class Bill(models.Model):
         return f"Bill #{self.id} for {self.user.username}"
 
 
-class OpeningHour(models.Model):
+class OpeningHours(models.Model):
     DAYS_OF_WEEK = [
         ('Monday', 'Monday'),
         ('Tuesday', 'Tuesday'),
@@ -158,6 +158,5 @@ class OpeningHour(models.Model):
     day = models.CharField(max_length=10,choices=DAYS_OF_WEEK)
     start_time = models.TimeField()
     end_time = models.TimeField()
-
-    def __str__(self):
-        return f"{rental_center.name} {self.day} from {self.start_time} to {self.end_time}"
+    def str(self):
+        return f"{self.get_day_display()}: {self.start_time} - {self.end_time}"
