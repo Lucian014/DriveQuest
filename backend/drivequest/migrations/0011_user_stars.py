@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('drivequest', '0010_comment'),
+        ('drivequest', '0006_openinghours'),
     ]
 
     operations = [
