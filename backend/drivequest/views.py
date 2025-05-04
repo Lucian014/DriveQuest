@@ -233,6 +233,7 @@ def center_details(request, center_id):
                 'price': car.price,
                 'image': car.image.url if car.image else None,
                 'car_type': car.car_type,
+                'rating': car.average_rating if car.average_rating > 0 else "N/A",
             })
 
         return JsonResponse({
@@ -243,7 +244,7 @@ def center_details(request, center_id):
                 'address': center.address,
                 'country': center.country,
                 'phone': center.phone,
-                'image': center.image.url if center.image else None,
+                'image': request.build_absolute_uri(center.image.url) if center.image else None,
                 'latitude': center.lat,
                 'longitude': center.long,
                 'cars': car_list,
@@ -276,8 +277,10 @@ def search_cars(request):
         start_date = request.GET.get('startDate')
         end_date = request.GET.get('endDate')
         car_type = request.GET.get('carType')
-
-        cars = Car.objects.all()
+        if request.GET.get('center_id'):
+            cars=Car.objects.filter(center_id=request.GET.get('center_id'))
+        else:
+            cars = Car.objects.all()
 
         if input_value:
             cars = cars.filter(
