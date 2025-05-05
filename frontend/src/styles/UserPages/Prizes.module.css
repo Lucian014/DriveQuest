@@ -1,5 +1,5 @@
 .container {
-    @apply bg-gray-100 font-sans min-h-screen py-8 px-4 sm:px-6 lg:px-8;
+    @apply bg-gray-100 font-sans min-h-screen py-8 px-4 lg:px-6 lg:px-8;
 }
 
 .header {
@@ -7,7 +7,7 @@
 }
 
 .header h1 {
-    @apply text-4xl sm:text-5xl font-extrabold tracking-tight;
+    @apply text-4xl lg:text-5xl font-extrabold tracking-tight;
 }
 
 .prizes {
@@ -15,7 +15,7 @@
 }
 
 .prize {
-    @apply w-full sm:w-[350px] md:w-[400px] lg:w-[450px] h-auto flex flex-col p-4 items-center justify-between bg-white rounded-2xl shadow-xl overflow-hidden transform transition-transform duration-300 hover:scale-105;
+    @apply w-full lg:w-[350px] md:w-[400px] lg:w-[450px] h-auto flex flex-col p-4 items-center justify-between bg-white rounded-2xl shadow-xl overflow-hidden transform transition-transform duration-300 hover:scale-105;
 }
 
 .prize::before {
@@ -29,11 +29,11 @@
 }
 
 .prizeTitle {
-    @apply text-2xl sm:text-3xl font-bold text-gray-800 my-3;
+    @apply text-2xl lg:text-3xl font-bold text-gray-800 my-3;
 }
 
 .prizeDescription {
-    @apply text-base sm:text-lg text-center text-gray-600 mb-6;
+    @apply text-base lg:text-lg text-center text-gray-600 mb-6;
 }
 
 .prizeButton {
