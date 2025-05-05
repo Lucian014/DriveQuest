@@ -22,7 +22,7 @@ function Center() {
     const [center, setCenter] = useState(null);
     const csrftoken = useContext(CsrfContext);
     const [cars, setCars] = useState([]);
-    const carTypes = ['SUV', 'Sedan', 'Hatchback', 'Hybrid', 'Electric', 'Pickup', 'Luxury', 'Sport', 'Convertible'];
+    const carTypes = ['SUV', 'Sedan', 'Hatchback', 'Hybrid', 'Electric', 'Pickup', 'Luxury', 'Sports', 'Convertible'];
     const navigate = useNavigate();
     const [searchInput, setSearchInput] = useState('');
     const [startDate, setStartDate] = useState('');
@@ -30,11 +30,12 @@ function Center() {
     const [carType,setCarType] = useState(null);
     const [showDropdown, setShowDropdown] = useState(false);
     const [searchedCars, setSearchedCars] = useState(null);
-    const [price, setPrice] = useState(0);
-    const [year, setYear] = useState(0);
+    const [price, setPrice] = useState(1000);
+    const [year, setYear] = useState(1950);
     const [displayNormal, setDisplayNormal] = useState(true);
+    const [selectedTypes, setSelectedTypes] = useState([]);
 
-    const [filtered, setFiltered] = useState(false);
+    const [filtered, setFiltered] = useState([]);
 
     useEffect(() => {
         fetch(`http://localhost:8000/drivequest/center_details/${id}/`, {
@@ -97,9 +98,17 @@ function Center() {
     }
 
 
-    const handleFilter = (cars) =>{
+    const handleFilter = (carList) => {
+        const filtered = carList.filter(car =>
+            car.price > price ||
+            car.year < year || // fails year filter
+            (selectedTypes.length > 0 && !selectedTypes.includes(car.car_type)) // fails type filter
+        );
+        const ids = filtered.map(car => car.id);
+        setFiltered(ids);
+        console.log(ids);
+    };
 
-    }
     return (
         <div className={styles.container}>
             {center ? (<div className={styles.centerContainer}>
@@ -108,7 +117,7 @@ function Center() {
                 >
                     <div className="w-full text-center p-2">
                         <h3 className="text-4xl text-bold mt-3">{center.name}</h3>
-                        <h3 className="text-2xl mb-4">Location: {center.country} {center.city}</h3>
+                        <h3 className="text-2xl mb-4">{center.country} {center.city}</h3>
                     </div>
                     <div className={styles.imageSection} style={{ backgroundImage: `url(${center.image})` }}>
                          <div className={styles.imageLeft}>
@@ -222,8 +231,8 @@ function Center() {
                             <input
                                 id="volume"
                                 type="range"
-                                min="0"
-                                max="1000"
+                                min="1950"
+                                max="2025"
                                 step="1"
                                 value={year}
                                 onChange={(e) => setYear(parseInt(e.target.value))}
@@ -231,27 +240,61 @@ function Center() {
                             />
                         </div>
                             <p className="text-2xl text-gray-600 mb-2">Car type:</p>
-                            {filteredTypes.map((type) => (
-                                <div className="flex">
-                                    <input
-                                        className="w-6 h-6 mr-2 mb-3 accent-amber-400"
-                                        key={type}
-                                        type="checkbox"/>
-                                    <p className="text-xl">{type}</p>
-                                </div>
-                            ))}
-                        <button className="text-xl w-[200px] bg-amber-400 text-white py-2 rounded-lg mb-4">Apply filters</button>
+                        {filteredTypes.map((type) => (
+                            <div className="flex" key={type}>
+                                <input
+                                    className="w-6 h-6 mr-2 mb-3 accent-amber-400"
+                                    type="checkbox"
+                                    checked={selectedTypes.includes(type)}
+                                    onChange={() => {
+                                        setSelectedTypes(prev =>
+                                            prev.includes(type)
+                                                ? prev.filter(t => t !== type)
+                                                : [...prev, type]
+                                        );
+                                    }}
+                                />
+                                <p className="text-xl">{type}</p>
+                            </div>
+                        ))}
+                        <div className="flex">
+                        <button className="text-xl w-[150px] mr-3 bg-amber-400 text-white py-2 rounded-lg mb-4"
+                                onClick={() => handleFilter(displayNormal ? cars : searchedCars)}
+                        >Apply filters</button>
+                        <button className="text-xl w-[150px] bg-amber-400 text-white py-2 rounded-lg mb-4"
+                                onClick={() => {setFiltered([]);
+                                    setPrice(1000);
+                                    setYear(1950);
+                                    setSelectedTypes([]);
+                                    }}
+                        >Reset Filters</button>
+                        </div>
+                        <div className="pt-4">
+                            <h3 className="text-lg text-center">Our Address: {center.address} {center.city}, {center.country}</h3>
+                            <MapContainer center={[center.latitude, center.longitude]} zoom={12} style={{ height: "295px", width: "100%" }}>
+                                <TileLayer
+                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                />
+                                <Marker position={[center.latitude, center.longitude]}>
+                                    <Popup>
+                                        Drivequest head center
+                                    </Popup>
+                                </Marker>
+                            </MapContainer>
+                        </div>
                     </div>
 
 
                     {(displayNormal && cars.length > 0) ? (<div className={styles.carsDisplay}>
-                        <div className="flex items-center my-2">
+                        <div className="flex items-center">
                             <h2 className="text-4xl font-bold mx-auto">
                                 Your results
                             </h2>
                         </div>
                         <div className={styles.car_list}>
-                            {cars.map((car) => (
+                            {cars.filter(car => !filtered.includes(car.id))
+                                .map((car) => (
                                 <div className={styles.carCard}
                                      key={car.id}
                                 >
@@ -270,6 +313,7 @@ function Center() {
                                         </h3>
                                         <p className="text-xl">Price: {car.price}€/day</p>
                                         <p className="text-xl">Year: {car.year}</p>
+                                        <p className="text-xl">Category: {car.car_type}</p>
                                         <p className="text-xl">Rating: {car.rating}</p>
                                         <button
                                             className="text-xl w-[200px] bg-amber-400 text-white py-2 rounded-lg mt-4"
@@ -281,7 +325,9 @@ function Center() {
                                 </div>
                             ))}
                         </div>
-                    </div>) : null}
+                    </div>) : <div>
+                        <p className="text-8xl text-center ml-[150px]">No cars available</p>
+                    </div>}
 
 
                         {searchedCars ? (
@@ -301,7 +347,8 @@ function Center() {
                                     >Clear Results</button>
                                 </div>
                                 <div className={styles.car_list}>
-                                    {searchedCars.map((car) => (
+                                    {searchedCars.filter(car => !filtered.includes(car.id))
+                                        .map((car) => (
                                         <div className={styles.carCard}
                                              key={car.id}
                                         >
@@ -320,6 +367,7 @@ function Center() {
                                                 </h3>
                                                 <p className="text-xl">Price: {car.price}€/day</p>
                                                 <p className="text-xl">Year: {car.year}</p>
+                                                <p className="text-xl">Category: {car.car_type}</p>
                                                 <p className="text-xl">Rating: {car.rating}</p>
                                                 <button
                                                     className="text-xl w-[200px] bg-amber-400 text-white py-2 rounded-lg mt-4"
