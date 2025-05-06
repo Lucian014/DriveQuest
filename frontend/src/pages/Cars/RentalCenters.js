@@ -88,7 +88,9 @@ function RentalCenters() {
                                     <p className={styles.country}>{center.country}</p>
 
                                 </div>
-                                <div className={styles.MapWrapper}>
+                                <div className={styles.MapWrapper}
+                                    onClick={(e) => e.stopPropagation()}
+                                >
                                     <MapContainer center={[center.latitude, center.longitude]} zoom={12} style={{ height: '400px', width: '100%' }}>
                                         <TileLayer
                                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

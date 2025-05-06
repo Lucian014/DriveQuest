@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Car, User, Contact, Car_Rental, Comment, RentalCenter, Bill, OpeningHours
+from .models import Car, User, Contact, Car_Rental, Comment, RentalCenter, Bill, OpeningHour
 
 # Register your models here.
 
@@ -9,7 +9,7 @@ admin.site.register(Contact)
 admin.site.register(Car_Rental)
 admin.site.register(Comment)
 admin.site.register(RentalCenter)
-admin.site.register(OpeningHours)
+admin.site.register(OpeningHour)
 
 @admin.register(Bill)
 class BillAdmin(admin.ModelAdmin):
