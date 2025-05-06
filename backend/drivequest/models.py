@@ -143,7 +143,6 @@ class Bill(models.Model):
     def __str__(self):
         return f"Bill #{self.id} for {self.user.username}"
 
-
 class OpeningHour(models.Model):
     rental_center = models.OneToOneField('RentalCenter', on_delete=models.CASCADE)
 
