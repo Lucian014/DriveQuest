@@ -39,6 +39,7 @@ function Home() {
             .catch((err) => console.log(err));
     }, [csrftoken]);
 
+
     const handleCar = (id) => {
         navigate(`/car_details/${id}`);
     };
