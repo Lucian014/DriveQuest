@@ -26,4 +26,6 @@ urlpatterns = [
     path('claim_reward/<int:prize_number>/', views.claim_reward, name='claim_reward'),
     path('leaderboard/', views.leaderboard, name='leaderboard'),
     path('bill_history/', views.bill_history, name='bill_history'),
+    path('opening_hours/<int:center_id>/', views.opening_hours, name='opening_hours'),
+    path('search_centers/',views.search_centers,name='search_centers'),
 ]
