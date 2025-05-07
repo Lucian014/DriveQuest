@@ -6,7 +6,7 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    gap: 1.3rem;
+    gap: 7rem;
 }
 
 .content{
@@ -14,7 +14,9 @@
     flex-direction: row;
     justify-content: space-between;
     gap: 2rem;
-    align-items: flex-start;
+    align-items: stretch;
+    margin-bottom: 2rem;
+    padding-left: 25px;
 }
 
 .inputs {
@@ -93,16 +95,20 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     padding: 3rem ;
     transition: all 0.3s ease;
-    text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    max-height: 600px;
+    max-height: 800px;
     width: 100%;
 }
 
 .text_content{
+    margin-top: 3.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     flex: 0 0 50%;
+    margin-bottom: 3rem;
 }
 
 .card:hover {
@@ -114,30 +120,61 @@
 .name {
     display: flex;
     text-align: left;
-    font-size: 1.6rem;
+    font-size: 2rem;
     font-weight: 700;
     color: #2d3748;
-    margin-bottom: 0.5rem;
+    padding-bottom: 1.5rem;
 }
 
 .info {
     display: flex;
     text-align: left;
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     color: #4a5568;
+    margin-top: 0.2rem;
     margin-bottom: 0.2rem;
     letter-spacing: 0.3px;
+
 }
+
+
+.opening_hours {
+    margin-top: 0.5rem;
+    font-size: 1.3rem;
+    color: #4a5568;
+    line-height: 1.6;
+
+}
+
+.opening_hours p {
+    margin: 0.25rem 0;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+.opening_hours .day {
+    font-weight: 500;
+    min-width: 90px;
+}
+
+.opening_hours .hours {
+    white-space: nowrap;
+}
+
 
 .country {
     font-size: 1.3rem;
     font-weight: 600;
     color: #718096;
+    padding: 0.3rem;
+
     background-color: #edf2f7;
-    padding: 0.3rem 0.5rem;
     border-radius: 1rem;
     margin-top: 1.1rem;
     width: fit-content;
+    text-align: left;
+    align-self: flex-start;
 }
 
 
