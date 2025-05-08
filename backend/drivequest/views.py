@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie, csrf_protect
-from .models import Car, Contact, Car_Rental, Comment, RentalCenter, CarRating, Bill
+from .models import Car, Contact, Car_Rental, Comment, RentalCenter, CarRating, Bill,OpeningHour
 from django.contrib.auth import get_user_model,login,authenticate,login as django_login
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_protect
@@ -14,6 +14,8 @@ from django.contrib.auth import get_user_model, login as django_login,logout as 
 from django.core.exceptions import ValidationError
 import json
 from datetime import datetime
+from rapidfuzz import fuzz
+
 
 @ensure_csrf_cookie
 def csrf_token(request):
@@ -633,3 +635,68 @@ def bill_history(request):
         return JsonResponse({'message': 'Bill deleted successfully'}, safe=False)
     else:
         return JsonResponse({'error': 'Only GET requests are allowed.'}, status=405)
+
+def opening_hours(request, center_id):
+    if request.method == 'GET':
+        try:
+            opening_hour = OpeningHour.objects.get(rental_center_id=center_id)
+
+            data = {
+                "monday": [opening_hour.monday_start, opening_hour.monday_end],
+                "tuesday": [opening_hour.tuesday_start, opening_hour.tuesday_end],
+                "wednesday": [opening_hour.wednesday_start, opening_hour.wednesday_end],
+                "thursday": [opening_hour.thursday_start, opening_hour.thursday_end],
+                "friday": [opening_hour.friday_start, opening_hour.friday_end],
+                "saturday": [opening_hour.saturday_start, opening_hour.saturday_end],
+                "sunday": [opening_hour.sunday_start, opening_hour.sunday_end],
+            }
+
+            # Convertește TimeField-urile în string-uri (ex: "09:00")
+            for day in data:
+                data[day] = [t.strftime('%H:%M') if t else None for t in data[day]]
+
+            return JsonResponse(data, status=200)
+
+        except OpeningHour.DoesNotExist:
+            return JsonResponse({"error": "Opening hours not found."}, status=404)
+
+def search_centers(request):
+    if request.method == 'GET':
+        country = request.GET.get('country', '').strip()
+        city = request.GET.get('city', '').strip()
+        address = request.GET.get('address', '').strip()
+        name = request.GET.get('name', '').strip()
+
+        # Ia toate centrele
+        all_centers = RentalCenter.objects.all()
+
+        # Filtrare fuzzy în Python
+        results = []
+
+        for center in all_centers:
+            match = True
+
+            if country and fuzz.partial_ratio(center.country.lower(), country.lower()) < 85:
+                match = False
+            if city and fuzz.partial_ratio(center.city.lower(), city.lower()) < 85:
+                match = False
+            if address and fuzz.partial_ratio(center.address.lower(), address.lower()) < 90:
+                match = False
+            if name and fuzz.partial_ratio(center.name.lower(), name.lower()) < 50:
+                match = False
+
+            if match:
+                results.append({
+                    'id': center.id,
+                    'name': center.name,
+                    'country': center.country,
+                    'city': center.city,
+                    'phone': center.phone,
+                    'address': center.address,
+                    'latitude': center.lat,
+                    'longitude': center.long,
+                })
+
+        return JsonResponse(results, safe=False)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)

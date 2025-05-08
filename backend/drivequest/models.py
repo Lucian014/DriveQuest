@@ -2,7 +2,6 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.db import models
 from django.db.models import Avg
-
 # Create your models here.
 
 class CustomUserManager(BaseUserManager):
@@ -143,8 +142,7 @@ class Bill(models.Model):
     def __str__(self):
         return f"Bill #{self.id} for {self.user.username}"
 
-
-class OpeningHours(models.Model):
+class OpeningHour(models.Model):
     rental_center = models.OneToOneField('RentalCenter', on_delete=models.CASCADE)
 
     monday_start = models.TimeField(null=True, blank=True)
@@ -167,6 +165,7 @@ class OpeningHours(models.Model):
 
     sunday_start = models.TimeField(null=True, blank=True)
     sunday_end = models.TimeField(null=True, blank=True)
+
 
     def __str__(self):
         return f"Opening hours for {self.rental_center.name}"
