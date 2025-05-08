@@ -10,7 +10,7 @@ function Navbar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
     const csrftoken = useContext(CsrfContext);
-
+    const [menuOpen,setMenuOpen ] = useState(false);
     useEffect(() => {
         const token = localStorage.getItem('auth-token');
         const tokenExpiration = localStorage.getItem('token-expiration');
@@ -81,13 +81,20 @@ function Navbar() {
     return (
         <nav className={styles.navbar}>
             <div className={styles.switchWrapper}>
-                <SwitchButton/>
+                <SwitchButton />
             </div>
+
             <div className={styles.logoWrapper}>
                 <p className={styles.logo}>DriveQuest</p>
             </div>
 
-            <div className={styles.navItems}>
+            <div className={styles.hamburger} onClick={() => setMenuOpen(!menuOpen)}>
+                <div className={styles.bar}></div>
+                <div className={styles.bar}></div>
+                <div className={styles.bar}></div>
+            </div>
+
+            <div className={`${styles.navItems} ${menuOpen ? styles.open : ''}`}>
                 {navItems.map((item, index) => renderNav(item, index))}
             </div>
         </nav>
