@@ -248,7 +248,7 @@ function CarDetails() {
                                 <h4>Similar Cars You Might Like</h4>
                                 <div className={styles.relatedList}>
                                     {relatedCars.map(r => (
-                                        <div key={`${r.id}-${Math.random()}`} className={styles.relatedCard} onClick={() => navigate(`/cars/${r.id}`)}>
+                                        <div key={`${r.id}-${Math.random()}`} className={styles.relatedCard} onClick={() => navigate(`/car_details/${r.id}`)}>
                                             <img src={r.image ? `http://localhost:8000${r.image}` : '/images/defaultImage.webp'} alt={r.model}/>
                                             <div className={styles.relatedDetails}>
                                                 <p>{r.brand} {r.model}</p>
