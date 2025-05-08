@@ -1,79 +1,84 @@
-/* Container wrapper pentru a centra pe pagină */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Wrapper */
 .container_wrapper {
-    display: flex;
-    justify-content: center; /* Aliniază pe axa orizontală (centrat) */
-    align-items: center; /* Aliniază pe axa verticală (centrat) */
-    height: 100vh; /* Înălțimea completă a ferestrei */
+    @apply flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-emerald-100 dark:from-gray-900 dark:to-gray-800;
 }
 
-/* Containerul care conține toate detaliile */
+/* Main two-column container */
 .container {
-    background-color: rgba(126, 126, 126, 0.32); /* Fundal alb */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 800px; /* Lățimea maximă a containerului */
-    box-sizing: border-box;
-
+    @apply flex flex-col gap-9 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-2xl shadow-2xl p-6 sm:p-10 w-full max-w-5xl transition-colors;
 }
 
-/* Detaliile de prezentare a închirierii */
-.details , .paymentMethodText {
-    font-size: 1.3rem;
-    color: #333;
-    margin-bottom: 10px;
+@screen sm {
+    .container {
+        @apply flex-row;
+    }
 }
 
-/* Textul pentru alegerea metodei de plată */
-
-
-/* Stilul pentru select */
-.select {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
-    font-size: 16px;
-    margin-bottom: 15px;
-    background-color: #fff;
-    transition: border-color 0.3s;
+/* Panels: prevent shrinking, fix width */
+.methods, .summary {
+    @apply flex-shrink-0 basis-[48%] w-full sm:w-1/2 bg-white dark:bg-gray-900 border border-indigo-200 dark:border-indigo-700 rounded-xl p-6 transition-colors shadow-lg;
 }
 
-/* Focus pe select */
-.select:focus {
-    border-color: #007BFF;
-    outline: none;
+.methods {
+    @apply flex flex-col gap-6;
 }
 
-/* Stilul pentru buton */
+.summary {
+    @apply flex flex-col gap-4;
+}
+
+/* Text */
+.details {
+    @apply text-sm sm:text-base mb-2 leading-relaxed;
+}
+
+.paymentMethodText {
+    @apply text-lg font-bold text-indigo-700 dark:text-indigo-300;
+}
+
+/* Options list */
+.optionsContainer {
+    @apply flex flex-col gap-3;
+}
+
+.optionItem {
+    @apply px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg cursor-pointer transition-all bg-white dark:bg-gray-800 hover:border-violet-500 hover:shadow-md;
+}
+.optionItem:hover {
+    @apply -translate-y-1;
+}
+.optionItemSelected {
+    @apply bg-gradient-to-r from-indigo-500 to-purple-600 text-white border-transparent shadow-lg;
+}
+
+/* Button */
 .button {
-    background-color: #28a745; /* Verde pentru buton */
-    color: white;
-    padding: 12px 20px;
-    font-size: 1.3rem;
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.3s, transform 0.2s ease-in-out;
-    margin-top: 10px;
+    @apply w-full py-3 sm:py-3 text-sm sm:text-base font-semibold text-white rounded-lg transition-all;
+    @apply bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed;
 }
 
-/* Hover pe buton */
-.button:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
+/* Car details */
+.car {
+    @apply flex flex-col mb-4 px-4 border-b border-gray-200 dark:border-gray-700;
 }
 
-/* Butonul dezactivat */
-.button:disabled {
-    background-color: #d06262;
-    cursor: not-allowed;
+.car p {
+    @apply self-center sm:self-start text-base sm:text-base mb-2;
+}
+.car img {
+    @apply self-center sm:self-start mt-2 w-full max-w-xs rounded-lg object-cover shadow-xl;
 }
 
-/* Spatiu între select și buton */
-br {
-    margin-top: 20px;
+/* Error message */
+.error {
+    @apply text-red-600 dark:text-red-400 text-center mt-4 font-medium;
+}
+
+/* Loading wrapper */
+.loadingWrapper {
+    @apply flex items-center justify-center h-64;
 }
