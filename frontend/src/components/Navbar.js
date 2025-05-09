@@ -124,7 +124,14 @@ function Navbar() {
 
         if (item === "Logout") {
             return (
-                <div key={index} onClick={handleLogout} className={styles.navItem}>
+                <div
+                    key={index}
+                    onClick={() => {
+                        handleLogout();
+                        setMenuOpen(false);
+                    }}
+                    className={styles.navItem}
+                >
                     {iconWrapper}
                     <span>{item}</span>
                     <span className={styles.navArrow}>{menuOpen ? <FaAngleRight/> : null}</span>
@@ -141,10 +148,15 @@ function Navbar() {
         if (item === "Prizes") path = "/prizes";
 
         return (
-            <Link to={path} key={index} className={styles.navItem}>
+            <Link
+                to={path}
+                key={index}
+                className={styles.navItem}
+                onClick={() => setMenuOpen(false)} // închide meniul la click
+            >
                 {iconWrapper}
                 <span>{item}</span>
-                <span className={styles.navArrow}>{menuOpen ? <FaAngleRight/> : null}</span>
+                <span className={styles.navArrow}>{menuOpen ? <FaAngleRight /> : null}</span>
             </Link>
         );
     };
