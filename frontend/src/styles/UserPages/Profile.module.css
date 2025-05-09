@@ -1,3 +1,8 @@
+body{
+    background-color: var(--color-bg);
+}
+
+
 .profile_container {
     @apply box-border
     mx-auto w-[90%]
@@ -45,14 +50,14 @@ input[type="file"] {
 
 /* .button should have the right styles for alignment and appearance */
 .button {
-    @apply bg-yellow-500 text-center p-3 rounded-lg hover:cursor-pointer;
+    @apply bg-secondary text-center p-3 rounded-lg hover:cursor-pointer hover:bg-tertiary transition duration-300;
 }
 
 .image_actions{
     @apply flex gap-2 my-2;
 }
 .imageButton{
-    @apply bg-yellow-500 text-center p-1 rounded-lg hover:cursor-pointer;
+    @apply bg-secondary text-center p-1 rounded-lg hover:cursor-pointer hover:bg-tertiary transition duration-300;
 }
 
 .car_list{

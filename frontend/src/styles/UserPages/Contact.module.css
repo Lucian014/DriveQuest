@@ -1,5 +1,9 @@
+body{
+    background-color: var(--color-bg);
+}
+
+
 .contactContainer {
-    background-color: #e9e6e6;
     line-height: 1.6;
     margin-top: 0;
     min-height: 100vh;
@@ -15,7 +19,6 @@
 
 /* Header Styles */
 .header {
-    background-color: #00bfa5;
     color: black;
     padding: 20px 0;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -90,12 +93,12 @@
 
 .formGroup input:focus,
 .formGroup textarea:focus {
-    border-color: #20786e;
+    border-color: var(--color-accent);
     outline: none;
 }
 
 .submitBtn {
-    background-color: #00bfa5;
+    background-color: var(--color-primary);
     margin-top: 20px;
     color: black;
     padding: 14px 20px;
@@ -107,7 +110,7 @@
 }
 
 .submitBtn:hover {
-    background-color: #ff8a65;
+    background-color: var(--color-accent)
 }
 
 .contactMap {
@@ -340,7 +343,7 @@
 
 .modalContent p {
     font-size: 24px;
-    color: #20786e;
+    color: var(--color-accent);
     line-height: 1.5;
     margin: 0;
 }

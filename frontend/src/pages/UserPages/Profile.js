@@ -2,8 +2,6 @@ import React, {useContext, useEffect, useState} from 'react';
 import styles from '../../styles/UserPages/Profile.module.css';
 import {motion , AnimatePresence} from "framer-motion";
 import CsrfContext from "../../components/CsrfContext";
-import homeStyles from '../../styles/UserPages/Home.module.css';
-import {useTheme} from "../../components/ThemeContext";
 import '../../App.css';
 import Footer from "../../components/Footer";
 
@@ -20,7 +18,6 @@ function Profile() {
     const [cars, setCars] = useState([]);
     const [points, setPoints] = useState(0);
     const [XP, setXP] = useState(0);
-    const {darkMode} = useTheme();
     const [instagram, setInstagram] = useState("");
     const [twitter, setTwitter] = useState("");
     const [tiktok, setTiktok] = useState("");
@@ -49,11 +46,6 @@ function Profile() {
     const start = pageIndex * billsPerPage;
     const currentBills = bills.slice(start, start + billsPerPage);
 
-
-
-    useEffect(() => {
-        document.documentElement.setAttribute('data-theme', 'dark');
-    }, [darkMode]);
 
     useEffect(() => {
         fetch("http://localhost:8000/drivequest/profile/", {
@@ -269,8 +261,6 @@ function Profile() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, transition: { duration: 0.5 } }}
                 exit={{ opacity: 0 }}
-                key={darkMode ? "dark" : "light"}
-                className={darkMode ? homeStyles.body_dark : homeStyles.body_light}
             >
                 <div className={styles.profile_container}>
                     <div className={`${styles.left}`}>
@@ -281,7 +271,7 @@ function Profile() {
                                 className="rounded-full w-[100px] h-[100px] mb-4 object-cover"
                             />
                             {isEditing && (
-                                <label className="absolute bottom-0 right-0 bg-yellow-500 p-2 rounded-full cursor-pointer shadow hover:bg-yellow-600">
+                                <label className="absolute bottom-0 right-0 bg-secondary p-2 rounded-full cursor-pointer shadow hover:bg-tertiary transition duration-300">
                                     <i className="fas fa-pen text-black"></i>
                                     <input
                                         type="file"
@@ -380,10 +370,10 @@ function Profile() {
                                     key={key}
                                     onClick={() => setSelectedTab(key)}
                                     className={`text-lg relative pl-4 pt-4 pb-1 transition-all duration-300 ease-in-out
-          ${selectedTab === key ? "text-yellow-500" : "text-gray-400"}
+          ${selectedTab === key ? "text-tertiary" : "text-gray-600"}
           after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-full
           after:transition-all after:duration-300 after:ease-in-out
-          ${selectedTab === key ? "after:bg-yellow-500" : "after:bg-transparent"}`}
+          ${selectedTab === key ? "after:bg-secondary" : "after:bg-transparent"}`}
                                 >
                                     {label}
                                 </button>
@@ -491,7 +481,7 @@ function Profile() {
                                                         setModalTitle("Delete from Rental History");
                                                         setModalContent("Are you sure you want to delete this rental?");
                                                     }}
-                                                    className="min-h-[30px] ml-1 text-mb bg-amber-400 rounded-lg w-auto"
+                                                    className="min-h-[30px] p-1 ml-1 text-mb bg-primary hover:bg-accent rounded-lg w-auto transition-colors duration-300"
                                                 >
                                                     Delete from Rental History
                                                 </button>
@@ -566,7 +556,7 @@ function Profile() {
                                                             href={bill.pdf_url}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
-                                                            className="px-4 py-2 bg-blue-500 text-black text-sm font-medium rounded-lg hover:bg-blue-600 transition"
+                                                            className="px-4 py-2 bg-primary text-black text-sm font-medium rounded-lg hover:bg-accent transition duration-300"
                                                         >
                                                             View PDF
                                                         </a>
@@ -575,7 +565,7 @@ function Profile() {
                                                     )}
                                                     {isEditing && (
                                                         <button
-                                                            className="px-4 py-2 bg-amber-400 text-black text-sm font-medium rounded-lg hover:bg-amber-500 transition"
+                                                            className="px-4 py-2 bg-secondary text-black text-sm font-medium rounded-lg hover:bg-tertiary transition duration-300"
                                                             onClick={() => {
                                                                 setToDelete(bill.id);
                                                                 setIsOpen(true);
@@ -637,7 +627,7 @@ function Profile() {
                                 <p className="text-gray-700">{modalContent}</p>
                                 <div className="mt-6 flex justify-end gap-2">
                                     <button onClick={()=>{setToDelete(null); setIsOpen(!isOpen)}} className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
-                                    <button onClick={()=>{deleteRental(toDelete)}} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Confirm
+                                    <button onClick={()=>{deleteRental(toDelete)}} className="px-4 py-2 bg-primary text-white rounded hover:bg-accent">Confirm
                                     </button>
                                 </div>
                             </div>

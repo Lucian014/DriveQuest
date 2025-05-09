@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import CsrfContext from "../../components/CsrfContext";
 import styles from '../../styles/Cars/RentalCenters.module.css';
 import {useNavigate} from "react-router-dom";
-import {useTheme} from "../../components/ThemeContext";
 import {motion,AnimatePresence} from "framer-motion";
 import homeStyle from "../../styles/UserPages/Home.module.css";
 import L from 'leaflet';
@@ -57,7 +56,6 @@ function RentalCenters() {
     const [centers, setCenters] = useState([]);
     const csrftoken = useContext(CsrfContext);
     const navigate = useNavigate();
-    const {darkMode} = useTheme();
     const [countryInput, setCountryInput] = useState('Romania');
     const [cityInput, setCityInput] = useState('Bucuresti');
     const [addressInput, setAddressInput] = useState('');
@@ -82,11 +80,6 @@ function RentalCenters() {
             <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clipRule="evenodd" />
         </svg>
 
-
-
-    useEffect(() => {
-        document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
-    }, [darkMode]);
 
     useEffect(() => {
         fetch('http://localhost:8000/drivequest/get_centers/', {
@@ -175,11 +168,9 @@ function RentalCenters() {
     return (
         <AnimatePresence mode="popLayout" initial={false}>
             <motion.div
-                key={darkMode ? "dark" : "light"}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, transition: { duration: 0.5 } }}
                 exit={{ opacity: 0 }}
-                className={darkMode ? homeStyle.body_dark : homeStyle.body_light}
             >
                 <motion.form
                     className={styles.inputs}
@@ -227,7 +218,7 @@ function RentalCenters() {
                                             setShowDropdown(false);
                                         }}
                                         className={homeStyle.dropdown_item}
-                                        whileHover={{ backgroundColor: '#f1e6da' }}
+                                        whileHover={{ backgroundColor: '#00b8d9' }}
                                         whileTap={{ scale: 0.98 }}
                                     >
                                         {city}
