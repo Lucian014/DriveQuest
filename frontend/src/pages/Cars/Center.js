@@ -8,6 +8,7 @@ import 'leaflet/dist/leaflet.css';
 import styles from '../../styles/Cars/Center.module.css';
 import {motion} from "framer-motion";  // 👈 import module
 import '../../App.css';
+import Footer from "../../components/Footer";
 
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -194,7 +195,7 @@ function Center() {
 
                             <button
                                 type="submit"
-                                className="bg-amber-400 text-white py-2 rounded-lg mb-4"
+                                className="bg-primary text-white py-2 rounded-lg mb-4 hover:bg-accent transition-all duration-300"
                                 onClick={(e) => handleSearch(e)}
                             >
                                 Caută mașină
@@ -219,7 +220,7 @@ function Center() {
                                 step="1"
                                 value={price}
                                 onChange={(e) => setPrice(parseInt(e.target.value))}
-                                className="accent-amber-400"
+                                className="accent-cyan-500"
                             />
                         </div>
                         <div className="flex flex-col my-4">
@@ -236,14 +237,14 @@ function Center() {
                                 step="1"
                                 value={year}
                                 onChange={(e) => setYear(parseInt(e.target.value))}
-                                className="accent-amber-400"
+                                className="accent-cyan-500"
                             />
                         </div>
                             <p className="text-2xl text-gray-600 mb-2">Car type:</p>
                         {filteredTypes.map((type) => (
                             <div className="flex" key={type}>
                                 <input
-                                    className="w-6 h-6 mr-2 mb-3 accent-amber-400"
+                                    className="w-6 h-6 mr-2 mb-3 color-primary"
                                     type="checkbox"
                                     checked={selectedTypes.includes(type)}
                                     onChange={() => {
@@ -258,10 +259,10 @@ function Center() {
                             </div>
                         ))}
                         <div className="flex">
-                        <button className="text-xl w-[150px] mr-3 bg-amber-400 text-white py-2 rounded-lg mb-4"
+                        <button className="text-xl w-[150px] mr-3 bg-primary hover:bg-accent text-white py-2 rounded-lg mb-4 transtion-all duration-300"
                                 onClick={() => handleFilter(displayNormal ? cars : searchedCars)}
                         >Apply filters</button>
-                        <button className="text-xl w-[150px] bg-amber-400 text-white py-2 rounded-lg mb-4"
+                        <button className="text-xl w-[150px] bg-primary hover:bg-accent text-white py-2 rounded-lg mb-4 transtion-all duration-300"
                                 onClick={() => {setFiltered([]);
                                     setPrice(1000);
                                     setYear(1950);
@@ -316,7 +317,7 @@ function Center() {
                                         <p className="text-xl">Category: {car.car_type}</p>
                                         <p className="text-xl">Rating: {car.rating}</p>
                                         <button
-                                            className="text-xl w-[200px] bg-amber-400 text-white py-2 rounded-lg mt-4"
+                                            className="text-xl w-[200px] bg-primary hover:bg-accent transition-all duration-300 text-white py-2 rounded-lg mt-4"
                                             onClick={()=>{navigate(`/car_details/${car.id}`)}}
                                         >
                                             Închiriază
@@ -325,9 +326,7 @@ function Center() {
                                 </div>
                             ))}
                         </div>
-                    </div>) : <div>
-                        <p className="text-8xl text-center ml-[150px]">No cars available</p>
-                    </div>}
+                    </div>) :null}
 
 
                         {searchedCars ? (
@@ -336,7 +335,7 @@ function Center() {
                                     <h2 className="text-4xl font-bold mx-auto">
                                         Your results
                                     </h2>
-                                    <button className="text-xl w-[200px] bg-amber-400 text-white p-2 rounded-lg"
+                                    <button className="text-xl w-[200px] bg-primary hover:bg-accent transtion-all duration-300 text-white p-2 rounded-lg"
                                             onClick={() => {setSearchedCars(null);
                                             setDisplayNormal(true);
                                             setSearchInput('');
@@ -370,7 +369,7 @@ function Center() {
                                                 <p className="text-xl">Category: {car.car_type}</p>
                                                 <p className="text-xl">Rating: {car.rating}</p>
                                                 <button
-                                                    className="text-xl w-[200px] bg-amber-400 text-white py-2 rounded-lg mt-4"
+                                                    className="text-xl w-[200px] bg-primary hover:bg-accent transition-all duration-300 text-white py-2 rounded-lg mt-4"
                                                     onClick={()=>{navigate(`/car_details/${car.id}`)}}
                                                 >
                                                     Închiriază
@@ -383,6 +382,7 @@ function Center() {
                         ) : null}
                 </div>
             </div> ) : null}
+            <Footer />
         </div>
     );
 }

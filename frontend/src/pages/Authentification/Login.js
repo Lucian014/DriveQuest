@@ -1,10 +1,8 @@
 // src/components/Login.js
 import React, { useEffect, useState, useContext } from 'react';
 import styles from '../../styles/Authentification/Login.module.css';
-import homeStyle from "../../styles/UserPages/Home.module.css";
 import { useNavigate } from "react-router-dom";
 import CsrfContext from '../../components/CsrfContext';
-import { useTheme } from "../../components/ThemeContext";
 import { AnimatePresence, motion } from "framer-motion";
 import styled from 'styled-components';
 
@@ -15,7 +13,6 @@ function Login() {
     const [current, setCurrent] = useState(0);
     const [fade, setFade] = useState(true);
     const navigate = useNavigate();
-    const { darkMode } = useTheme();
     const csrftoken = useContext(CsrfContext);
     const [showPassword, setShowPassword] = useState(false);
 
@@ -25,11 +22,6 @@ function Login() {
         "../images/logan.png",
     ];
     const length = images.length;
-
-    // update theme attr on <html>
-    useEffect(() => {
-        document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
-    }, [darkMode]);
 
     // carousel + fade logic
     useEffect(() => {
@@ -72,11 +64,9 @@ function Login() {
     return (
         <AnimatePresence mode="popLayout" exitBeforeEnter initial={false} animate="visible" exit="hidden">
             <motion.div
-                key={darkMode ? "dark" : "light"}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, transition: { duration: 0.5 } }}
                 exit={{ opacity: 0 }}
-                className={darkMode ? homeStyle.body_dark : homeStyle.body_light}
             >
                 <div className={styles.body}>
                     <div className={styles.left}>

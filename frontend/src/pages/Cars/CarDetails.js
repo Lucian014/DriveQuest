@@ -4,9 +4,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import CsrfContext from "../../components/CsrfContext";
 import styles from '../../styles/Cars/CarDetails.module.css';
 import { motion, AnimatePresence } from "framer-motion";
-import { useTheme } from "../../components/ThemeContext";
-import homeStyle from "../../styles/UserPages/Home.module.css";
 import Loading from "../../components/Loading";
+import Footer from "../../components/Footer";
 
 function CarDetails() {
     const { id } = useParams();
@@ -23,13 +22,9 @@ function CarDetails() {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
     const [relatedCars, setRelatedCars] = useState(null)
-    const { darkMode } = useTheme();
     const [rating,setRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0);
 
-    useEffect(() => {
-        document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
-    }, [darkMode]);
 
     useEffect(() => {
         setLoading(true);
@@ -166,11 +161,9 @@ function CarDetails() {
     return (
         <AnimatePresence mode="popLayout" initial={false}>
             <motion.div
-                key={darkMode ? "dark" : "light"}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, transition: { duration: 0.5 } }}
                 exit={{ opacity: 0 }}
-                className={darkMode ? homeStyle.body_dark : homeStyle.body_light}
             >
                 <div className={styles.container}>
                     {car && (
@@ -317,6 +310,7 @@ function CarDetails() {
                         </div>
                     </div>
                 </div>
+                <Footer />
             </motion.div>
         </AnimatePresence>
     );

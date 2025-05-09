@@ -3,7 +3,7 @@ import {AnimatePresence, motion} from 'framer-motion';
 import styles from '../../styles/UserPages/Home.module.css';
 import { useNavigate } from 'react-router-dom';
 import CsrfContext from "../../components/CsrfContext";
-import {useTheme} from "../../components/ThemeContext";
+import Footer from "../../components/Footer";
 
 function Home() {
     const [showDropdown, setShowDropdown] = useState(false);
@@ -15,11 +15,7 @@ function Home() {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [carType,setCarType] = useState(null);
-    const {darkMode} = useTheme();
     const [searchedCars, setSearchedCars] = useState(null);
-    useEffect(()=>{
-        document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
-    },[darkMode]);
 
 
     useEffect(() => {
@@ -102,12 +98,10 @@ function Home() {
     return (
         <AnimatePresence mode={"popLayout"} exitBeforeEnter={true} initial={false} animate={"visible"} exit={"hidden"}>
             <motion.div
-                key={darkMode ? "dark" : "light"}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, transition: { duration: 0.5 } }}
                 exit={{ opacity: 0 }}
                 variants={containerVariants}
-                className={darkMode ? styles.body_dark : styles.body_light}
             >
                 <div className={styles.hero}>
                     {/* HERO SECTION */}
@@ -192,7 +186,7 @@ function Home() {
                                                 key={type}
                                                 onClick={() => handleSelect(type)}
                                                 className={styles.dropdown_item}
-                                                whileHover={{ backgroundColor: '#f1e6da' }}
+                                                whileHover={{ backgroundColor: '#00b8d9' }}
                                                 whileTap={{ scale: 0.98 }}
                                             >
                                                 {type}
@@ -205,8 +199,8 @@ function Home() {
                             <motion.button
                                 type="submit"
                                 className={styles.form_input}
-                                whileHover={{ scale: 1.03, backgroundColor: '#9c7355' }}
                                 whileTap={{ scale: 0.97 }}
+                                whileHover={{ backgroundColor: "#009ab8", scale: 1.02 }}
                                 onClick={(e) => handleSearch(e)}
                             >
                                 Caută mașină
@@ -344,6 +338,7 @@ function Home() {
                         </div>
                     </motion.section>
                 </div>
+                <Footer />
             </motion.div>
         </AnimatePresence>
     );

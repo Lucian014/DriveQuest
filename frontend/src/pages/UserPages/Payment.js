@@ -3,10 +3,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import CsrfContext from "../../components/CsrfContext";
 import styles from '../../styles/UserPages/Payment.module.css';
 import { motion, AnimatePresence } from "framer-motion";
-import { useTheme } from "../../components/ThemeContext";
-import homeStyle from "../../styles/UserPages/Home.module.css";
 import Loading from "../../components/Loading";
 import '../../App.css';
+import Footer from "../../components/Footer";
 
 function Payment() {
     const location = useLocation();
@@ -15,7 +14,6 @@ function Payment() {
     const csrftoken = useContext(CsrfContext);
     const [price] = useState(state.price);
     const [paymentMethod, setPaymentMethod] = useState('');
-    const { darkMode } = useTheme();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [car, setCar] = useState(null);
@@ -49,9 +47,6 @@ function Payment() {
         }
     }, [state, csrftoken]);
 
-    useEffect(() => {
-        document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
-    }, [darkMode]);
 
     useEffect(() => {
         if (!state) navigate('/home');
@@ -113,11 +108,9 @@ function Payment() {
     return (
         <AnimatePresence mode="popLayout" initial={false} exitBeforeEnter>
             <motion.div
-                key={darkMode ? "dark" : "light"}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, transition: { duration: 0.5 } }}
                 exit={{ opacity: 0 }}
-                className={darkMode ? homeStyle.body_dark : homeStyle.body_light}
             >
                 <div className={styles.container_wrapper}>
                     <form onSubmit={createRental} className={styles.container}>
@@ -145,14 +138,14 @@ function Payment() {
                                         placeholder="Card Number"
                                         value={cardDetails.number}
                                         onChange={e => setCardDetails({ ...cardDetails, number: e.target.value })}
-                                        className="p-3 border rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 transition-all"
+                                        className="p-3 border rounded-lg bg-gray-100  text-gray-900  placeholder-gray-400  focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 transition-all"
                                     />
                                     <input
                                         type="text"
                                         placeholder="Name on Card"
                                         value={cardDetails.name}
                                         onChange={e => setCardDetails({ ...cardDetails, name: e.target.value })}
-                                        className="p-3 border rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 transition-all"
+                                        className="p-3 border rounded-lg bg-gray-100  text-gray-900  placeholder-gray-400  focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 transition-all"
                                     />
                                     <div className="flex gap-4">
                                         <input
@@ -160,14 +153,14 @@ function Payment() {
                                             placeholder="MM/YY"
                                             value={cardDetails.expiry}
                                             onChange={e => setCardDetails({ ...cardDetails, expiry: e.target.value })}
-                                            className="w-full sm:w-1/2 p-3 border rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 transition-all"
+                                            className="w-full sm:w-1/2 p-3 border rounded-lg bg-gray-100 text-gray-900  placeholder-gray-400 0 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 transition-all"
                                         />
                                         <input
                                             type="password"
                                             placeholder="CVV"
                                             value={cardDetails.cvv}
                                             onChange={e => setCardDetails({ ...cardDetails, cvv: e.target.value })}
-                                            className="w-full sm:w-1/2 p-3 border rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 transition-all"
+                                            className="w-full sm:w-1/2 p-3 border rounded-lg bg-gray-100 text-gray-900  placeholder-gray-400 0 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 transition-all"
                                         />
                                     </div>
                                 </div>
@@ -180,7 +173,7 @@ function Payment() {
                                         placeholder="PayPal Email"
                                         value={paypalEmail}
                                         onChange={e => setPaypalEmail(e.target.value)}
-                                        className="p-3 border rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 transition-all"
+                                        className="p-3 border rounded-lg bg-gray-100  text-gray-900  placeholder-gray-400  focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 transition-all"
                                     />
                                 </div>
                             )}
@@ -216,6 +209,7 @@ function Payment() {
 
                     </form>
                 </div>
+                <Footer />
             </motion.div>
         </AnimatePresence>
     );
