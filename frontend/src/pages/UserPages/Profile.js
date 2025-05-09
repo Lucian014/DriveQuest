@@ -5,6 +5,7 @@ import CsrfContext from "../../components/CsrfContext";
 import homeStyles from '../../styles/UserPages/Home.module.css';
 import {useTheme} from "../../components/ThemeContext";
 import '../../App.css';
+import Footer from "../../components/Footer";
 
 function Profile() {
     const [email, setEmail] = useState("");
@@ -643,6 +644,7 @@ function Profile() {
                         </div>
                     )}
                 </div>
+                <Footer />
             </motion.div>
         </AnimatePresence>
     );

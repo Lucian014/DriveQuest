@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "../../components/ThemeContext";
 import homeStyle from "../../styles/UserPages/Home.module.css";
 import Loading from "../../components/Loading";
+import Footer from "../../components/Footer";
 
 function CarDetails() {
     const { id } = useParams();
@@ -317,6 +318,7 @@ function CarDetails() {
                         </div>
                     </div>
                 </div>
+                <Footer />
             </motion.div>
         </AnimatePresence>
     );

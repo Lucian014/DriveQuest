@@ -4,6 +4,7 @@ import styles from '../../styles/UserPages/Home.module.css';
 import { useNavigate } from 'react-router-dom';
 import CsrfContext from "../../components/CsrfContext";
 import {useTheme} from "../../components/ThemeContext";
+import Footer from "../../components/Footer";
 
 function Home() {
     const [showDropdown, setShowDropdown] = useState(false);
@@ -344,6 +345,7 @@ function Home() {
                         </div>
                     </motion.section>
                 </div>
+                <Footer />
             </motion.div>
         </AnimatePresence>
     );

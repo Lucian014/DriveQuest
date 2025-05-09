@@ -7,6 +7,7 @@ import { useTheme } from "../../components/ThemeContext";
 import homeStyle from "../../styles/UserPages/Home.module.css";
 import Loading from "../../components/Loading";
 import '../../App.css';
+import Footer from "../../components/Footer";
 
 function Payment() {
     const location = useLocation();
@@ -216,6 +217,7 @@ function Payment() {
 
                     </form>
                 </div>
+                <Footer />
             </motion.div>
         </AnimatePresence>
     );

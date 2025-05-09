@@ -8,6 +8,7 @@ import homeStyle from "../../styles/UserPages/Home.module.css";
 import L from 'leaflet';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import Footer from "../../components/Footer";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -298,7 +299,7 @@ function RentalCenters() {
                         ))
                     )}
                 </div>
-
+                <Footer />
             </motion.div>
         </AnimatePresence>
     );

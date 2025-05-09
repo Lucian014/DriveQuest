@@ -8,6 +8,7 @@ import 'leaflet/dist/leaflet.css';
 import styles from '../../styles/Cars/Center.module.css';
 import {motion} from "framer-motion";  // 👈 import module
 import '../../App.css';
+import Footer from "../../components/Footer";
 
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -383,6 +384,7 @@ function Center() {
                         ) : null}
                 </div>
             </div> ) : null}
+            <Footer />
         </div>
     );
 }
