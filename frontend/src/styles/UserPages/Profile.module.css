@@ -1,3 +1,8 @@
+body{
+    background-color: var(--color-bg);
+}
+
+
 .profile_container {
     @apply box-border
     mx-auto w-[90%]
@@ -5,7 +10,7 @@
 }
 
 .left {
-    @apply h-[530px] bg-white w-[100%] md:w-[40%] max-w-[450px] px-12 py-6 flex flex-col items-center my-20 shadow-xl;
+    @apply h-[530px] bg-white w-[100%] md:w-[40%] max-w-[450px] px-12 py-6 flex flex-col items-center mt-20 mb-12 shadow-xl;
 }
 
 input[type="file"] {
@@ -16,7 +21,7 @@ input[type="file"] {
     @apply h-[530px] box-border flex-1 bg-white
     px-6 py-6
     flex flex-col
-    my-20 shadow-xl;
+    mt-20 mb-12 shadow-xl;
 }
 
 .tabs {
@@ -45,14 +50,14 @@ input[type="file"] {
 
 /* .button should have the right styles for alignment and appearance */
 .button {
-    @apply bg-yellow-500 text-center p-3 rounded-lg hover:cursor-pointer;
+    @apply bg-secondary text-center p-3 rounded-lg hover:cursor-pointer hover:bg-tertiary transition duration-300;
 }
 
 .image_actions{
     @apply flex gap-2 my-2;
 }
 .imageButton{
-    @apply bg-yellow-500 text-center p-1 rounded-lg hover:cursor-pointer;
+    @apply bg-secondary text-center p-1 rounded-lg hover:cursor-pointer hover:bg-tertiary transition duration-300;
 }
 
 .car_list{

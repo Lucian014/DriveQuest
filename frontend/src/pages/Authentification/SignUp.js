@@ -3,9 +3,7 @@ import styles from "../../styles/Authentification/Login.module.css";
 import {useNavigate} from "react-router-dom";
 import { useContext } from 'react';
 import CsrfContext from "../../components/CsrfContext";
-import {useTheme} from "../../components/ThemeContext";
 import {motion} from "framer-motion";
-import homeStyle from "../../styles/UserPages/Home.module.css";
 import {AnimatePresence} from "framer-motion";
 import styled from 'styled-components';
 
@@ -19,13 +17,8 @@ function Signup() {
     const [username, setUsername] = useState('');
     const navigate = useNavigate();
     const csrftoken = useContext(CsrfContext);
-    const {darkMode} = useTheme();
     const [fade, setFade] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
-
-    useEffect(() => {
-        document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
-    }, [darkMode]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -99,11 +92,9 @@ function Signup() {
     return (
         <AnimatePresence mode={"popLayout"} exitBeforeEnter={true} initial={false} animate={"visible"} exit={"hidden"}>
             <motion.div
-                key={darkMode ? "dark" : "light"}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, transition: { duration: 0.5 } }}
                 exit={{ opacity: 0 }}
-                className={darkMode ? homeStyle.body_dark : homeStyle.body_light}
             >
                 <div className={styles.body}>
                     <div className={styles.left}>

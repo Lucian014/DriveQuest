@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import CsrfContext from "../../components/CsrfContext";
 import styles from '../../styles/UserPages/Prizes.module.css';
 import '../../App.css';
+import Footer from "../../components/Footer";
 
 function Prizes() {
 
@@ -57,6 +58,7 @@ function Prizes() {
     }
 
     return (
+        <div>
         <div className={styles.container}>
             <div className={styles.header}>
             <h1 className={"text-7xl font-bold mb-4"}>Prizes</h1>
@@ -152,6 +154,8 @@ function Prizes() {
                     </div>
                 </div>
             )}
+        </div>
+    <Footer />
         </div>
     );
 }

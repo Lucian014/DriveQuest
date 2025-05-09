@@ -1,13 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
 import CsrfContext from "../../components/CsrfContext";
-import homeStyle from "../../styles/UserPages/Home.module.css";
-import {useTheme} from "../../components/ThemeContext";
 import {AnimatePresence} from "framer-motion";
 import {motion} from "framer-motion";
 import styles from "../../styles/UserPages/Contact.module.css";
 import L from 'leaflet';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import Footer from "../../components/Footer";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -23,15 +22,11 @@ function Contact() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
-    const {darkMode} = useTheme();
     const csrftoken = useContext(CsrfContext);
     const [rating,setRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0);
     const [ratingMessage, setRatingMessage] = useState("");
     const [showModal, setShowModal] = useState(false);
-    useEffect(()=>{
-        document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
-    },[darkMode]);
 
 
     const handleStarClick = async (e,star) => {
@@ -104,11 +99,9 @@ function Contact() {
         <div className={styles.contactContainer}>
             <AnimatePresence mode={"popLayout"} exitBeforeEnter={true} initial={false} animate={"visible"} exit={"hidden"}>
                 <motion.div
-                    key={darkMode ? "dark" : "light"}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1, transition: { duration: 0.5 } }}
                     exit={{ opacity: 0 }}
-                    className={darkMode ? homeStyle.body_dark : homeStyle.body_light}
                 >
                     <main>
                         <section className={styles.contactSection}>
@@ -195,6 +188,7 @@ function Contact() {
                             </div>
                         </div>
                     )}
+                    <Footer />
                 </motion.div>
             </AnimatePresence>
         </div>

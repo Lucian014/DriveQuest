@@ -1,3 +1,8 @@
+body{
+    background-color: var(--color-bg);
+}
+
+
 .imageSection{
     @apply bg-no-repeat bg-cover bg-center w-full h-[500px] flex flex-col lg:flex-row;
 }
