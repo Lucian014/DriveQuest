@@ -4,6 +4,8 @@ import CsrfContext from "./CsrfContext";
 import SwitchButton from "./SwitchButton";
 import styles from '../styles/Components/Navbar.module.css';
 import {Link} from "react-router-dom";
+import { FaHome,FaAngleRight, FaSignInAlt, FaUser, FaPhone, FaMapMarkerAlt, FaGift, FaSignOutAlt } from 'react-icons/fa';
+import {motion,AnimatePresence} from "framer-motion";
 
 function Navbar() {
 
@@ -11,6 +13,17 @@ function Navbar() {
     const navigate = useNavigate();
     const csrftoken = useContext(CsrfContext);
     const [menuOpen,setMenuOpen ] = useState(false);
+    const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1140);
+    const navIcons = {
+        "Home": <FaHome />,
+        "Login": <FaSignInAlt />,
+        "Profile": <FaUser />,
+        "Contact": <FaPhone />,
+        "Pick-up Points": <FaMapMarkerAlt />,
+        "Prizes": <FaGift />,
+        "Logout": <FaSignOutAlt />
+    };
+
     useEffect(() => {
         const token = localStorage.getItem('auth-token');
         const tokenExpiration = localStorage.getItem('token-expiration');
@@ -26,6 +39,21 @@ function Navbar() {
             }
         }
     }, [])
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsLargeScreen(window.innerWidth >= 1140);
+            if (window.innerWidth >= 1140) {
+                setMenuOpen(false); // Închidem meniul automat pe ecranele mari
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     const handleLogout = async () => {
         try {
@@ -53,13 +81,53 @@ function Navbar() {
     const navItems = isLoggedIn ? ["Home", "Pick-up Points", "Profile" , "Prizes", "Contact", "Logout"]
         : ["Home", "Login", "Pick-up Points"];
 
+    const menuVariants = {
+        hidden: {
+            opacity: 0,
+            height: 0,
+            paddingTop: 0,
+            paddingBottom: 0,
+            transition: {
+                duration: 0.3,
+                ease: "easeInOut"
+            }
+        },
+        visible: {
+            opacity: 1,
+            height: "auto",
+            paddingTop: "2rem",
+            paddingBottom: "2rem",
+            transition: {
+                duration: 0.4,
+                ease: "easeOut",
+                when: "beforeChildren",
+                staggerChildren: 0.07
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: -10 },
+        visible: { opacity: 1, y: 0 }
+    };
+
+
     const renderNav = (item, index) => {
         if (!item) return null;
+
+        const icon = navIcons[item];
+        const iconWrapper = menuOpen ? (
+            <span className={styles.iconCircle}>
+            {icon}
+        </span>
+        ) : null;
 
         if (item === "Logout") {
             return (
                 <div key={index} onClick={handleLogout} className={styles.navItem}>
-                    {item}
+                    {iconWrapper}
+                    <span>{item}</span>
+                    <span className={styles.navArrow}>{menuOpen ? <FaAngleRight/> : null}</span>
                 </div>
             );
         }
@@ -74,10 +142,14 @@ function Navbar() {
 
         return (
             <Link to={path} key={index} className={styles.navItem}>
-                {item}
+                {iconWrapper}
+                <span>{item}</span>
+                <span className={styles.navArrow}>{menuOpen ? <FaAngleRight/> : null}</span>
             </Link>
         );
     };
+
+
     return (
         <nav className={styles.navbar}>
             <div className={styles.switchWrapper}>
@@ -94,9 +166,28 @@ function Navbar() {
                 <div className={styles.bar}></div>
             </div>
 
-            <div className={`${styles.navItems} ${menuOpen ? styles.open : ''}`}>
-                {navItems.map((item, index) => renderNav(item, index))}
-            </div>
+            <AnimatePresence>
+                {menuOpen && !isLargeScreen && ( // Doar activezi animațiile pe ecranele mici
+                    <motion.div
+                        className={`${styles.navItems} ${menuOpen ? styles.open : ''}`}
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                        variants={menuVariants}
+                    >
+                        {navItems.map((item, index) => (
+                            <motion.div key={index} variants={itemVariants}>
+                                {renderNav(item, index)}
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                )}
+                {isLargeScreen && (
+                    <div className={styles.navItems}>
+                        {navItems.map((item, index) => renderNav(item, index))}
+                    </div>
+                )}
+            </AnimatePresence>
         </nav>
     );
 
