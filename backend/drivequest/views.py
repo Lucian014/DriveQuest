@@ -574,18 +574,39 @@ def rate_website(request):
         return JsonResponse({'message': 'Method not allowed'}, status=405)
 
 
+PRIZE_COSTS = {
+    1: 1000,
+    2: 2000,
+    3: 3500,
+    4: 5500,
+    5: 7500,
+}
+
+
 def claim_reward(request, prize_number):
     if request.method == 'PUT':
         user = request.user
         prize_field = f'prize{prize_number}'
-        if hasattr(user, prize_field):
-            setattr(user, prize_field, True)
-            user.save()
-            return JsonResponse({'message': f'Prize {prize_field} claimed successfully'}, status=200)
-        else:
+        cost = PRIZE_COSTS.get(prize_number)
+
+        if not cost:
+            return JsonResponse({'message': 'Invalid prize number'}, status=400)
+
+        if not hasattr(user, prize_field):
             return JsonResponse({'message': f'Invalid prize: {prize_field}'}, status=400)
-    else:
-        return JsonResponse({'message': 'Method not allowed'}, status=405)
+
+        if getattr(user, prize_field):
+            return JsonResponse({'message': 'Prize already claimed'}, status=400)
+
+        if user.points < cost:
+            return JsonResponse({'message': 'Not enough points to claim this prize'}, status=403)
+
+        setattr(user, prize_field, True)
+        user.points -= cost
+        user.save()
+        return JsonResponse({'message': f'Prize {prize_field} claimed successfully'}, status=200)
+
+    return JsonResponse({'message': 'Method not allowed'}, status=405)
 
 
 def leaderboard(request):
