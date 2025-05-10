@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import styles from "../../styles/Authentification/Login.module.css";
+import styles from "../../styles/Authentification/SignUp.module.css";
 import {useNavigate} from "react-router-dom";
 import { useContext } from 'react';
 import CsrfContext from "../../components/CsrfContext";
 import {motion} from "framer-motion";
 import {AnimatePresence} from "framer-motion";
-import styled from 'styled-components';
+import {FcGoogle} from "react-icons/fc";
+import {FaApple} from "react-icons/fa";
 
 
 function Signup() {
@@ -76,154 +77,110 @@ function Signup() {
     ];
 
     const [current, setCurrent] = useState(0);
-    const length = images.length;
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setFade(false);              // start fade‐out
-            setTimeout(() => {
-                setCurrent(prev => (prev + 1) % length);
-                setFade(true);             // fade‐in new image
-            }, 1000);                    // match CSS opacity transition time
-        }, 5000);
-        return () => clearInterval(interval);
-    }, [length]);
 
     return (
-        <AnimatePresence mode={"popLayout"} exitBeforeEnter={true} initial={false} animate={"visible"} exit={"hidden"}>
+        <AnimatePresence mode="popLayout" exitBeforeEnter initial={false} animate="visible" exit="hidden">
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, transition: { duration: 0.5 } }}
                 exit={{ opacity: 0 }}
             >
-                <div className={styles.body}>
-                    <div className={styles.left}>
+                <div className={styles.authContainer}>
+                    <div className={styles.leftSide}>
                         <img
-                            src={images[current]}
-                            alt="carousel"
-                            className={`${styles.imageCarrousel} ${fade ? styles.fade : ''}`}
+                            src={"/images/loginLogo.png"}
+                            alt="logo"
+                            className={styles.heroImage}
                         />
-                        <div className={styles.description}>
-                            <h2 className={styles.h2}>Already have an account?</h2>
-                            <p className={styles.p}>Click the button below to return to the login page.</p>
-                            <button className={styles.btn1} onClick={() => navigate("/")}>Login</button>
-                        </div>
+                        <div className={styles.caption}>Your journey starts here</div>
                     </div>
 
-                    <div className={styles.right}>
-                        <div className={styles.rightContainer}>
-                            <h1 className={styles.login_title}>Create a new account</h1>
-                            <div className={styles.rightside}>
-                                <form className={styles.login} onSubmit={handleSubmit}>
-                                    <StyledWrapper>
-                                        <div className="inputGroup">
-                                        <div className={styles.names}>
-                                                <div className="inputGroup">
-                                                <input
-                                                    type='text'
-                                                    required
-                                                    autoComplete="off"
-                                                    value={firstName}
-                                                    onChange={(e) => setFirstName(e.target.value)}
-                                                />
-                                                <label htmlFor="name">First Name</label>
-                                                </div>
-                                                <div className="inputGroup">
-                                                <input
-                                                    type='text'
-                                                    required
-                                                    value={lastName}
-                                                    autoComplete="off"
-                                                    onChange={(e) => setLastName(e.target.value)}
-                                                />
-                                                <label className="label" htmlFor="name">Last Name</label>
-                                                </div>
-                                        </div>
-                                        </div>
-                                        <div className="inputGroup">
-                                            <input type="text" required autoComplete="off" value={username}
-                                                   onChange={e => setUsername(e.target.value)}/>
-                                            <label htmlFor="name">Username</label>
-                                        </div>
-                                        <div className="inputGroup">
-                                            <input type="text" required autoComplete="off" value={email}
-                                                   onChange={e => setEmail(e.target.value)}/>
-                                            <label htmlFor="name">Name</label>
-                                        </div>
-                                        <div className="inputGroup">
-                                            <input type={showPassword ? "text" : "password"} required autoComplete="off" value={password}
-                                                   onChange={e => setPassword(e.target.value)}/>
-                                            <label htmlFor="password">Password</label>
-                                            <span className="eyeIcon" onClick={() => setShowPassword(!showPassword)}>
-    <i className={showPassword ? "fas fa-eye-slash" : "fas fa-eye"}></i>
-  </span>
-                                        </div>
-                                    </StyledWrapper>
-                                    <button className={styles.btn} type="submit">Sign Up</button>
-                                </form>
-                            </div>
+                    <div className={styles.rightSide}>
+                        <div className={styles.border}>
+                            <h1 className={styles.title}>Create a new account</h1>
+                            <p className={styles.subtitle}>
+                                Already have an account?
+                                <span onClick={() => navigate("/")}>Login</span>
+                            </p>
+
+                            <form className={styles.form} onSubmit={handleSubmit}>
+                                <div className={`${styles.inputGroup} ${styles.names}`}>
+                                    <div className={styles.inputGroup}>
+                                        <input
+                                            type="text"
+                                            required
+                                            autoComplete="off"
+                                            value={firstName}
+                                            onChange={(e) => setFirstName(e.target.value)}
+                                            placeholder="First Name"
+                                        />
+                                    </div>
+                                    <div className={styles.inputGroup}>
+                                        <input
+                                            type="text"
+                                            required
+                                            autoComplete="off"
+                                            value={lastName}
+                                            onChange={(e) => setLastName(e.target.value)}
+                                            placeholder="Last Name"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className={styles.inputGroup}>
+                                    <input
+                                        type="text"
+                                        required
+                                        autoComplete="off"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        placeholder="Username"
+                                    />
+                                </div>
+
+                                <div className={styles.inputGroup}>
+                                    <input
+                                        type="email"
+                                        required
+                                        autoComplete="off"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        placeholder="Email"
+                                    />
+                                </div>
+
+                                <div className={styles.inputGroup}>
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        required
+                                        autoComplete="off"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        placeholder="Password"
+                                    />
+                                    <span className={styles.eyeIcon} onClick={() => setShowPassword(!showPassword)}>
+                                    <i className={showPassword ? "fas fa-eye-slash" : "fas fa-eye"}></i>
+                                </span>
+                                </div>
+
+                                <button className={styles.primaryBtn} type="submit">Sign Up</button>
+
+                                <div className={styles.divider}>or create an account with</div>
+
+                                <div className={styles.providers}>
+                                    <button className={styles.providerBtn}><FcGoogle size={24} style={{verticalAlign: 'middle',marginBottom:'4px'}}/>Google</button>
+                                    <button className={styles.providerBtn}><FaApple size={28} style={{verticalAlign: 'middle',marginBottom:'6px'}}/>Apple</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </motion.div>
         </AnimatePresence>
     );
+
 }
-
-const StyledWrapper = styled.div`
-    .eyeIcon {
-        position: absolute;
-        top: 50%;
-        right: 20px;
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: #999;
-        font-size: 1.2em;
-    }
-
-    .eyeIcon:hover {
-        color: #333;
-    }
-    
-  .inputGroup {
-    font-family: 'Segoe UI', sans-serif;
-    width:400px;
-    position: relative;
-      margin-top:15px;
-  }
-
-  .inputGroup input {
-    font-size: 100%;
-    padding: 0.8em;
-    outline: none;
-    border: 2px solid rgb(200, 200, 200);
-    background-color: transparent;
-    border-radius: 20px;
-    width: 100%;
-  }
-
-  .inputGroup label {
-    font-size: 100%;
-    position: absolute;
-    left: 0;
-    padding: 0.8em;
-    margin-left: 0.5em;
-    pointer-events: none;
-    transition: all 0.3s ease;
-    color: rgb(100, 100, 100);
-  }
-  
-  .inputGroup :is(input:focus, input:valid)~label {
-    transform: translateY(-50%) scale(.9);
-    margin: 0em;
-    margin-left: 1.3em;
-    padding: 0.4em;
-    background-color: #e8e8e8;
-  }
-
-  .inputGroup :is(input:focus, input:valid) {
-    border-color: rgb(150, 150, 200);
-  }`;
 
 
 export default Signup;
