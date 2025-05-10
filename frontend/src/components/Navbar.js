@@ -164,8 +164,8 @@ function Navbar() {
 
     return (
         <nav className={styles.navbar}>
-            <div className={styles.switchWrapper}>
-                <SwitchButton />
+            <div className={styles.DriveQuestLogo}>
+                <img alt="Drivequest" src= "/images/logo.png"/>
             </div>
 
             <div className={styles.logoWrapper}>
