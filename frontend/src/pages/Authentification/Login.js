@@ -5,7 +5,9 @@ import { useNavigate } from "react-router-dom";
 import CsrfContext from '../../components/CsrfContext';
 import { AnimatePresence, motion } from "framer-motion";
 import styled from 'styled-components';
-
+import {scale} from "leaflet/src/control/Control.Scale";
+import {FcGoogle} from 'react-icons/fc'
+import {FaApple} from "react-icons/fa";
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -63,114 +65,57 @@ function Login() {
 
     return (
         <AnimatePresence mode="popLayout" exitBeforeEnter initial={false} animate="visible" exit="hidden">
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1, transition: { duration: 0.5 } }}
-                exit={{ opacity: 0 }}
-            >
-                <div className={styles.body}>
-                    <div className={styles.left}>
-                        <img
-                            src={images[current]}
-                            alt="carousel"
-                            className={`${styles.imageCarrousel} ${fade ? styles.fade : ''}`}
-                        />
-                        <div className={styles.description}>
-                            <h2 className={styles.h2}>New here?</h2>
-                            <p className={styles.p}>
-                                Click on the button below to go to the sign up page and create an account
-                            </p>
-                            <button className={styles.btn1} onClick={() => navigate("/signup")}>
+            <div className={styles.authContainer}>
+                <div className={styles.leftSide}>
+                    <img src="/images/loginLogo.png" alt="DriveQuest" className={styles.heroImage} />
+                    <p className={styles.caption}>Your Journey Starts Here</p>
+                </div>
+
+                <div className={styles.rightSide}>
+                    <div className={styles.border}>
+                        <h1 className={styles.title}>Log in to your account</h1>
+                        <p className={styles.subtitle}>
+                            Don’t have an account?{" "}
+                            <motion.span
+                                whileHover={{ scale: 1.1 }}
+                                transition={{ type: "spring", stiffness: 300 }}
+                                onClick={() => navigate("/signup")}
+                                className={styles.signupLink}
+                            >
                                 Sign up
-                            </button>
-                        </div>
-                    </div>
-                    <div className={styles.right}>
-                        <div className={styles.rightContainer}>
-                            <h1 className={styles.login_title}>Login to your account</h1>
-                            <form className={styles.login} onSubmit={handleSubmit}>
-                                <StyledWrapper>
-                                    <div className="inputGroup">
-                                        <input type="text" required autoComplete="off" value={email}
-                                               onChange={e => setEmail(e.target.value)}/>
-                                        <label htmlFor="name">Name</label>
-                                    </div>
-                                    <div className="inputGroup">
-                                        <input type={showPassword ? "text" : "password"} required autoComplete="off" value={password}
-                                               onChange={e => setPassword(e.target.value)}/>
-                                        <label htmlFor="password">Password</label>
-                                        <span className="eyeIcon" onClick={() => setShowPassword(!showPassword)}>
-                                         <i className={showPassword ? "fas fa-eye-slash" : "fas fa-eye"}></i>
-                                        </span>
-                                    </div>
-                                </StyledWrapper>
-                                <div className={styles.fixingColor}>
-                                    <button className={styles.btn} type="submit">Login</button>
+                            </motion.span>
+                        </p>
+
+                        <form onSubmit={handleSubmit} className={styles.form}>
+                            <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Password"
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                                required
+                            />
+                            <div className={styles.optionsRow}>
+                                <div className={styles.remember}>
+                                    <span>Remember me</span>
+                                    <input type="checkbox" className={styles.checkbox} />
                                 </div>
-                            </form>
-                        </div>
+                                <span className={styles.forgot}>Forgot password?</span>
+                            </div>
+                            <button type="submit" className={styles.primaryBtn}>Login</button>
+
+                            <div className={styles.divider}>or login with</div>
+
+                            <div className={styles.providers}>
+                                <button className={styles.providerBtn}><FcGoogle size={24} style={{verticalAlign: 'middle',marginBottom:'4px'}}/>Google</button>
+                                <button className={styles.providerBtn}><FaApple size={28} style={{verticalAlign: 'middle',marginBottom:'6px'}}/>Apple</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </motion.div>
+            </div>
         </AnimatePresence>
     );
 }
-
-const StyledWrapper = styled.div`
-    .eyeIcon {
-        position: absolute;
-        top: 50%;
-        right: 20px;
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: #999;
-        font-size: 1.2em;
-    }
-
-    .eyeIcon:hover {
-        color: #333;
-    }
-    
-  .inputGroup {
-    font-family: 'Segoe UI', sans-serif;
-    width:400px;
-    position: relative;
-      margin-top:15px;
-  }
-
-  .inputGroup input {
-    font-size: 100%;
-    padding: 0.8em;
-    outline: none;
-      padding-right: 3em;
-    border: 2px solid rgb(200, 200, 200);
-    background-color: transparent;
-    border-radius: 20px;
-    width: 100%;
-  }
-
-  .inputGroup label {
-    font-size: 100%;
-    position: absolute;
-    left: 0;
-    padding: 0.8em;
-    margin-left: 0.5em;
-    pointer-events: none;
-    transition: all 0.3s ease;
-    color: rgb(100, 100, 100);
-  }
-
-  .inputGroup :is(input:focus, input:valid)~label {
-    transform: translateY(-50%) scale(.9);
-    margin: 0em;
-    margin-left: 1.3em;
-    padding: 0.4em;
-    background-color: #e8e8e8;
-  }
-
-  .inputGroup :is(input:focus, input:valid) {
-    border-color: rgb(150, 150, 200);
-  }`;
-
 
 export default Login;

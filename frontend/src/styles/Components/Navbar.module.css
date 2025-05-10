@@ -21,6 +21,12 @@ body {
     padding: 20px;
 }
 
+.DriveQuestLogo{
+    width: 110px;
+    height: 110px;
+}
+
+
 /* Centrare absolută pentru logo */
 .logoWrapper {
     position: absolute;
@@ -35,6 +41,9 @@ body {
     font-family: 'Segoe UI', sans-serif;
     white-space: nowrap;
 }
+
+
+
 
 /* Bara de navigație din dreapta */
 .navItems {
