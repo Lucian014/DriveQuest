@@ -1,7 +1,11 @@
-// imports stay the same
+// src/pages/Cars/CarDetails.js
+
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import CsrfContext from "../../components/CsrfContext";
+import DatePicker from 'react-datepicker';
+import { isWithinInterval, parseISO, format } from 'date-fns';
+import 'react-datepicker/dist/react-datepicker.css';
 import styles from '../../styles/Cars/CarDetails.module.css';
 import { motion, AnimatePresence } from "framer-motion";
 import Loading from "../../components/Loading";
@@ -14,145 +18,154 @@ function CarDetails() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const csrftoken = useContext(CsrfContext);
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
     const [days, setDays] = useState('');
     const [price, setPrice] = useState(null);
+    const [rentalHistory, setRentalHistory] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
-    const [relatedCars, setRelatedCars] = useState(null)
-    const [rating,setRating] = useState(0);
-    const [hoverRating, setHoverRating] = useState(0);
+    const [relatedCars, setRelatedCars] = useState([]);
+    const [rating, setRating] = useState(0);
 
-
+    // load current user
     useEffect(() => {
         setLoading(true);
         fetch(`http://localhost:8000/drivequest/user`, {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken,
-            },
-            credentials: 'include',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
+            credentials: 'include'
         })
             .then(res => res.json())
-            .then(data => data.user ? setUser(data.user) : setError('User not found.'))
-            .catch(() => setError('A apărut o eroare la preluarea datelor.'))
+            .then(data => setUser(data.user))
+            .catch(() => setError('Error loading user'))
             .finally(() => setLoading(false));
-    }, []);
+    }, [csrftoken]);
 
+    // load car details, comments, related cars, rental history
     useEffect(() => {
         setLoading(true);
         fetch(`http://localhost:8000/drivequest/car_details/${id}`, {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken,
-            },
-            credentials: 'include',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
+            credentials: 'include'
         })
             .then(res => res.json())
             .then(data => {
-                if (data && data.car) {
-                    console.log(data);
-                    setCar(data.car);
-                    setComments(data.comments || []);
-                    setRelatedCars(data.related_cars);
-                } else {
-                    setError('Mașina nu a fost găsită.');
-                }
+                setCar(data.car);
+                setComments(data.comments || []);
+                setRelatedCars(data.related_cars || []);
+                const intervals = (data.rental_history || []).map(r => ({
+                    start: parseISO(r.start_date),
+                    end: parseISO(r.end_date),
+                    rawEnd: r.end_date
+                }));
+                setRentalHistory(intervals);
             })
-            .catch(() => setError('A apărut o eroare la preluarea datelor.'))
+            .catch(() => setError('Error loading car'))
             .finally(() => setLoading(false));
-    }, [id]);
+    }, [id, csrftoken]);
 
-    const getDetails = (e) => {
+    // disable dates within any rental interval
+    const isDayDisabled = date =>
+        rentalHistory.some(({ start, end }) =>
+            isWithinInterval(date, { start, end })
+        );
+
+    // render day cell with tooltip and dimming
+    const renderDay = (day, date) => {
+        const disabled = isDayDisabled(date);
+        const interval = rentalHistory.find(({ start, end }) =>
+            isWithinInterval(date, { start, end })
+        );
+        const title = disabled
+            ? `Rented until ${format(parseISO(interval.rawEnd), 'dd-MM-yyyy')}`
+            : undefined;
+        return (
+            <div title={title}>
+                <span style={{ opacity: disabled ? 0.4 : 1 }}>{day}</span>
+            </div>
+        );
+    };
+
+    // compute days & price
+    const getDetails = e => {
         e.preventDefault();
         if (startDate && endDate) {
-            const start = new Date(startDate);
-            const end = new Date(endDate);
-            const differenceInDays = Math.ceil((end - start) / (1000 * 3600 * 24));
-            setDays(differenceInDays);
-            setPrice(differenceInDays * car.price);
+            const diff = Math.ceil((endDate - startDate) / (1000 * 3600 * 24));
+            setDays(diff);
+            setPrice(diff * car.price);
         }
     };
 
-    const createRent = (e) => {
+    // navigate to payment
+    const createRent = e => {
         e.preventDefault();
-        navigate('/payment', {
-            state: { id, startDate, endDate, days, price },
-        });
+        navigate('/payment', { state: { id, startDate, endDate, days, price } });
     };
 
-    const postComment = async (e) => {
+    // post a new comment
+    const postComment = async e => {
         e.preventDefault();
         if (!newComment.trim()) return;
-        const response = await fetch(`http://localhost:8000/drivequest/post_comment/${id}/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken,
-            },
-            credentials: 'include',
-            body: JSON.stringify({ comment: newComment }),
-        });
-        if (response.ok) {
-            const data = await response.json();
-            setComments([...comments, data.comment]);
+        const res = await fetch(
+            `http://localhost:8000/drivequest/post_comment/${id}/`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                credentials: 'include',
+                body: JSON.stringify({ comment: newComment })
+            }
+        );
+        if (res.ok) {
+            const d = await res.json();
+            setComments([...comments, d.comment]);
             setNewComment('');
         } else {
-            alert('Something went wrong.');
+            alert('Error posting comment');
         }
     };
 
-    const handleDelete = async (commentID) => {
-        const response = await fetch(`http://localhost:8000/drivequest/delete_comment/${commentID}/`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken,
-            },
-            credentials: 'include',
-        });
-        if (response.ok) {
-            setComments(comments.filter(comment => comment.id !== commentID));
-        } else {
-            alert('Failed to delete comment.');
-        }
+    // delete a comment
+    const handleDelete = async cid => {
+        const res = await fetch(
+            `http://localhost:8000/drivequest/delete_comment/${cid}/`,
+            {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                credentials: 'include'
+            }
+        );
+        if (res.ok) setComments(comments.filter(c => c.id !== cid));
+        else alert('Failed to delete comment');
     };
 
-    const handleStarMouseEnter = (star) => {
-        setHoverRating(star);
-    };
-
-    const handleStarMouseLeave = () => {
-        setHoverRating(0);
-    };
-
-    const handleStarClick = async (e,star) => {
+    // rate the car
+    const handleStarClick = async (e, star) => {
         setRating(star);
         await fetch(`http://localhost:8000/drivequest/rate_car/${id}/`, {
             method: 'POST',
-            headers:{
+            headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken,
+                'X-CSRFToken': csrftoken
             },
             credentials: 'include',
-            body: JSON.stringify({
-                rating: star,
-            })
-        }).then(response => response.json())
-            .then(data => {
-                console.log(data);
-            }).catch(error => {
-                console.log(error);
-            })
-    }
+            body: JSON.stringify({ rating: star })
+        });
+    };
 
-    const formatDate = (dateStr) => {
-        const date = new Date(dateStr);
-        return `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getFullYear()).slice(-2)}`;
+    const formatDate = ds => {
+        const d = new Date(ds);
+        return `${String(d.getDate()).padStart(2, '0')}-${String(
+            d.getMonth() + 1
+        ).padStart(2, '0')}-${String(d.getFullYear()).slice(-2)}`;
     };
 
     if (loading) return <Loading />;
@@ -177,16 +190,14 @@ function CarDetails() {
                                 <div className={styles.rateContainerCar}>
                                     <p>Rate Vehicle</p>
                                     <div className={styles.stars}>
-                                        {[1, 2, 3, 4, 5].map((star) => {
-                                            const isFilled = star <= (hoverRating || rating);
+                                        {[1, 2, 3, 4, 5].map(star => {
+                                            const filled = star <= rating;
                                             return (
                                                 <i
                                                     key={star}
-                                                    className={`fas fa-star ${styles.star} ${isFilled ? styles.filled : ""}`}
-                                                    onMouseEnter={() => handleStarMouseEnter(star)}
-                                                    onMouseLeave={handleStarMouseLeave}
-                                                    onClick={(e) => handleStarClick(e,star)}
-                                                ></i>
+                                                    className={`fas fa-star ${styles.star} ${filled ? styles.filled : ''}`}
+                                                    onClick={e => handleStarClick(e, star)}
+                                                />
                                             );
                                         })}
                                     </div>
@@ -195,40 +206,98 @@ function CarDetails() {
                             <div className={styles.infoContainer}>
                                 <h2>{car.brand} {car.model}</h2>
                                 <p><strong>Year:</strong> {car.year}</p>
-                                <p><strong>Price per day:</strong> ${car.price}</p>
-                                <p><strong>Car type:</strong> {car.car_type}</p>
-                                <p><strong>Rental Center:</strong> {car.center}</p>
-                                <p><strong>User Rating:</strong> {car.rating}</p>
-                                {car.rented ? (
-                                    <div className={styles.rentalStatus}>
-                                        <p><strong>Status:</strong> Already rented</p>
-                                        <p><strong>Available from:</strong> {formatDate(car.end_date)}</p>
-                                    </div>
-                                ) : (
-                                    <form className={styles.form} onSubmit={getDetails}>
-                                        <input
-                                            type="date"
-                                            value={startDate}
-                                            required
-                                            min={new Date().toISOString().split('T')[0]}
-                                            onChange={(e) => setStartDate(e.target.value)}
-                                        />
-                                        <input
-                                            type="date"
-                                            value={endDate}
-                                            required
-                                            min={new Date().toISOString().split('T')[0]}
-                                            onChange={(e) => setEndDate(e.target.value)}
-                                        />
-                                        <button type="submit">Get Details</button>
-                                    </form>
-                                )}
+                                <p><strong>Price/day:</strong> ${car.price}</p>
+                                <p><strong>Type:</strong> {car.car_type}</p>
+                                <p><strong>Center:</strong> {car.center}</p>
+                                <p><strong>Rating:</strong> {car.rating}</p>
 
-                                {(days && price) && (
+                                <form className={styles.form} onSubmit={getDetails}>
+                                    {[{
+                                        date: startDate,
+                                        onChange: setStartDate,
+                                        selects: 'Start',
+                                        placeholder: 'Start date'
+                                    }, {
+                                        date: endDate,
+                                        onChange: setEndDate,
+                                        selects: 'End',
+                                        placeholder: 'End date'
+                                    }].map(({ date, onChange, selects, placeholder }) => (
+                                        <div key={selects} className={styles.datePickerWrapper}>
+                                            <DatePicker
+                                                selected={date}
+                                                onChange={onChange}
+                                                selectsStart={selects === 'Start'}
+                                                selectsEnd={selects === 'End'}
+                                                startDate={startDate}
+                                                endDate={endDate}
+                                                minDate={selects === 'Start' ? new Date() : startDate || new Date()}
+                                                excludeDateIntervals={rentalHistory}
+                                                placeholderText={placeholder}
+                                                calendarClassName={styles.customCalendar}
+                                                dayClassName={date => {
+                                                    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+                                                    const isExcluded =
+                                                        rentalHistory.some(({ start, end }) => {
+                                                            const startDate = new Date(start);
+                                                            const endDate = new Date(end);
+                                                            return date >= startDate && date <= endDate;
+                                                        });
+
+                                                    if (isExcluded) return styles.excludedDate;
+                                                    if (isWeekend) return styles.weekend;
+                                                    return undefined;
+                                                }}
+                                                renderCustomHeader={({
+                                                                         date,
+                                                                         changeYear,
+                                                                         changeMonth,
+                                                                         decreaseMonth,
+                                                                         increaseMonth,
+                                                                         prevMonthButtonDisabled,
+                                                                         nextMonthButtonDisabled
+                                                                     }) => (
+                                                    <div className={styles.customHeader}>
+                                                        <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled} type="button" className={styles.navButton}>
+                                                            {'‹'}
+                                                        </button>
+
+                                                        <select
+                                                            value={date.getFullYear()}
+                                                            onChange={e => changeYear(Number(e.target.value))}
+                                                        >
+                                                            {Array.from({ length: 15 }, (_, i) => {
+                                                                const y = new Date().getFullYear() - 7 + i;
+                                                                return <option key={y} value={y}>{y}</option>;
+                                                            })}
+                                                        </select>
+
+                                                        <select
+                                                            value={date.getMonth()}
+                                                            onChange={e => changeMonth(Number(e.target.value))}
+                                                        >
+                                                            {["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                                                                .map((m, i) => <option key={m} value={i}>{m}</option>)}
+                                                        </select>
+
+                                                        <button onClick={increaseMonth} disabled={nextMonthButtonDisabled} type="button" className={styles.navButton}>
+                                                            {'›'}
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            />
+                                        </div>
+                                    ))}
+                                    <button type="submit">Get Details</button>
+                                </form>
+
+
+
+                                {days && price && (
                                     <div className={styles.detailsSummary}>
                                         <p><strong>Days:</strong> {days}</p>
-                                        <p><strong>Total Price:</strong> ${price}</p>
-                                        <button onClick={createRent}>Rent Car</button>
+                                        <p><strong>Total:</strong> ${price}</p>
+                                        <button onClick={createRent}>Rent</button>
                                     </div>
                                 )}
                             </div>

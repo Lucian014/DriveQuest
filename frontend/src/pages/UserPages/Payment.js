@@ -52,6 +52,14 @@ function Payment() {
         if (!state) navigate('/home');
     }, [state, navigate]);
 
+
+    const toSimpleDate = (isoString) => {
+        const date = new Date(isoString);
+        date.setDate(date.getDate() + 1); // Add 1 day
+        return date.toISOString().split('T')[0]; // returns 'YYYY-MM-DD'
+    };
+
+
     const createRental = async (e) => {
         e.preventDefault();
         // validate method-specific fields
@@ -69,8 +77,8 @@ function Payment() {
         }
 
         const rent_data = {
-            start_date: state.startDate,
-            end_date: state.endDate,
+            start_date: toSimpleDate(state.startDate),
+            end_date: toSimpleDate(state.endDate),
             days: state.days,
             price,
             payment_method: paymentMethod,

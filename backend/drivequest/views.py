@@ -335,17 +335,23 @@ def search_cars(request):
         return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 
-
 def car_details(request, car_id):
     if request.method == 'GET':
         car = Car.objects.get(id=car_id)
-        rent =Car_Rental.objects.filter(car=car).first()
+        rents = Car_Rental.objects.filter(car=car)
+        rented = rents.exists()
+
+        rental_data = []
+        for rent in rents:
+            rental_data.append({
+                'id': rent.id,
+                'start_date': rent.start_date,
+                'end_date': rent.end_date,
+                'user': rent.user.username if rent.user else None,
+            })
+
         related = Car.objects.filter(brand=car.brand, car_type=car.car_type).exclude(id=car.id)[:3]
-        rented = False
-        end_date = None
-        if rent is not None:
-            rented = True
-            end_date = rent.end_date
+
         comments = Comment.objects.filter(car=car)
         comments_data = []
         for comment in comments:
@@ -355,6 +361,7 @@ def car_details(request, car_id):
                 'date': comment.date,
                 'username': comment.user.username,
             })
+
         related_data = []
         for related_car in related:
             related_data.append({
@@ -368,19 +375,24 @@ def car_details(request, car_id):
                 'center': related_car.center.name if related_car.center else None,
                 'rating': car.average_rating if car.average_rating > 0 else "N/A",
             })
-        return JsonResponse({'car':{
-            'id': car.id,
-            'brand': car.brand,
-            'model': car.model,
-            'year': car.year,
-            'price': car.price,
-            'image': car.image.url if car.image else None,
-            'rented': rented,
-            'end_date': end_date if end_date else None,
-            'car_type': car.car_type,
-            'center': car.center.name if car.center else None,
-            'rating': car.average_rating if car.average_rating > 0 else "N/A",
-        }, 'comments': comments_data , 'related_cars': related_data}, status=200)
+
+        return JsonResponse({
+            'car': {
+                'id': car.id,
+                'brand': car.brand,
+                'model': car.model,
+                'year': car.year,
+                'price': car.price,
+                'image': car.image.url if car.image else None,
+                'rented': rented,
+                'car_type': car.car_type,
+                'center': car.center.name if car.center else None,
+                'rating': car.average_rating if car.average_rating > 0 else "N/A",
+            },
+            'rental_history': rental_data,
+            'comments': comments_data,
+            'related_cars': related_data
+        }, status=200)
     else:
         return JsonResponse({'message': 'Method not allowed'}, status=405)
 
