@@ -8,7 +8,7 @@ body{
     flex-direction: column;
     gap: 40px;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 80px auto;
     padding: 40px 20px;
     box-sizing: border-box;
 }
@@ -42,7 +42,7 @@ body{
     font-family: 'Poppins', sans-serif;
     font-size: 2rem;
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     color: #333;
     text-align: center;
 }
@@ -69,8 +69,8 @@ body{
 
 
 .rateContainerCar {
-    margin-top: 18px;
-    min-height: 105px;
+    margin-top: 12px;
+    min-height: 90px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -146,25 +146,202 @@ body{
     color: white;
 }
 
-/* Form Styling */
 .form {
     display: flex;
-    gap: 16px;
     flex-wrap: wrap;
+    gap: 8px;
     justify-content: center;
-    margin-top: 16px;
+    margin-top: 20px;
 }
-.form input[type="date"] {
+
+.datePickerWrapper {
+    flex: 0 0 auto;
+    max-width: 180px;
+    position: relative;
+}
+
+.datePickerWrapper input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+/* Calendar popup styling */
+:global(.react-datepicker) {
+    background: white !important;
+    border: 1px solid #ddd !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    padding: 8px !important;
+    font-family: 'Poppins', sans-serif !important;
+    position: absolute !important;
+    top: -430px !important;
+    left: -170px !important;
+    z-index: 9999 !important;
+    transition: none !important;
+}
+
+/* Header area */
+:global(.react-datepicker__header) {
+    font-size: 18px !important;
+    background: white !important;
+    border-bottom: none !important;
+    padding-top: 10px !important;
+}
+
+/* Bigger day numbers */
+:global(.react-datepicker__day) {
+    font-size: 16px !important;
+}
+
+/* Navigation arrow buttons */
+:global(.react-datepicker__navigation) {
+    width: 50px !important;
+    height: 50px !important;
+    top: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+    cursor: pointer !important;
+    z-index: 10 !important;
+}
+
+/* Enlarge the arrow icons */
+:global(.react-datepicker__navigation-icon::before) {
+    width: 14px !important;
+    height: 14px !important;
+    border-width: 4px 4px 0 0 !important;
+    border-color: #333 !important;
+}
+
+/* Left arrow */
+:global(.react-datepicker__navigation--previous) {
+    left: 5px !important;
+}
+
+/* Right arrow */
+:global(.react-datepicker__navigation--next) {
+    right: 5px !important;
+}
+
+/* For custom header (if still used) */
+.customHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.navButton {
+    font-size: 30px !important;      /* Make the arrows large */
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.navButton:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+
+/* Header with dropdowns */
+.customHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.customHeader button {
+    background: none;
+    border: none;
+    font-size: 1.5rem; /* Adjust button size */
+    cursor: pointer;
+}
+
+.customHeader select {
+    background: var(--color-bg);
+    border: 1px solid var(--color-accent);
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-size: 0.9rem;
+}
+
+/* Weekday row */
+:global(.react-datepicker__day-names) {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+/* Day cells */
+.weekend :global(.react-datepicker__day) {
+    color: red;
+}
+
+:global(.react-datepicker__day) {
+    width: 2.5rem;
+    line-height: 2.5rem;
+    margin: 2px;
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+
+:global(.react-datepicker__day:hover) {
+    background: var(--color-primary);
+    color: white;
+}
+
+:global(.react-datepicker__day--selected) {
+    background: var(--color-secondary) !important;
+    color: white !important;
+}
+
+/* Current month title */
+:global(.react-datepicker__current-month) {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.excludedDate {
+    background-color: #009ab8 !important; /* Purple */
+    color: white !important;
+    border-radius: 50% !important;
+}
+
+.weekend {
+    color: #999;
+}
+
+/* Mirrors your date input styles */
+.datePickerInput {
+    width: 100%;
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 1rem;
     transition: border-color 0.3s;
+    box-sizing: border-box;
 }
-.form input[type="date"]:focus {
+
+.datePickerInput:focus {
     border-color: var(--color-accent);
     outline: none;
 }
+
 .form button {
     background: var(--color-primary);
     color: #fff;
@@ -175,10 +352,19 @@ body{
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
 }
+
 .form button:hover {
     background: var(--color-accent);
     transform: translateY(-2px);
 }
+
+/* Optional: popper container if you still want to add styling */
+.popperContainer {
+    z-index: 9999;
+    position: absolute;
+}
+
+
 
 /* Details Summary Styling */
 .detailsSummary {

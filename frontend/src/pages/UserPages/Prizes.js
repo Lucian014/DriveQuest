@@ -67,33 +67,43 @@ function Prizes() {
 
             <div className={styles.prizes}>
                 <div className={styles.prize}>
-                    <h2 className={styles.prizeTitle}>First Prize</h2>
-                    <p className={styles.prizeDescription}>Win a luxurious weekend getaway with all expenses covered</p>
-                    {user && user.prize1 ? <button className={styles.prizeButton}>Reward already claimed</button> : <button className={styles.prizeButton} onClick={()=>claimReward(1)}>Unlock (1000 points)</button>}
+                    <h2 className={styles.prizeTitle}>Movie Night Kit</h2>
+                    <p className={styles.prizeDescription}>Car + projector, snacks & screen for a drive-in vibe</p>
+                    {user && user.prize1
+                        ? <button className={styles.prizeButton}>Reward already claimed</button>
+                        : <button className={styles.prizeButton} onClick={() => claimReward(1)}>Unlock (1000 points)</button>}
                 </div>
 
                 <div className={styles.prize}>
-                    <h2 className={styles.prizeTitle}>Second Prize</h2>
-                    <p className={styles.prizeDescription}>Win a luxurious weekend getaway with all expenses covered</p>
-                    {user && user.prize2 ? <button className={styles.prizeButton}>Reward already claimed</button> : <button className={styles.prizeButton} onClick={()=>claimReward(2)}>Unlock (1000 points)</button>}
+                    <h2 className={styles.prizeTitle}>Eco Roadtrip</h2>
+                    <p className={styles.prizeDescription}>Rental + carbon offset + eco travel gear (bottle, bag)</p>
+                    {user && user.prize2
+                        ? <button className={styles.prizeButton}>Reward already claimed</button>
+                        : <button className={styles.prizeButton} onClick={() => claimReward(2)}>Unlock (2000 points)</button>}
                 </div>
 
                 <div className={styles.prize}>
-                    <h2 className={styles.prizeTitle}>Third Prize</h2>
-                    <p className={styles.prizeDescription}>Win a luxurious weekend getaway with all expenses covered</p>
-                    {user && user.prize3 ? <button className={styles.prizeButton}>Reward already claimed</button> : <button className={styles.prizeButton} onClick={()=>claimReward(3)}>Unlock (1000 points)</button>}
+                    <h2 className={styles.prizeTitle}>Route Explorer</h2>
+                    <p className={styles.prizeDescription}>Free rental with a scenic GPS tour of hidden gems</p>
+                    {user && user.prize3
+                        ? <button className={styles.prizeButton}>Reward already claimed</button>
+                        : <button className={styles.prizeButton} onClick={() => claimReward(3)}>Unlock (3500 points)</button>}
                 </div>
 
                 <div className={styles.prize}>
-                    <h2 className={styles.prizeTitle}>Fourth Prize</h2>
-                    <p className={styles.prizeDescription}>Win a luxurious weekend getaway with all expenses covered</p>
-                    {user && user.prize4 ? <button className={styles.prizeButton}>Reward already claimed</button> : <button className={styles.prizeButton} onClick={()=>claimReward(4)}>Unlock (1000 points)</button>}
+                    <h2 className={styles.prizeTitle}>Mystery Drive</h2>
+                    <p className={styles.prizeDescription}>Surprise car for a weekend: convertible? electric? retro?</p>
+                    {user && user.prize4
+                        ? <button className={styles.prizeButton}>Reward already claimed</button>
+                        : <button className={styles.prizeButton} onClick={() => claimReward(4)}>Unlock (5500 points)</button>}
                 </div>
 
                 <div className={styles.prize}>
-                    <h2 className={styles.prizeTitle}>Fifth Prize</h2>
-                    <p className={styles.prizeDescription}>Win a luxurious weekend getaway with all expenses covered</p>
-                    {user && user.prize5 ? <button className={styles.prizeButton}>Reward already claimed</button> : <button className={styles.prizeButton} onClick={()=>claimReward(5)}>Unlock (1000 points)</button>}
+                    <h2 className={styles.prizeTitle}>Car Influencer</h2>
+                    <p className={styles.prizeDescription}>Luxury car + professional photoshoot for your socials</p>
+                    {user && user.prize5
+                        ? <button className={styles.prizeButton}>Reward already claimed</button>
+                        : <button className={styles.prizeButton} onClick={() => claimReward(5)}>Unlock (7500 points)</button>}
                 </div>
             </div>
 
