@@ -16,7 +16,7 @@
     align-items: center;
     height: 100vh;
     color: white;
-    padding: 2rem;
+    padding: 1.7rem;
     position: relative;
 }
 
@@ -24,24 +24,24 @@
     width: 100%;
     max-height: 100%;
     object-fit: cover;
-    border-radius: 20px;
-
+    border-radius: 17px;
 }
 
 .caption {
     position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 3rem;
+    bottom: 1.7rem; /* was 2rem */
+    left: 45%;
+    transform: translateX(-45%);
+    font-size: 2.5rem; /* was 3rem */
     font-weight: 300;
     color: white;
+    margin-bottom: 2.6rem; /* was 3rem */
 }
 
 .rightSide {
     flex: 1;
     background-color: #252539;
-    padding: 4rem 3rem;
+    padding: 3.4rem 2.6rem;
     color: white;
     display: flex;
     flex-direction: column;
@@ -54,19 +54,18 @@
 .border {
     position: relative;
     max-width: 550px;
-    border: 5px solid #2d3748;
-    padding: 3rem;
-    border-radius: 1rem;
+    border: 4px solid #2d3748;
+    padding: 2.6rem;
+    border-radius: 0.85rem;
     overflow: visible;
     background: #252539;
 }
 
-/* Pseudo-elements */
 .border::after,
 .border::before {
     content: '';
     position: absolute;
-    inset: -6px;
+    inset: -5px;
     border-radius: inherit;
     background: conic-gradient(
             from var(--angle),
@@ -80,25 +79,22 @@
     transition: box-shadow 0.4s ease;
 }
 
-/* Halo permanent */
 .border::after {
     animation: glowing-border 10s linear infinite;
 }
 
 .border::before {
     z-index: -2;
-    filter: blur(55px);
+    filter: blur(48px);
     opacity: 0.8;
     animation: blur-effect 10s ease-in-out infinite, glowing-border 10s linear infinite;
 }
 
-/* Speed boost on hover */
 .border:hover::after,
 .border:hover::before {
     animation-duration: 3.5s;
 }
 
-/* Animate angle */
 @property --angle {
     syntax: "<angle>";
     initial-value: 0deg;
@@ -106,56 +102,43 @@
 }
 
 @keyframes glowing-border {
-    from {
-        --angle: 0deg;
-    }
-    to {
-        --angle: 360deg;
-    }
+    from { --angle: 0deg; }
+    to { --angle: 360deg; }
 }
 
 @keyframes blur-effect {
-    0% {
-        filter: blur(55px);
-        opacity: 0.75;
-    }
-    50% {
-        filter: blur(65px);
-        opacity: 1;
-    }
-    100% {
-        filter: blur(55px);
-        opacity: 0.75;
-    }
+    0% { filter: blur(48px); opacity: 0.75; }
+    50% { filter: blur(58px); opacity: 1; }
+    100% { filter: blur(48px); opacity: 0.75; }
 }
 
 .signupLink {
     color: #a78bfa;
     cursor: pointer;
-    display: inline-block; /* important pentru scale */
+    display: inline-block;
 }
 
 .formContainer {
     width: 100%;
     max-width: 700px;
-    background: rgba(58, 58, 79, 0.8); /* ușor translucid */
-    padding: 2rem;
-    border-radius: 20px;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(8px);
+    background: rgba(58, 58, 79, 0.8);
+    padding: 1.7rem;
+    border-radius: 17px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(7px);
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .title {
-    font-size: 2.3rem;
+    font-size: 2rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
     text-align: center;
 }
 
 .subtitle {
-    font-size: 1.3rem;
-    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    margin-bottom: 1.7rem;
     text-align: center;
     color: #ccc;
 }
@@ -163,18 +146,18 @@
 .subtitle span {
     color: #a78bfa;
     cursor: pointer;
-    margin-left: 5px;
+    margin-left: 4px;
 }
 
 .form input {
     width: 100%;
-    padding: 1.3rem;
-    margin-bottom: 1.2rem;
+    padding: 1.1rem;
+    margin-bottom: 1rem;
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     background: #3a3a4f;
     color: white;
-    font-size: 1rem;
+    font-size: 0.9rem;
     transition: background 0.3s;
 }
 
@@ -187,8 +170,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
+    font-size: 1rem;
+    margin-bottom: 0.9rem;
     color: #ccc;
     width: 100%;
 }
@@ -196,14 +179,14 @@
 .remember {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.45rem;
     white-space: nowrap;
 }
 
 .checkbox {
-    margin-top: 1.6rem;
-    transform: scale(1.5);
-    accent-color: #a78bfa; /* suportat în browsere moderne */
+    margin-top: 1.4rem;
+    transform: scale(1.35);
+    accent-color: #a78bfa;
     cursor: pointer;
 }
 
@@ -220,16 +203,16 @@
 
 .primaryBtn {
     width: 100%;
-    padding: 1rem;
+    padding: 0.9rem;
     background: #a78bfa;
     color: white;
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 0.95rem;
     cursor: pointer;
     transition: background 0.3s;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.3rem;
 }
 
 .primaryBtn:hover {
@@ -238,15 +221,15 @@
 
 .divider {
     text-align: center;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     opacity: 0.6;
-    margin: 1rem 0;
+    margin: 0.9rem 0;
     position: relative;
 }
 
 .providers {
     display: flex;
-    gap: 1rem;
+    gap: 0.9rem;
     width: 100%;
 }
 
@@ -255,9 +238,9 @@
     background: #3a3a4f;
     color: white;
     border: none;
-    padding: 0.8rem;
-    border-radius: 10px;
-    font-size: 0.9rem;
+    padding: 0.7rem;
+    border-radius: 9px;
+    font-size: 0.85rem;
     cursor: pointer;
     transition: background 0.3s;
     text-align: center;

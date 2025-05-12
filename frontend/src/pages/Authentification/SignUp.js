@@ -93,7 +93,7 @@ function Signup() {
                             alt="logo"
                             className={styles.heroImage}
                         />
-                        <div className={styles.caption}>Your journey starts here</div>
+                        <div className={styles.caption}>Your Journey Starts Here</div>
                     </div>
 
                     <div className={styles.rightSide}>
@@ -105,7 +105,7 @@ function Signup() {
                             </p>
 
                             <form className={styles.form} onSubmit={handleSubmit}>
-                                <div className={`${styles.inputGroup} ${styles.names}`}>
+                                <div className={`${styles.names}`}>
                                     <div className={styles.inputGroup}>
                                         <input
                                             type="text"
