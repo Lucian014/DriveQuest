@@ -41,7 +41,7 @@
 .rightSide {
     flex: 1;
     background-color: #252539;
-    padding: 3.4rem 2.6rem;
+    padding: 3.5rem 2.6rem;
     color: white;
     display: flex;
     flex-direction: column;
@@ -53,19 +53,21 @@
 
 .border {
     position: relative;
-    max-width: 550px;
-    border: 4px solid #2d3748;
-    padding: 2.6rem;
-    border-radius: 0.85rem;
+    width: 100%;
+    max-width: 505px; /* was 600px */
+    border: 4px solid #2d3748; /* was 5px */
+    padding: 2.6rem; /* was 3rem */
+    border-radius: 0.85rem; /* was 1rem */
     overflow: visible;
     background: #252539;
 }
 
+/* Pseudo-elements */
 .border::after,
 .border::before {
     content: '';
     position: absolute;
-    inset: -5px;
+    inset: -5px; /* was -6px */
     border-radius: inherit;
     background: conic-gradient(
             from var(--angle),
@@ -85,7 +87,7 @@
 
 .border::before {
     z-index: -2;
-    filter: blur(48px);
+    filter: blur(50px); /* was 55px */
     opacity: 0.8;
     animation: blur-effect 10s ease-in-out infinite, glowing-border 10s linear infinite;
 }
@@ -149,7 +151,39 @@
     margin-left: 4px;
 }
 
-.form input {
+
+.inputGroup {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.inputGroup input {
+    width: 100%;
+    padding: 1rem; /* was 1.3rem */
+    border: none;
+    border-radius: 11px; /* was 12px */
+    background: #3a3a4f;
+    color: white;
+    font-size: 0.95rem; /* was 1rem */
+    transition: background 0.3s;
+}
+
+.inputGroup input:focus {
+    outline: none;
+    background: #4b4b61;
+}
+
+.eyeIcon {
+    position: absolute;
+    right: 0.9rem; /* was 1rem */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #a78bfa;
+}
+
+
+.input {
     width: 100%;
     padding: 1.1rem;
     margin-bottom: 1rem;
@@ -161,7 +195,7 @@
     transition: background 0.3s;
 }
 
-.form input:focus {
+.input:focus {
     outline: none;
     background: #4b4b61;
 }
@@ -184,7 +218,7 @@
 }
 
 .checkbox {
-    margin-top: 1.4rem;
+    margin-top: 0.5rem;
     transform: scale(1.35);
     accent-color: #a78bfa;
     cursor: pointer;
@@ -203,16 +237,16 @@
 
 .primaryBtn {
     width: 100%;
-    padding: 0.9rem;
+    padding: 0.9rem; /* was 1rem */
     background: #a78bfa;
     color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: 11px; /* was 12px */
     font-weight: bold;
-    font-size: 0.95rem;
+    font-size: 0.95rem; /* was 1rem */
     cursor: pointer;
     transition: background 0.3s;
-    margin-bottom: 1.3rem;
+    margin-bottom: 0.7rem; /* was 1.5rem */
 }
 
 .primaryBtn:hover {
@@ -221,14 +255,16 @@
 
 .divider {
     text-align: center;
-    font-size: 0.75rem;
+    font-size: 0.83rem; /* was 0.85rem */
     opacity: 0.6;
-    margin: 0.9rem 0;
+    margin: 0.9rem 0; /* was 1rem */
     position: relative;
 }
 
 .providers {
     display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 0.9rem;
     width: 100%;
 }
