@@ -29,7 +29,7 @@ load_dotenv()
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-d0&a(a62hd$nfhz^)_f-3gpv)29=+skfh6-i(!tth921zlf5q0')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -96,6 +96,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
+
 LOGIN_REDIRECT_URL = 'http://localhost:3000/home'
 SITE_ID = 1
 
