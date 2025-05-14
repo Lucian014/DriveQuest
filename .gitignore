@@ -2,3 +2,4 @@
 /backend/venv/Scripts/pythonw.exe
 /backend/venv/pyvenv.cfg
 backend/venv
+*.env

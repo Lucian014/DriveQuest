@@ -45,7 +45,7 @@ function AppContent() {
     }, [location]);
 
     return (
-        <>
+        <>  
             {!hideNavbarRoutes.includes(location.pathname) && <Navbar />}
             <Suspense fallback={<Loading />}>
                 <Routes>
