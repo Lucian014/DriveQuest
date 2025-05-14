@@ -8,6 +8,8 @@ import styled from 'styled-components';
 import {scale} from "leaflet/src/control/Control.Scale";
 import {FcGoogle} from 'react-icons/fc'
 import {FaApple} from "react-icons/fa";
+import {GoogleLogin} from "@react-oauth/google";
+import {jwtDecode} from "jwt-decode"
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -17,25 +19,6 @@ function Login() {
     const navigate = useNavigate();
     const csrftoken = useContext(CsrfContext);
     const [showPassword, setShowPassword] = useState(false);
-
-    const images = [
-        "../images/bestia.png",
-        "../images/golf.png",
-        "../images/logan.png",
-    ];
-    const length = images.length;
-
-    // carousel + fade logic
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setFade(false);              // start fade‐out
-            setTimeout(() => {
-                setCurrent(prev => (prev + 1) % length);
-                setFade(true);             // fade‐in new image
-            }, 1000);                    // match CSS opacity transition time
-        }, 5000);
-        return () => clearInterval(interval);
-    }, [length]);
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -49,6 +32,40 @@ function Login() {
             credentials: 'include',
             body: JSON.stringify({ email, password })
         });
+        if (resp.ok) {
+            const data = await resp.json();
+            console.log(data);
+            navigate('/home');
+            const exp = new Date();
+            exp.setHours(exp.getHours() + 6);
+            localStorage.setItem('auth-token', 'true');
+            localStorage.setItem('token-expiration', exp.toString());
+        } else {
+            const err = await resp.json();
+            alert(err.message);
+        }
+    };
+
+    const handleGoogleLogin = async (response) => {
+        const googleToken = response.credential; // Tokenul Google
+
+        console.log("Google Token: ", googleToken);
+
+        if (!csrftoken) {
+            alert('CSRF token is missing.');
+            return;
+        }
+
+        const resp = await fetch('http://localhost:8000/drivequest/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            credentials: 'include',
+            body: JSON.stringify({ google_token: googleToken })  // Trimite tokenul Google către backend
+        });
+
         if (resp.ok) {
             const data = await resp.json();
             console.log(data);
@@ -107,8 +124,15 @@ function Login() {
                             <div className={styles.divider}>or login with</div>
 
                             <div className={styles.providers}>
-                                <button className={styles.providerBtn}><FcGoogle size={24} style={{verticalAlign: 'middle',marginBottom:'4px'}}/>Google</button>
-                                <button className={styles.providerBtn}><FaApple size={28} style={{verticalAlign: 'middle',marginBottom:'6px'}}/>Apple</button>
+                                <GoogleLogin
+                                    onSuccess={(credentialResponse) => {
+                                        console.log(credentialResponse);
+                                        console.log(jwtDecode(credentialResponse.credential));
+                                        handleGoogleLogin(credentialResponse);
+                                    }}
+                                    onError={() => alert("Login failed.")}
+                                >
+                                </GoogleLogin>
                             </div>
                         </form>
                     </div>

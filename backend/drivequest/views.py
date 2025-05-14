@@ -5,7 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie, csrf_protect
-from .models import Car, Contact, Car_Rental, Comment, RentalCenter, CarRating, Bill,OpeningHour
+from .models import Car, Contact, Car_Rental, Comment, RentalCenter, CarRating, Bill,OpeningHour,User
+import os
 from django.contrib.auth import get_user_model,login,authenticate,login as django_login
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_protect
@@ -15,6 +16,9 @@ from django.core.exceptions import ValidationError
 import json
 from datetime import datetime
 from rapidfuzz import fuzz
+from google.auth.transport.requests import Request
+from google.oauth2 import id_token
+from django.contrib.auth.backends import ModelBackend
 
 
 @ensure_csrf_cookie
@@ -69,36 +73,58 @@ def signup(request):
 
 @csrf_protect
 def login(request):
+    GOOGLE_CLIENT_ID = os.environ.get('client_id_Google')
+
     if request.method == "POST":
         try:
             data = json.loads(request.body)
         except json.decoder.JSONDecodeError:
             return JsonResponse({'message': 'Invalid JSON'}, status=400)
 
-        email = data.get('email')
-        password = data.get('password')
+        google_token = data.get('google_token')
 
-        if not (email and password):
-            return JsonResponse({'message': 'Email and password required'}, status=400)
+        if google_token:
+            try:
+                # Verify the Google token
+                id_info = id_token.verify_oauth2_token(google_token, Request(), GOOGLE_CLIENT_ID)
+                google_email = id_info.get('email')
+                first_name = id_info.get('given_name', '')
+                last_name = id_info.get('family_name', '')
 
-        user = authenticate(request, email=email, password=password)
-        if user is not None:
-            django_login(request, user)
-            # Setează sesiunea pentru 6 ore (6 * 3600 secunde)
-            request.session.set_expiry(6 * 3600)
+                if google_email:
+                    # Find or create a user
+                    user = User.objects.filter(email=google_email).first()
 
-            # Nu expune parola (chiar dacă e hash-uită) în răspuns
-            user_data = {
-                'email': user.email,
-                'first_name': user.first_name,
-                'last_name': user.last_name,
-                'is_superuser': user.is_superuser,
-            }
-            return JsonResponse({'message': 'User logged in successfully', 'user': user_data}, status=200)
+                    if not user:
+                        # Create a new user if not found
+                        user = User.objects.create_user(
+                            username=google_email,
+                            email=google_email,
+                            first_name=first_name,
+                            last_name=last_name,
+                            password=User.objects.make_random_password()  # Random password
+                        )
+
+                    # Use the dotted path to the backend
+                    user.backend = 'django.contrib.auth.backends.ModelBackend'  # Corrected line
+
+                    django_login(request, user)
+                    request.session.set_expiry(6 * 3600)
+
+                    user_data = {
+                        'email': user.email,
+                        'first_name': user.first_name,
+                        'last_name': user.last_name,
+                        'is_superuser': user.is_superuser,
+                    }
+                    return JsonResponse({'message': 'User logged in with Google successfully', 'user': user_data}, status=200)
+
+            except ValueError as e:
+                return JsonResponse({'message': f'Invalid Google token: {str(e)}'}, status=400)
+
         else:
-            return JsonResponse({'message': 'Invalid Credentials'}, status=400)
-    else:
-        return JsonResponse({'message': 'Method not allowed'}, status=405)
+            return JsonResponse({'message': 'Google token is missing'}, status=400)
+
 
 @csrf_exempt
 def logout(request):
