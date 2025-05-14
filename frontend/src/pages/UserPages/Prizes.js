@@ -127,7 +127,7 @@ function Prizes() {
                                 <td>{entry.username}</td>
                                 <td>
                                     <img
-                                        src={entry.profile_picture && entry.profile_picture !== "./bestia.png" ? entry.profile_picture : "./bestia.png"}
+                                        src={entry.profile_picture && entry.profile_picture !== "./images/defaultImage.png" ? entry.profile_picture : "./images/defaultImage.png"}
                                         alt="Avatar"
                                     />
                                 </td>

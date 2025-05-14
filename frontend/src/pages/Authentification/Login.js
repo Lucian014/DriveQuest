@@ -2,7 +2,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import styles from '../../styles/Authentification/Login.module.css';
 import { useNavigate } from "react-router-dom";
-import CsrfContext from '../../components/CsrfContext';
 import { AnimatePresence, motion } from "framer-motion";
 import styled from 'styled-components';
 import {scale} from "leaflet/src/control/Control.Scale";
@@ -12,15 +11,44 @@ import {GoogleLogin} from "@react-oauth/google";
 import {jwtDecode} from "jwt-decode"
 import Loading from "../../components/Loading";
 
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    console.log(cookieValue);
+    return cookieValue;
+}
+
+
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [current, setCurrent] = useState(0);
     const [fade, setFade] = useState(true);
     const navigate = useNavigate();
-    const csrftoken = useContext(CsrfContext);
+    const [csrftoken, setCsrftoken] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+
+
+    useEffect(() => {
+        fetch('http://localhost:8000/drivequest/csrf-token', {
+            credentials: 'include',
+        }).then(() => {
+            const token = getCookie('csrftoken');
+            setCsrftoken(token);
+        });
+    }, []);
+
 
     const handleSubmit = async e => {
         e.preventDefault();
