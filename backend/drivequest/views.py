@@ -123,8 +123,30 @@ def login(request):
                 return JsonResponse({'message': f'Invalid Google token: {str(e)}'}, status=400)
 
         else:
-            return JsonResponse({'message': 'Google token is missing'}, status=400)
+            email = data.get('email')
+            password = data.get('password')
 
+            if not (email and password):
+                return JsonResponse({'message': 'Email and password required'}, status=400)
+
+            user = authenticate(request, email=email, password=password)
+            if user is not None:
+                django_login(request, user)
+                # Setează sesiunea pentru 6 ore (6 * 3600 secunde)
+                request.session.set_expiry(6 * 3600)
+
+                # Nu expune parola (chiar dacă e hash-uită) în răspuns
+                user_data = {
+                    'email': user.email,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'is_superuser': user.is_superuser,
+                }
+                return JsonResponse({'message': 'User logged in successfully', 'user': user_data}, status=200)
+            else:
+                return JsonResponse({'message': 'Invalid Credentials'}, status=400)
+    else:
+        return JsonResponse({'message': 'Method not allowed'}, status=405)
 
 @csrf_exempt
 def logout(request):
