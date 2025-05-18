@@ -123,8 +123,8 @@
 }
 
 .subtitle {
-    font-size: 1.15rem; /* was 1.3rem */
-    margin-bottom: 1.7rem; /* was 2rem */
+    font-size: 1.1rem;
+    margin-bottom: 1.7rem;
     text-align: center;
     color: #ccc;
 }
@@ -132,7 +132,13 @@
 .subtitle span {
     color: #a78bfa;
     cursor: pointer;
-    margin-left: 4px; /* was 5px */
+    margin-left: 4px;
+}
+
+.signupLink {
+    color: #a78bfa;
+    cursor: pointer;
+    display: inline-block;
 }
 
 .form {
@@ -198,7 +204,7 @@
     font-size: 0.95rem; /* was 1rem */
     cursor: pointer;
     transition: background 0.3s;
-    margin-bottom: 1.3rem; /* was 1.5rem */
+    margin-bottom: 0.7rem; /* was 1.5rem */
 }
 
 .primaryBtn:hover {
@@ -207,7 +213,7 @@
 
 .divider {
     text-align: center;
-    font-size: 0.75rem; /* was 0.85rem */
+    font-size: 0.83rem; /* was 0.85rem */
     opacity: 0.6;
     margin: 0.9rem 0; /* was 1rem */
     position: relative;
@@ -215,9 +221,12 @@
 
 .providers {
     display: flex;
-    gap: 0.9rem; /* was 1rem */
+    justify-content: center;
+    align-items: center;
+    gap: 0.9rem;
     width: 100%;
 }
+
 
 .providerBtn {
     flex: 1;

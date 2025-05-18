@@ -70,7 +70,7 @@ function Profile() {
                 setInstagram(data.user.instagram);
                 setTwitter(data.user.twitter);
                 setTiktok(data.user.tiktok);
-                setLinkedin(data.user.tiktok);
+                setLinkedin(data.user.linkedin);
 
             })
             .catch(error => {
@@ -137,7 +137,7 @@ function Profile() {
                 setInstagram(data.user.instagram);
                 setTwitter(data.user.twitter);
                 setTiktok(data.user.tiktok);
-                setLinkedin(data.user.tiktok);
+                setLinkedin(data.user.linkedin);
                 alert('Profile updated successfully!');
             })
             .catch(err => {
@@ -371,7 +371,7 @@ function Profile() {
                                     onClick={() => setSelectedTab(key)}
                                     className={`text-lg relative pl-4 pt-4 pb-1 transition-all duration-300 ease-in-out
           ${selectedTab === key ? "text-tertiary" : "text-gray-600"}
-          after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-full
+          after:absolute after:left-2 after:bottom-0 after:h-0.5 after:w-full
           after:transition-all after:duration-300 after:ease-in-out
           ${selectedTab === key ? "after:bg-secondary" : "after:bg-transparent"}`}
                                 >
@@ -491,7 +491,7 @@ function Profile() {
                                         </div>
                                     ))
                                 ) : (
-                                    <p className={styles.no_rentals}>Nu ai închiriat nicio mașină momentan.</p>
+                                    <p className="text-gray-500 text-center text-2xl col-span-full">No rentals found.</p>
                                 )}
 
                                 {/* Right Arrow */}

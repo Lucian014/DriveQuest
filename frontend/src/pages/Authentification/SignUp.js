@@ -7,6 +7,26 @@ import {motion} from "framer-motion";
 import {AnimatePresence} from "framer-motion";
 import {FcGoogle} from "react-icons/fc";
 import {FaApple} from "react-icons/fa";
+import {GoogleLogin} from "@react-oauth/google";
+import {jwtDecode} from "jwt-decode";
+import Loading from "../../components/Loading";
+
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    console.log(cookieValue);
+    return cookieValue;
+}
 
 
 function Signup() {
@@ -17,10 +37,22 @@ function Signup() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [username, setUsername] = useState('');
     const navigate = useNavigate();
-    const csrftoken = useContext(CsrfContext);
+    const [csrftoken, setCsrftoken] = useState(null);
     const [fade, setFade] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
+
+    useEffect(() => {
+        fetch('http://localhost:8000/drivequest/csrf-token', {
+            credentials: 'include',
+        }).then(() => {
+            const token = getCookie('csrftoken');
+            setCsrftoken(token);
+        });
+    }, []);
+
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!csrftoken) {
@@ -35,7 +67,7 @@ function Signup() {
             alert('Password must be at least 8 characters.');
             return;
         }
-
+        setLoading(true);
         const userData = {
             email: email,
             password: password,
@@ -53,7 +85,7 @@ function Signup() {
             credentials: 'include',
             body: JSON.stringify(userData),
         });
-
+        setLoading(false);
         if (response.ok) {
             const data = await response.json();
             console.log(data);
@@ -68,15 +100,44 @@ function Signup() {
         }
     };
 
+    const handleGoogleSignUp = async (response) => {
+        setLoading(true);
+        const googleToken = response.credential;
+
+        console.log("Google Token: ", googleToken);
+
+        if (!csrftoken) {
+            alert('CSRF token is missing.');
+            return;
+        }
+
+        const resp = await fetch('http://localhost:8000/drivequest/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            credentials: 'include',
+            body: JSON.stringify({ google_token: googleToken })  // Trimite tokenul Google către backend
+        });
+        setLoading(false);
+        if (resp.ok) {
+            const data = await resp.json();
+            console.log(data);
+            navigate('/home');
+            const exp = new Date();
+            exp.setHours(exp.getHours() + 6);
+            localStorage.setItem('auth-token', 'true');
+            localStorage.setItem('token-expiration', exp.toString());
+        } else {
+            const err = await resp.json();
+            alert(err.message);
+        }
+    };
 
 
-    const images = [
-        "../images/bestia.png",
-        "../images/golf.png",
-        "../images/logan.png",
-    ];
-
-    const [current, setCurrent] = useState(0);
+    if(loading)
+        return <Loading />
 
 
     return (
@@ -100,8 +161,15 @@ function Signup() {
                         <div className={styles.border}>
                             <h1 className={styles.title}>Create a new account</h1>
                             <p className={styles.subtitle}>
-                                Already have an account?
-                                <span onClick={() => navigate("/")}>Login</span>
+                                Already have an account?{" "}
+                                <motion.span
+                                    whileHover={{ scale: 1.1 }}
+                                    transition={{ type: "spring", stiffness: 300 }}
+                                    onClick={() => navigate("/")}
+                                    className={styles.signupLink}
+                                >
+                                   Login
+                                </motion.span>
                             </p>
 
                             <form className={styles.form} onSubmit={handleSubmit}>
@@ -166,11 +234,16 @@ function Signup() {
 
                                 <button className={styles.primaryBtn} type="submit">Sign Up</button>
 
-                                <div className={styles.divider}>or create an account with</div>
+                                <div className={styles.divider}>or login with</div>
 
                                 <div className={styles.providers}>
-                                    <button className={styles.providerBtn}><FcGoogle size={24} style={{verticalAlign: 'middle',marginBottom:'4px'}}/>Google</button>
-                                    <button className={styles.providerBtn}><FaApple size={28} style={{verticalAlign: 'middle',marginBottom:'6px'}}/>Apple</button>
+                                    <GoogleLogin
+                                        onSuccess={(credentialResponse) => {
+                                            handleGoogleSignUp(credentialResponse);
+                                        }}
+                                        onError={() => alert("Login failed.")}
+                                    >
+                                    </GoogleLogin>
                                 </div>
                             </form>
                         </div>

@@ -2,7 +2,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import styles from '../../styles/Authentification/Login.module.css';
 import { useNavigate } from "react-router-dom";
-import CsrfContext from '../../components/CsrfContext';
 import { AnimatePresence, motion } from "framer-motion";
 import styled from 'styled-components';
 import {scale} from "leaflet/src/control/Control.Scale";
@@ -10,6 +9,25 @@ import {FcGoogle} from 'react-icons/fc'
 import {FaApple} from "react-icons/fa";
 import {GoogleLogin} from "@react-oauth/google";
 import {jwtDecode} from "jwt-decode"
+import Loading from "../../components/Loading";
+
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    console.log(cookieValue);
+    return cookieValue;
+}
+
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -17,8 +35,20 @@ function Login() {
     const [current, setCurrent] = useState(0);
     const [fade, setFade] = useState(true);
     const navigate = useNavigate();
-    const csrftoken = useContext(CsrfContext);
+    const [csrftoken, setCsrftoken] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+
+    useEffect(() => {
+        fetch('http://localhost:8000/drivequest/csrf-token', {
+            credentials: 'include',
+        }).then(() => {
+            const token = getCookie('csrftoken');
+            setCsrftoken(token);
+        });
+    }, []);
+
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -46,7 +76,12 @@ function Login() {
         }
     };
 
+    if(loading)
+        return <Loading />
+
+
     const handleGoogleLogin = async (response) => {
+        setLoading(true);
         const googleToken = response.credential; // Tokenul Google
 
         console.log("Google Token: ", googleToken);
@@ -65,7 +100,7 @@ function Login() {
             credentials: 'include',
             body: JSON.stringify({ google_token: googleToken })  // Trimite tokenul Google către backend
         });
-
+        setLoading(false);
         if (resp.ok) {
             const data = await resp.json();
             console.log(data);
@@ -90,7 +125,7 @@ function Login() {
 
                 <div className={styles.rightSide}>
                     <div className={styles.border}>
-                        <h1 className={styles.title}>Log in to your account</h1>
+                        <h1 className={styles.title}>Log into your account</h1>
                         <p className={styles.subtitle}>
                             Don’t have an account?{" "}
                             <motion.span
@@ -104,14 +139,20 @@ function Login() {
                         </p>
 
                         <form onSubmit={handleSubmit} className={styles.form}>
-                            <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                placeholder="Password"
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
-                                required
-                            />
+                            <input className={styles.input} type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
+                            <div className={styles.inputGroup}>
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    required
+                                    autoComplete="off"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="Password"
+                                />
+                                <span className={styles.eyeIcon} onClick={() => setShowPassword(!showPassword)}>
+                                    <i className={showPassword ? "fas fa-eye-slash" : "fas fa-eye"}></i>
+                                </span>
+                            </div>
                             <div className={styles.optionsRow}>
                                 <div className={styles.remember}>
                                     <span>Remember me</span>
@@ -126,8 +167,6 @@ function Login() {
                             <div className={styles.providers}>
                                 <GoogleLogin
                                     onSuccess={(credentialResponse) => {
-                                        console.log(credentialResponse);
-                                        console.log(jwtDecode(credentialResponse.credential));
                                         handleGoogleLogin(credentialResponse);
                                     }}
                                     onError={() => alert("Login failed.")}

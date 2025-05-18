@@ -96,6 +96,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
+
 LOGIN_REDIRECT_URL = 'http://localhost:3000/home'
 SITE_ID = 1
 
