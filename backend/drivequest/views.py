@@ -465,7 +465,7 @@ def car_details(request, car_id):
                 'user': rent.user.username if rent.user else None,
             })
 
-        related = Car.objects.filter(brand=car.brand, car_type=car.car_type).exclude(id=car.id)[:3]
+        related = Car.objects.filter(brand=car.brand).exclude(id=car.id)[:3]
 
         comments = Comment.objects.filter(car=car)
         comments_data = []
