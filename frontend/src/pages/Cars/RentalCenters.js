@@ -272,7 +272,7 @@ function RentalCenters() {
                                                 ))}
                                             </div>
                                         )}
-                                            <p className={styles.country}>{center.country}</p>
+                                        <p className={styles.country}>{center.country}</p>
                                     </div>
                                     <div className={styles.MapWrapper} onClick={(e) => e.stopPropagation()}>
                                         <MapContainer center={[center.latitude, center.longitude]} zoom={12} style={{ height: '600px', width: '100%' }}>

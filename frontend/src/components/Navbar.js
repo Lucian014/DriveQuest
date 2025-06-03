@@ -33,6 +33,7 @@ function Navbar() {
             if (currentTime >= expirationTime) {
                 localStorage.removeItem('auth-token');
                 localStorage.removeItem('token-expiration');
+                localStorage.removeItem('admin');
                 setIsLoggedIn(false);
             } else {
                 setIsLoggedIn(true);

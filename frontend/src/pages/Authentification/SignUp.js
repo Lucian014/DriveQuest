@@ -34,7 +34,6 @@ function Signup() {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
     const [username, setUsername] = useState('');
     const navigate = useNavigate();
     const [csrftoken, setCsrftoken] = useState(null);
@@ -57,10 +56,6 @@ function Signup() {
         e.preventDefault();
         if (!csrftoken) {
             alert('CSRF token is missing.');
-            return;
-        }
-        if (password !== confirmPassword) {
-            alert('Passwords do not match.');
             return;
         }
         if (password.length < 8) {

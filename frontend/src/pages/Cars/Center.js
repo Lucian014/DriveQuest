@@ -120,7 +120,15 @@ function Center() {
                         <h3 className="text-4xl text-bold mt-3">{center.name}</h3>
                         <h3 className="text-2xl mb-4">{center.country} {center.city}</h3>
                     </div>
-                    <div className={styles.imageSection} style={{ backgroundImage: `url(${center.image})` }}>
+                    <div
+                        className={styles.imageSection}
+                        style={{
+                            backgroundImage: `url(${center.image || '/images/notFound.svg'})`,
+                            backgroundSize: 'contain',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'center',
+                        }}
+                    >
                          <div className={styles.imageLeft}>
                               <h3 className="text-white p-2 text-center text-3xl lg:text-4xl">Cooling System Service
                                   We also provide high-quality cooling system repair and maintenance for all types of vehicles and cars.
