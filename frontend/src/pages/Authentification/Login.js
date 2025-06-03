@@ -70,6 +70,11 @@ function Login() {
             exp.setHours(exp.getHours() + 6);
             localStorage.setItem('auth-token', 'true');
             localStorage.setItem('token-expiration', exp.toString());
+            if(data.user.is_superuser){
+                localStorage.setItem('admin', 'true');
+            }else{
+                localStorage.setItem('admin', 'false');
+            }
         } else {
             const err = await resp.json();
             alert(err.message);

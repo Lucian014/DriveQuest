@@ -17,6 +17,22 @@ function Home() {
     const [carType,setCarType] = useState(null);
     const [searchedCars, setSearchedCars] = useState(null);
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const carsPerPage = 9;
+
+
+    const indexOfLastCar = currentPage * carsPerPage;
+    const indexOfFirstCar = indexOfLastCar - carsPerPage;
+    const currentCars = cars.slice(indexOfFirstCar, indexOfLastCar);
+
+
+    const totalPages = Math.ceil(cars.length / carsPerPage);
+    const nextPage = () => {
+        if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
+    };
+    const prevPage = () => {
+        if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+    };
 
     useEffect(() => {
         fetch('http://localhost:8000/drivequest/cars', {
@@ -72,7 +88,7 @@ function Home() {
         e.preventDefault();
 
         const params = new URLSearchParams();
-        if (searchInput) params.append('searchInput', searchInput);
+        if (searchInput) params.append('searchInput', searchInput.charAt(0).toUpperCase() + searchInput.slice(1).toLowerCase());
         if (startDate) params.append('startDate', startDate);
         if (endDate) params.append('endDate', endDate);
         if (carType) params.append('carType', carType);
@@ -117,7 +133,7 @@ function Home() {
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.2 }}
                         >
-                            Închiriază mașina perfectă în câteva clickuri
+                            Rent the perfect car in a few clicks
                         </motion.h1>
                         <motion.p
                             className={styles.hero_subtitle}
@@ -125,10 +141,10 @@ function Home() {
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.4 }}
                         >
-                            Rapid, simplu și la cele mai bune prețuri
+                            Fast, simple, and at the best prices
                         </motion.p>
 
-                        {/* FORMULAR CĂUTARE */}
+                        {/* SEARCH FORM */}
                         <motion.form
                             className={styles.search_form}
                             initial={{ opacity: 0 }}
@@ -156,14 +172,14 @@ function Home() {
                                 whileFocus={{ scale: 1.02 }}
                             />
 
-                            {/* INPUT CU DROPDOWN PENTRU TIP MAȘINĂ */}
+                            {/* INPUT WITH DROPDOWN FOR CAR TYPE */}
                             <motion.div
                                 className={styles.dropdown_wrapper}
                                 whileHover={{ scale: 1.01 }}
                             >
                                 <input
                                     type="text"
-                                    placeholder="Tip mașină (ex: SUV)"
+                                    placeholder="Car type (e.g., SUV)"
                                     value={carType}
                                     onChange={(e) => {
                                         setCarType(e.target.value);
@@ -203,12 +219,12 @@ function Home() {
                                 whileHover={{ backgroundColor: "#009ab8", scale: 1.02 }}
                                 onClick={(e) => handleSearch(e)}
                             >
-                                Caută mașină
+                                Find car
                             </motion.button>
                         </motion.form>
                     </motion.section>
 
-                    {/* AVANTAJE */}
+                    {/* BENEFITS */}
                     <motion.section
                         className={styles.benefits}
                         initial="hidden"
@@ -217,7 +233,7 @@ function Home() {
                         variants={containerVariants}
                     >
                         <motion.h2 className={styles.section_title} variants={itemVariants}>
-                            De ce să ne alegi?
+                            Why choose us?
                         </motion.h2>
                         <div className={styles.benefit_list}>
                             <motion.div
@@ -225,27 +241,27 @@ function Home() {
                                 variants={itemVariants}
                                 whileHover={{ scale: 1.05, boxShadow: '0 8px 15px rgba(0,0,0,0.1)' }}
                             >
-                                ✅ Prețuri accesibile
+                                ✅ Affordable prices
                             </motion.div>
                             <motion.div
                                 className={styles.benefit_item}
                                 variants={itemVariants}
                                 whileHover={{ scale: 1.05, boxShadow: '0 8px 15px rgba(0,0,0,0.1)' }}
                             >
-                                🚗 Flotă diversificată
+                                🚗 Diverse fleet
                             </motion.div>
                             <motion.div
                                 className={styles.benefit_item}
                                 variants={itemVariants}
                                 whileHover={{ scale: 1.05, boxShadow: '0 8px 15px rgba(0,0,0,0.1)' }}
                             >
-                                📞 Asistență 24/7
+                                📞 24/7 support
                             </motion.div>
                         </div>
                     </motion.section>
 
 
-                    {/* MAȘINI CAUTATE */}
+                    {/* SEARCHED CARS */}
                     {searchedCars ? (
                         <motion.section
                             className={styles.featured_cars}
@@ -255,7 +271,7 @@ function Home() {
                             variants={containerVariants}
                         >
                             <motion.h2 className={styles.section_title} variants={itemVariants}>
-                                Rezultatele Tale
+                                Your Results
                             </motion.h2>
                             <div className={styles.car_list}>
                                 {searchedCars.map((car) => (
@@ -277,14 +293,14 @@ function Home() {
                                         <h3 className={styles.car_name}>
                                             {car.brand} {car.model} {car.year}
                                         </h3>
-                                        <p className={styles.car_price}>de la {car.price}€/zi</p>
+                                        <p className={styles.car_price}>from {car.price}€/day</p>
                                         <motion.button
                                             className={styles.rent_button}
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
                                             onClick={() => handleCar(car.id)}
                                         >
-                                            Închiriază
+                                            Rent now
                                         </motion.button>
                                     </motion.div>
                                 ))}
@@ -293,7 +309,7 @@ function Home() {
                     ) : null}
 
 
-                    {/* MAȘINI RECOMANDATE */}
+                    {/* RECOMMENDED CARS */}
                     <motion.section
                         className={styles.featured_cars}
                         initial="hidden"
@@ -302,10 +318,11 @@ function Home() {
                         variants={containerVariants}
                     >
                         <motion.h2 className={styles.section_title} variants={itemVariants}>
-                            Mașini recomandate
+                            Recommended Cars
                         </motion.h2>
+
                         <div className={styles.car_list}>
-                            {cars.map((car) => (
+                            {currentCars.map((car) => (
                                 <motion.div
                                     key={car.id}
                                     className={styles.car_card}
@@ -324,17 +341,27 @@ function Home() {
                                     <h3 className={styles.car_name}>
                                         {car.brand} {car.model} {car.year}
                                     </h3>
-                                    <p className={styles.car_price}>de la {car.price}€/zi</p>
+                                    <p className={styles.car_price}>from {car.price}€/day</p>
                                     <motion.button
                                         className={styles.rent_button}
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
                                         onClick={() => handleCar(car.id)}
                                     >
-                                        Închiriază
+                                        Rent now
                                     </motion.button>
                                 </motion.div>
                             ))}
+                        </div>
+
+                        <div className={styles.pagination_buttons}>
+                            <button onClick={prevPage} disabled={currentPage === 1}>
+                                Previous page
+                            </button>
+                            <span>Page {currentPage} of {totalPages}</span>
+                            <button onClick={nextPage} disabled={currentPage === totalPages}>
+                                Next page
+                            </button>
                         </div>
                     </motion.section>
                 </div>

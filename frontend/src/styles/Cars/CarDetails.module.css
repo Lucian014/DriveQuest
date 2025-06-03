@@ -456,7 +456,7 @@ body{
 }
 .relatedCard img {
     height: 140px;
-    width: auto;
+    width: 250px;
     object-fit: cover;
 }
 .relatedCard p {
