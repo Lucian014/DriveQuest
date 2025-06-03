@@ -1,4 +1,5 @@
 import requests
+from allauth.utils import build_absolute_uri
 from django.db.models import Q
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
@@ -110,6 +111,7 @@ def signup(request):
                     )
                 except ValidationError as e:
                     return JsonResponse({'message': str(e)}, status=400)
+                user.backend = 'allauth.account.auth_backends.AuthenticationBackend'
                 django_login(request, user)
                 request.session.set_expiry(6 * 3600)
                 user_data = {
@@ -197,6 +199,7 @@ def login(request):
 
             user = authenticate(request, email=email, password=password)
             if user is not None:
+                user.backend = 'allauth.account.auth_backends.AuthenticationBackend'
                 django_login(request, user)
                 # Setează sesiunea pentru 6 ore (6 * 3600 secunde)
                 request.session.set_expiry(6 * 3600)
@@ -326,7 +329,7 @@ def get_centers(request):
                 'city': center.city,
                 'country': center.country,
                 'phone': center.phone,
-                'image': center.image.url if center.image else None,
+                'image': request.build_absolute_uri(center.image.url) if center.image else None,
                 'latitude': center.lat,
                 'longitude': center.long,
             })
@@ -383,7 +386,8 @@ def get_cars(request, car_id=None):
                 'model': car.model,
                 'year': car.year,
                 'price': car.price,
-                'image': car.image.url if car.image else None
+                'image': car.image.url if car.image else None,
+                'center': car.center.id
             })
         return JsonResponse(cars_data, safe=False)
     return JsonResponse({'error': 'Invalid request method'}, status=405)
@@ -848,3 +852,84 @@ def search_centers(request):
         return JsonResponse(results, safe=False)
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+
+def save_car(request, car_id):
+    # Only accept POST (for multipart). If you truly need PUT, you'd have to parse request body differently.
+    if request.method == 'POST':
+        # Get the Car instance or 404
+        car = Car.objects.get(id=car_id)
+
+        # Text fields come in request.POST
+        car.brand = request.POST.get('brand', car.brand)
+        car.model = request.POST.get('model', car.model)
+        car.price = request.POST.get('price', car.price)
+        car.year = request.POST.get('year', car.year)
+        center_id = request.POST.get('center', None)
+
+
+        # If a valid center_id was passed, update ForeignKey
+        if center_id:
+            try:
+                center_obj = RentalCenter.objects.get(id=center_id)
+                car.center = center_obj
+            except RentalCenter.DoesNotExist:
+                return JsonResponse({'error': 'Center not found'}, status=404)
+
+        # Check for uploaded image
+        if 'image' in request.FILES:
+            uploaded_file = request.FILES['image']
+            car.image = uploaded_file  # Assuming your Car model has an ImageField named `image`
+
+        # Save the updated Car
+        car.save()
+
+        # Build absolute URI for the image so React can display it
+        image_url = None
+        if car.image:
+            # `car.image.url` is a relative path; build absolute URI:
+            image_url = request.build_absolute_uri(car.image.url)
+
+        # Return JSON of updated car
+        return JsonResponse({
+            'id': car.id,
+            'brand': car.brand,
+            'model': car.model,
+            'year': car.year,
+            'price': car.price,
+            'center': car.center.id if car.center else None,
+            'image': image_url,
+        })
+
+    return JsonResponse({'error': 'Only POST requests are allowed.'}, status=405)
+
+
+def save_center(request, center_id):
+    if request.method == 'POST':
+        center = RentalCenter.objects.get(id=center_id)
+        center.name = request.POST.get('name', center.name).strip()
+        center.address = request.POST.get('address', center.address).strip()
+        center.city = request.POST.get('city', center.city).strip()
+        center.country = request.POST.get('country', center.country).strip()
+        center.phone = request.POST.get('phone', center.phone).strip()
+        center.lat = request.POST.get('latitude', center.lat).strip()
+        center.long = request.POST.get('longitude', center.long).strip()
+
+        if 'image' in request.FILES:
+            center.image = request.FILES['image']
+
+        center.save()
+        return JsonResponse({
+            'id': center.id,
+            'name': center.name,
+            'address': center.address,
+            'city': center.city,
+            'country': center.country,
+            'phone': center.phone,
+            'latitude': center.lat,
+            'longitude': center.long,
+            'image': request.build_absolute_uri(center.image.url) if center.image else None
+        })
+    else:
+        return JsonResponse({'error': 'Only POST requests are allowed.'}, status=405)

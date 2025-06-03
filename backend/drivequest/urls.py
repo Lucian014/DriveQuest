@@ -28,4 +28,6 @@ urlpatterns = [
     path('bill_history/', views.bill_history, name='bill_history'),
     path('opening_hours/<int:center_id>/', views.opening_hours, name='opening_hours'),
     path('search_centers/',views.search_centers,name='search_centers'),
+    path('save_car/<int:car_id>/',views.save_car,name='save_car'),
+    path('save_center/<int:center_id>/', views.save_center, name='save_center')
 ]
